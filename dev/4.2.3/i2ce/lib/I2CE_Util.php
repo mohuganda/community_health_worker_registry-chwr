@@ -191,7 +191,7 @@ class I2CE_Util {
      * @param mixed $transact defaults to true meaning that the whole script is executed in a transaction.  If a string, it is the name of
      * a save point to use (assumes you are already in a transaction)
      * @param string $dsn.  An option DSN to connect on.  If set $database is ignored.
-     * it will use whatever database is refered to by the MDB2::singleton()
+     * it will use whatever database is refered to by the DSN
      * @param string $delimiter.  Defaults to ';' Needs to be exactly one character
      * @return boolean  -- true on sucess, false on failure
      */
@@ -205,39 +205,39 @@ class I2CE_Util {
         $file = $t_file;
         if ($dsn !== null) {
             $database = null;
-            $db = MDB2::connect($dsn); 
-            if( I2CE::pearError( $db,"Cannot connect to database $database")) {
+            $db = I2CE::pdoConnect( null, $dsn );
+            if ( !$db ) {
                 return false;
             }
-            $db->loadModule('Extended');
-            $db->setFetchMode( MDB2_FETCHMODE_OBJECT, 'MDB2_row' );
-            $db->query( "SET NAMES 'utf8'" );            
         } else if ($database!==null) {
-            $db = MDB2::singleton(); 
-            $oldDB = $db->database_name;
+            $db = I2CE::PDO();
+            $oldDB = I2CE_PDO::details('dbname');
         } else {
-            $db = MDB2::singleton(); 
+            $db = I2CE::PDO();
         }      
         if ($database !== null) {
-            if (I2CE::pearError($db->query('USE ' . $db->quoteIdentifier($database)),
-                                "Cannot use database $database")) {
+            try {
+                $db->exec( 'USE `' . $database . '`' );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Cannot use database $database" );
                 return false;
             }
         } 
         $transact_msg = '';
         $savepoint = null;
         if ($transact === true) {
+            /*
             if (!$db->supports('transactions')) {
                 $transact = false;
                 $transact_msg = 'No Transactions used (Not supported)';
-            } else if ( $db->in_transaction) {
+            } else */ if ( $db->inTransaction() ) {
                 $transact = 'SCRIPT_EXECUTE_' . rand(1000,9999);
                 $transact_msg = "Using savepoint $transact (Already in transaction)";
             } else {
                 $transact_msg = "Transaction on";
             }
         } else if (is_string($transact)) {
-            if ($db->in_transaction) {
+            if ($db->inTransaction()) {
                 $transact_msg = "Using savepoint $transact";
             } else {
                 $transact_msg = "Transaction on (Savepoint $transact ignored because not in transaction)";
@@ -251,8 +251,10 @@ class I2CE_Util {
 
         $result =  self::explodeAndExecuteSQLQueries(file_get_contents($file),$db,$transact,$delimiter);
         if ($database !== null) {
-            if (I2CE::pearError($db->query('USE ' . $db->quoteIdentifier($oldDB)),
-                                "Cannot use database $oldDB")) {
+            try {
+                $db->exec( 'USE `' . $oldDB . '`' );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError($e, "Cannot use database $oldDB");
                 return false;
             }
         } 
@@ -267,7 +269,7 @@ class I2CE_Util {
      * Explode and execute a 
      * @param string $sql a nuch of sql queries
      * @param boolean $transact defaults to true meaning that the whole script is executed in a transaction.  If a string, it is the name of a savepoint to rollback to/release
-     * @param MDB2 connection $db
+     * @param PDO $db
      * @param string $delimiter.  Defaults to ';'. Needs to be exactly one character
      * @returns boolean true on sucess or false
      */
@@ -277,19 +279,21 @@ class I2CE_Util {
             return false;
         }
         I2CE::longExecution();
-        if ($db->supports('transactions')) {
+        try {
             if ($transact===true) {
                 $db->beginTransaction(); 
                 I2CE::raiseError("Beginning transaction");
             } else if (is_string($transact)) {
-                if ($db->in_transaction) { 
-                    $db->query('SAVEPOINT $transact');
+                if ($db->inTransaction()) { 
+                    $db->exec('SAVEPOINT $transact');
                 } else { //we aren't in a transaction, so don't use the savepoint
                     $transact =true;
                     $db->beginTransaction();
                     I2CE::raiseError("Beginning transaction");
                 }
             }
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Unable to begin transactions" );
         }
         $len  = strlen($sql);
         $in_string_single = false;
@@ -307,16 +311,16 @@ class I2CE_Util {
                     $beg_qry = $i+1; //beginning of query is next line
                 }
                 if ($in_comment || $in_comment_ml ||$in_string_single !== false || $in_string_double || $in_string_back) {
-                    continue;
+                    continue 2;
                 }
                 if (preg_match('/^DELIMITER (.)$/',trim(substr($sql,$beg_qry,$i - $beg_qry )), $matches)) {
                     $delimiter = $matches[1];
                     $beg_qry = $i+1; //beginning of query is next line
                 }
-                continue;
+                continue 2;
             case "-":
                 if ($in_comment || $in_comment_ml ||$in_string_single !== false || $in_string_double || $in_string_back) {
-                    continue;
+                    continue 2;
                 }
                 if ($i > 0 && $sql[$i-1] == '-') {
                     $in_comment = true;
@@ -326,7 +330,7 @@ class I2CE_Util {
                 break;
             case "#":
                 if ($in_comment || $in_comment_ml ||$in_string_single !== false|| $in_string_double || $in_string_back) {
-                    continue;
+                    continue 2;
                 }
                 $in_comment = true;
                 $t_qry .= $t_qry . trim(substr($sql,$beg_qry,$i - $beg_qry ));
@@ -334,7 +338,7 @@ class I2CE_Util {
                 break;
             case '*':
                 if ($in_comment || $in_string_single !== false|| $in_string_double || $in_string_back) {
-                    continue;
+                    continue 2;
                 }
                 if ($in_comment_ml) {
                     if ($i +2 < $len && $sql[$i+1] == '/') {
@@ -348,11 +352,11 @@ class I2CE_Util {
                         $beg_qry = $i +1;
                     }
                 }
-                continue;
+                continue 2;
                 break;
             case "`":
                 if ($in_comment || $in_comment_ml) {
-                    continue;
+                    continue 2;
                 }
                 if ($in_string_back) {
                     $in_escape_slash = false;
@@ -374,11 +378,11 @@ class I2CE_Util {
                 } else if ($in_string_single ===FALSE && !$in_string_double) {
                     $in_string_back = true;
                 }
-                continue;
+                continue 2;
                 break;
             case '"':
                 if ($in_comment || $in_comment_ml) {
-                    continue;
+                    continue 2;
                 }
                 if ($in_string_double) {
                     $in_escape_slash = false;
@@ -401,11 +405,11 @@ class I2CE_Util {
                 } else  if ($in_string_single=== false && !$in_string_back) {
                     $in_string_double = true;
                 }
-                continue;
+                continue 2;
                 break;
             case "'":
                 if ($in_comment || $in_comment_ml) {
-                    continue;
+                    continue 2;
                 }
                 if ($in_string_single !== false) {
                     $in_escape_slash = false;
@@ -426,27 +430,33 @@ class I2CE_Util {
                 } else if (!$in_string_back && !$in_string_double) {
                     $in_string_single = $i;
                 }
-                continue;
+                continue 2;
                 break;
             case $delimiter: 
                 if ($in_string_single !== false || $in_string_double || $in_string_back || $in_comment || $in_comment_ml) {
-                    continue;
+                    continue 2;
                 }
                 $qry = trim($t_qry . trim(substr($sql,$beg_qry,$i - $beg_qry )));
                 $beg_qry = $i +1;
                 $t_qry = '';
                 if (!$qry) {
-                    continue;
+                    continue 2;
                 }
-                $result = $db->query($qry);
-                if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
-                    if ($db->in_transaction) { 
-                        if ($transact===true)  {
-                            I2CE::raiseError("Rolling Back");
-                            $db->rollback();
-                        } else if (is_string($transact)) {
-                            I2CE::raiseError("Rolling Back to savepoint $transact");
-                            $db->query("ROLLBACK TO SAVEPOINT $transact");
+                try {
+                    $db->exec($qry);
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError($e,"Cannot execute  query:\n$qry");
+                    if ($db->inTransaction()) { 
+                        try {
+                            if ($transact===true)  {
+                                I2CE::raiseError("Rolling Back");
+                                $db->rollback();
+                            } elseif (is_string($transact)) {
+                                I2CE::raiseError("Rolling Back to savepoint $transact");
+                                $db->exec("ROLLBACK TO SAVEPOINT $transact");
+                            }
+                        } catch ( PDOException $e ) {
+                            I2CE::pdoError( $e, "Failed to rollback transaction" );
                         }
                     }
                     if ($transact) {
@@ -454,7 +464,8 @@ class I2CE_Util {
                     }
                     return false;
                 }
-                continue;
+
+                continue 2;
                 break;
             default:
                 break;
@@ -463,15 +474,21 @@ class I2CE_Util {
         //now make sure we pick up the last query
         $qry = trim($t_qry . trim(substr($sql,$beg_qry)));
         if ($qry) {
-            $result = $db->query($qry);
-            if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
-                if ($db->in_transaction) {
-                    if ($transact===true) {
-                        I2CE::raiseError("Rolling Back");
-                        $db->rollback();
-                    } else if (is_string($transact)) {
-                        I2CE::raiseError("Rolling Back to savepoint $transact");
-                        $db->query("ROLLBACK TO SAVEPOINT $transact");                        
+            try {
+                $db->exec($qry);
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e,"Cannot execute  query:\n$qry");
+                if ($db->inTransaction()) {
+                    try {
+                        if ($transact===true) {
+                            I2CE::raiseError("Rolling Back");
+                            $db->rollback();
+                        } else if (is_string($transact)) {
+                            I2CE::raiseError("Rolling Back to savepoint $transact");
+                            $db->exec("ROLLBACK TO SAVEPOINT $transact");                        
+                        }
+                    } catch ( PDOException $e ) {
+                        I2CE::pdoError( $e, "Failed to rollback transaction" );
                     }
                 } 
                 if ($transact) {
@@ -481,15 +498,19 @@ class I2CE_Util {
             }
         }
         //we are done
-        if ($db->in_transaction) { 
-            if ($transact === true) {
-                I2CE::raiseError("Commiting");
-                return $db->commit()  == MDB2_OK; 
-            } 
-            if (is_string($transact))  {
-                $db->query("RELEASE SAVEPOINT $transact");                                        
-                I2CE::raiseError("Released savepoint $transact");
-            } 
+        if ($db->inTransaction()) { 
+            try {
+                if ($transact === true) {
+                    I2CE::raiseError("Commiting");
+                    return $db->commit();
+                } 
+                if (is_string($transact))  {
+                    $db->exec("RELEASE SAVEPOINT $transact");                                        
+                    I2CE::raiseError("Released savepoint $transact");
+                } 
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to commit transaction" );
+            }
             return true;
         } else{
             return true;  

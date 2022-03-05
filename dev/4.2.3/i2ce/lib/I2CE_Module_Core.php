@@ -162,16 +162,15 @@ class I2CE_Module_Core extends I2CE_Module{
 
     protected function  createMongoDBConfig($update_from_config_alt) {
         require_once("I2CE_MagicDataStorageMongoDB.php");
-        $db = MDB2::singleton();                    
-        if (! ($db_name = $db->database_name)) {
+        if (! ($db_name = I2CE::dbName() )) {
             I2CE::raiseError("No database to connect to MongoDB");
             return false;
         }
-        if (! ($db_password = $db->dsn['password'])) {
+        if (! ($db_password = I2CE_PDO::details( 'pass' ) )) {
             I2CE::raiseError("No password to connect to MongoDB");
             return false;
         }
-        if ( !($db_user = $db->dsn['username'])) {
+        if ( !($db_user = I2CE_PDO::details( 'user' ) )) {
             I2CE::raiseError("No user to connect to MongoDB");
             return false;
         }
@@ -218,14 +217,18 @@ class I2CE_Module_Core extends I2CE_Module{
             return false;
         }
 
+        $db = I2CE::PDO();
         $qry = 'SHOW TABLES LIKE "config_alt"';
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot access database")) {
+        try {
+            $result = $db->query($qry);
+            if ($result->rowCount() < 1) {
+                $update_from_config_alt = false;
+            }         
+            unset( $result );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot access database");
             return false;
         }
-        if ($result->numRows() < 1) {
-            $update_from_config_alt = false;
-        }         
         if ($update_from_config_alt && $new_coll ) {
             $qry_nodes = "SELECT IF(  LENGTH(p.parent) > 1, concat(p.parent,'/',p.name),IF (LENGTH(p.name) > 1, CONCAT('/',p.name), '')) as path, p.value as value, p.type as type, 
 GROUP_CONCAT(c.name SEPARATOR '/') AS children
@@ -237,28 +240,30 @@ ON c.parent  =  IF(
  IF( LENGTH(p.name) > 1, CONCAT('/',p.name), CONCAT('/',p.name))
 ) 
 GROUP BY path";
-            $res = $db->query($qry_nodes);
-            if (PEAR::isError($res)) {
-                I2CE::raiseError("Could not query existing config_alt");
+            try {
+                $res = $db->query($qry_nodes);
+                I2CE::raiseError("Populating mongodb from config_alt table");
+                while (($row = $res->fetch(PDO::FETCH_ASSOC))) {
+                    if ($row['type'] == '0') {
+                        $children = preg_split('/\\//',$row['children'],-1,PREG_SPLIT_NO_EMPTY);
+                    } else {
+                        $children = null;
+                    }
+                    $data = array( 
+                            I2CE_MagicDataStorageMongoDB::PATH  => $row['path'],
+                            I2CE_MagicDataStorageMongoDB::TYPE => $row['type'],
+                            I2CE_MagicDataStorageMongoDB::VALUE => $row['value'],
+                            I2CE_MagicDataStorageMongoDB::CHILDREN => $children
+                            );                
+                    if (! is_array( $r = $mcoll->insert($data, array("safe" => true))) || (array_key_exists('err',$r) && $r['err'])) {
+                        I2CE::raiseError("Could not inset new node:" . print_r($r,true));
+                        return false;
+                    }
+                }
+                unset( $res );
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e, "Could not query existing config_alt");
                 return false;
-            }
-            I2CE::raiseError("Populating mongodb from config_alt table");
-            while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
-                if ($row['type'] == '0') {
-                    $children = preg_split('/\\//',$row['children'],-1,PREG_SPLIT_NO_EMPTY);
-                } else {
-                    $children = null;
-                }
-                $data = array( 
-                    I2CE_MagicDataStorageMongoDB::PATH  => $row['path'],
-                    I2CE_MagicDataStorageMongoDB::TYPE => $row['type'],
-                    I2CE_MagicDataStorageMongoDB::VALUE => $row['value'],
-                    I2CE_MagicDataStorageMongoDB::CHILDREN => $children
-                    );                
-                if (! is_array( $r = $mcoll->insert($data, array("safe" => true))) || (array_key_exists('err',$r) && $r['err'])) {
-                    I2CE::raiseError("Could not inset new node:" . print_r($r,true));
-                    return false;
-                }
             }
 
         }
@@ -272,51 +277,66 @@ GROUP BY path";
 
     protected function updateConfigAltToLong() {
         $qry = "alter table config_alt modify COLUMN value longtext;";
-        $db = MDB2::singleton();
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot alter value table of config_alt table to long")) {
+        $db = I2CE::PDO();
+        try {
+            $db->exec($qry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot alter value table of config_alt table to long");
             return false;
-        } else {
-            return true;
-        }
+        } 
+        return true;
     }
 
     protected function  createAltConfig($update_from_config) {
         $hash = '2245023265ae4cf87d02c8b6ba991139'; //the hash of the root node
         //first test to see if the alt config table is there for some reason.
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         $qry = 'SHOW TABLES LIKE "config_alt"';
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot access database")) {
+
+        try {
+            $result = $db->query($qry);
+            if ($result->rowCount() > 0) {
+                I2CE::raiseError("Alt Config table has already been created");
+                $qry = "SELECT count(*) as count FROM `config_alt` WHERE `path_hash` = '$hash'";
+                try {
+                    $result = $db->query($qry);
+                    if ( ($row = $result->fetch())) {
+                        if ($row->count == 1) {
+                            unset( $result );
+                            I2CE::raiseError("Alt config has been created and seeded");
+                            return true;
+                        }
+                    }
+                    unset( $result );
+                } catch( PDOException $e ) {
+                    I2CE::pdoError($e,"Cannot access config_alt");
+                    return false;
+                }
+            }        
+            unset( $result );
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot access database");
             return false;
         }
-        if ($result->numRows() > 0) {
-            I2CE::raiseError("Alt Config table has already been created");
-            $qry = "SELECT count(*) as count FROM `config_alt` WHERE `path_hash` = '$hash'";
-            $result = $db->query($qry);
-            if (I2CE::pearError($result,"Cannot access config_alt")) {
-                return false;
-            }
-            if ( ($row = $result->fetchRow())) {
-                if ($row->count == 1) {
-                    I2CE::raiseError("Alt config has been created and seeded");
-                    return true;
-                }
-            }
-        }        
         if ($update_from_config) {
             //now see if the tmp alt config table is there and if so drop it.
             $qry = 'SHOW TABLES LIKE "config_alt_tmp"';
-            $result = $db->query($qry);
-            if (I2CE::pearError($result,"Cannot access database")) {
+            try {
+                $result = $db->query($qry);
+                if ($result->rowCount() > 0) {
+                    I2CE::raiseError("Temporary Alt Config table has already been created -- Dropping it");
+                    $qry = 'DROP TABLE  `config_alt_tmp`';
+                    try {
+                        $db->exec($qry);
+                    } catch( PDOException $e ) {
+                        I2CE::pdoError( $e, "Cannot drop temporary alternative config table");
+                        return false;
+                    }               
+                }
+                unset( $result );
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e,"Cannot access database");
                 return false;
-            }
-            if ($result->numRows() > 0) {
-                I2CE::raiseError("Temporary Alt Config table has already been created -- Dropping it");
-                $qry = 'DROP TABLE  `config_alt_tmp`';
-                if (I2CE::pearError( $db->query($qry), "Cannot drop temporary alternative config table")) {
-                    return false;
-                }               
             }
             $create = 'config_alt_tmp';
         } else {
@@ -336,8 +356,10 @@ GROUP BY path";
             "INSERT INTO `$create` (`path_hash`,`parent`,`name`,`type`,`value`) VALUE ('$hash','','',0,NULL)" //seed the table with the root node
             );
         foreach ($qrs as $qry) {
-            $result = $db->query($qry);
-            if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
+            try {
+                $db->exec($qry);
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e,"Cannot execute  query:\n$qry");
                 I2CE::raiseError("Could not initialize temporary alternate config table");
                 return false;
             }        
@@ -346,12 +368,16 @@ GROUP BY path";
             return true;
         } 
         $qry = 'SHOW TABLES LIKE "config"';
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot access database")) {
-            return false;
-        }
-        if ($result->numRows() == 0) {
-            I2CE::raiseError("Attempting to update to alternative config table from existing config table, but the config table does not exist");
+        try { 
+            $result = $db->query($qry);
+            if ($result->rowCount() == 0) {
+                I2CE::raiseError("Attempting to update to alternative config table from existing config table, but the config table does not exist");
+                unset( $result );
+                return false;
+            }
+            unset( $result );
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot access database");
             return false;
         }
         I2CE::longExecution();
@@ -362,11 +388,17 @@ GROUP BY path";
             IF ( locate('/',path) > 0 , SUBSTR(path,length(path) - locate('/', reverse(path)) +2  ), IF (locate(':',path),SUBSTR(path,locate(':',path)+1),'') ) as name
             ,type,value
 from config WHERE ( locate(':',path) > 0 OR path = 'config' )";
-        if (I2CE::pearError( $db->query($qry),"Cannot update alternative config table from existing table")) {
+        try {
+            $db->exec($qry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e,"Cannot update alternative config table from existing table");
             return false;
         }        
         $qry = "RENAME TABLE `config_alt_tmp` TO `config_alt`";
-        if (I2CE::pearError($db->query($qry),"Cannot rename temporary alternative config table")) {
+        try {
+            $db->exec($qry);
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot rename temporary alternative config table");
             return false;
         }      
         return $this->setupMagicDataStorage();
@@ -396,24 +428,29 @@ from config WHERE ( locate(':',path) > 0 OR path = 'config' )";
 //             72.7333     99.9036
 //             AVG(length(path))     count(distinct(substr(path,1,140))) / count(distinct(path)) * 100
 //            72.7333     99.9825 
-        $db = MDB2::singleton();
-        $check_qry = "SELECT * FROM information_schema.statistics WHERE table_schema = '" . addslashes($db->database_name) . "'"
+        $db = I2CE::PDO();
+        $check_qry = "SELECT * FROM information_schema.statistics WHERE table_schema = '" . addslashes(I2CE::dbName()) . "'"
             . " AND table_name = 'config' and index_name = 'path' ";
-        $result = $db->query($check_qry);
-        if (I2CE::pearError($result,"Cannot execute  query:\n$check_qry")) {
+        try {
+            $result = $db->query($check_qry);
+            if ($result->rowCount() > 0) {
+                //the index has already been created.
+                I2CE::raiseError("Index on config.path has already been created");
+                return true;
+            }
+            unset( $result );
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot execute  query:\n$check_qry");
             return false;
-        }
-        if ($result->numRows() > 0) {
-            //the index has already been created.
-            I2CE::raiseError("Index on config.path has already been created");
-            return true;
         }
         //create the index
         ini_set('max_execution_time',60000);
         I2CE::raiseError("Creating index 'path' on config.path");
         $qry = "ALTER TABLE config ADD INDEX `path` ( `path` ( 130 ) )";
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
+        try {
+            $db->exec($qry);
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot execute  query:\n$qry");
             return false;
         }
         return true;
@@ -437,39 +474,54 @@ from config WHERE ( locate(':',path) > 0 OR path = 'config' )";
     }
 
     private static function _runStatementList($statements = null) {
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         foreach($statements as $stmt) {
-            $r = $db->query($stmt);
-            if ($r instanceOf MDB2_Error) {
-                I2CE::raiseError("Problem executing statement: $stmt");
+            try {
+                $db->exec($stmt);
+                I2CE::raiseError("Executed: $stmt");
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e, "Problem executing statement");
                 return false;
             }
-            I2CE::raiseError("Executed: $stmt");
         }
         return true;
     }
 
 
     protected function dropOldCaches() {
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         I2CE::raiseError("Dropping old cache tables");
-        $tables = $db->queryCol("SHOW TABLES LIKE 'cache_%'", 0);
-        $s = array();
+        try {
+            $result = $db->query("SHOW TABLES LIKE 'cache_%'");
+            $tables = $result->fetchAll( PDO::FETCH_COLUMN, 0 );
+            unset( $result );
+            $s = array();
 
-        foreach($tables as $table) {$s[] = "DROP TABLE $table";}
-        
-        return self::_runStatementList($s);
+            foreach($tables as $table) {$s[] = "DROP TABLE $table";}
+
+            return self::_runStatementList($s);
+        } catch( PDOException $e ) {
+            I2CE::pdoError( $e, "Failed to get cached table list" );
+            return false;
+        }
     }
 
     protected function updateToInnoDB() {
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         I2CE::raiseError("Changing MyISAM tables to InnoDB and UTF-8");
-        $tables = $db->queryCol("SHOW TABLES", 0);
-        $s = array();
+        try {
+            $result = $db->query("SHOW TABLES");
+            $tables = $result->fetchAll( PDO::FETCH_COLUMN, 0 );
+            unset( $result );
+            $s = array();
 
-        foreach($tables as $table) {$s[] = "ALTER TABLE $table ENGINE=InnoDB CHARSET=utf8";}
+            foreach($tables as $table) {$s[] = "ALTER TABLE $table ENGINE=InnoDB CHARSET=utf8";}
         
-        return self::_runStatementList($s);
+            return self::_runStatementList($s);
+        } catch( PDOException $e ) {
+            I2CE::pdoError( $e, "Failed to get table list to alter" );
+            return false;
+        }
     }
 
     protected function updateConfigStatus() {
