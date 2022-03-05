@@ -613,10 +613,10 @@ class I2CE_Module_Tags extends I2CE_Module {
                         $var = null;
                     }
                     $arg = '';
-                    continue;
+                    continue 2;
                 } else {
                     $arg .= $c;
-                    continue;
+                    continue 2;
                 }
                 $state = self::FUNC_ARGS;   
                 self::addArgument($args,$arg,$append);                          
@@ -634,7 +634,7 @@ class I2CE_Module_Tags extends I2CE_Module {
                     $state = self::FUNC_ARG_VARIABLE_METH_PROP;                    
                 }else {
                     $arg .= $c;
-                    continue;
+                    continue 2;
                 }
                 $var = null;
                 if (strlen($arg) == 0) {
@@ -875,10 +875,10 @@ class I2CE_Module_Tags extends I2CE_Module {
                         throw new Exception("Expecting object to at property $func, but not found at $i in $orig_argument");
                     }
                     $func = '';
-                    continue;
+                    continue 2;
                 } else {
                     $func .= $c;
-                    continue;
+                    continue 2;
                 }
                 break;
             case self::VARIABLE:
@@ -1027,7 +1027,7 @@ class I2CE_Module_Tags extends I2CE_Module {
                 for ($i = 0; $i < $node->attributes->length; $i++) {
                     $attr = $node->attributes->item(0);
                     if ($attr->name == 'src') {
-                        continue;
+                        continue 2;
                     }
                     $attrs[$attr->name] = $attr->value;
                 }
