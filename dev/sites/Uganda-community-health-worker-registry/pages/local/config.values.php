@@ -54,7 +54,7 @@ $i2ce_site_i2ce_path = "/var/lib/iHRIS/community_registry/dev/4.2.3/i2ce";
 /**
  * the dsn to connect to your databse
  */
-$i2ce_site_dsn = 'mysql://ihris:ihris@2022systems@172.27.1.230/community_registry' ;
+$i2ce_site_dsn = 'mysql://ihris:ihris@2022systems@172.27.1.230/iHRIS_community_registry' ;
 
 
 /**
