@@ -13,23 +13,28 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-14 07:58+0000\n"
-"PO-Revision-Date: 2016-01-27 18:19+0000\n"
+"PO-Revision-Date: 2016-09-21 12:18:03+0000\n"
 "Last-Translator: Siebrand Mazeland <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-09-02 05:22+0000\n"
-"X-Generator: Launchpad (build 18446)\n"
-"Language: ja\n"
+"X-Launchpad-Export-Date: 2016-08-16 05:31+0000\n"
+"X-Generator: MediaWiki 1.28.0-alpha; Translate 2016-04-06\n"
 "X-POT-Import-Date: 2014-11-14 12:33:10+0000\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml#L14 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml line 14]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml#L14
+#: i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml
+#: line 14]
 #, no-c-format
 msgid "Unable to upload the file"
 msgstr "ファイルをアップロードすることができません"
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml#L10 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml line 10]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml#L10
+#: i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Binary_Files/configs/en_US/BinFiles.xml
+#: line 10]
 #, no-c-format
 msgid "Snap Picture"
 msgstr "スナップ写真"

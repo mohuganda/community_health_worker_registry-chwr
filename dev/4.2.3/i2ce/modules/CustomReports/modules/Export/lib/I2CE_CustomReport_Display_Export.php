@@ -93,7 +93,7 @@ class I2CE_CustomReport_Display_Export extends I2CE_CustomReport_Display{
 
     /**
      * Process results
-     * @param array $results_data an array of results.  indices are 'restults' and Buffered result and 'num_results' the
+     * @param array $results_data an array of results.  indices are 'restults' and MDB2 Buffered result and 'num_results' the
      * number of results.  (these values may be false on failure)
      * @param DOMNode $contentNode.  Default to null a node to append the results onto
      */
@@ -112,20 +112,19 @@ class I2CE_CustomReport_Display_Export extends I2CE_CustomReport_Display{
         if ( $this->style == "rawjson" ) {
             $out = json_encode( $results_data['results']->fetchAll() );
         } else {
-            try {
-            while ($row = $results_data['results']->fetch()) {
+            while ($row = $results_data['results']->fetchRow()) {
+                if (  PEAR::isError( $row ) ) {
+                    break;
+                }
                 if (!($row_out = $this->processResultRow($row,$row_num,$contentNode))) {
-                    unset( $results_data['results'] );
+                    $results_data['results']->free();
                     return '';
                 }
                 $out .= $row_out;
                 $row_num++;
             }
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Failed to process export results:" );
-            }
         }
-        unset( $results_data['results'] );
+        $results_data['results']->free();
         return $out;
     }
 

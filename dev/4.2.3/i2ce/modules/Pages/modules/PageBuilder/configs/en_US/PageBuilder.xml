@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="page-builder" path="/">
   <metadata>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="page-builder" path="/" locale="en_US">
-    <version>4.3.0</version>
+    <version>4.2.0.3</version>
     <configurationGroup name="tasks" path="/I2CE/tasks/task_description" locale="en_US">
       <configuration name="can_build_pages" locale="en_US" values="single" type="string">
         <value>Can build or configure pages</value>

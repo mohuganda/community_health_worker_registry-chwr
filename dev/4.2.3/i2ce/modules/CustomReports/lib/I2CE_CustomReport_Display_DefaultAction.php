@@ -100,6 +100,51 @@ class I2CE_CustomReport_Display_DefaultAction extends I2CE_CustomReport_Display_
     }
             
     /**
+     * Display the results jumper
+     * @param mixed $num_results  Either boolean (false) if we don't have the total number of results  or an integer the number of results
+     * @return boolean true on sucess
+     */
+    /*
+    protected function doJumper($num_results,$contentNode) {
+        if (($num_results === false) || ( ((int) $num_results) < 1) ||
+            ($this->page->request_exists('limit_paginated') && !$this->page->request('limit_paginated'))) {            
+            $this->template->removeNodeById('report_pager_display',$contentNode);            
+            return;
+        }
+        //take care of the jumper
+        $total_pages = 1;
+        $per_page = (int) ($this->defaultOptions['limit_per_page']);
+        if ($per_page <1) {
+            //check it is not bad, if so make it something reasonable -- in fact make it the default per page in I2CE_CustomReport_Display
+            $per_page = 100;
+        }
+        $page = (int) $this->defaultOptions['limit_page'];
+        //$page = (int) $this->page->request('limit_page');
+        if ($page < 1) {
+            $page = 1;
+        }
+        if (MDB2::singleton()->getOption('result_buffering')) {
+            $num_rows = $num_results;
+            $total_pages = ceil( $num_rows / $per_page );
+            if ( $page > $total_pages ) {
+                $page = $total_pages ;
+            }
+        }
+        if ($total_pages == 1) {
+            $this->template->removeNodeById('report_pager_display',$contentNode);            
+            return;
+        }        
+        $url = "CustomReports/show/{$this->view}/{$this->display}";
+        $url = $this->page->page();
+        $qry_fields = $this->getJumperQryFields();
+        $q = array();
+        foreach ($qry_fields as $i=>$v) {
+            $q[urlencode($i)  ] = $v;
+        }
+        $this->page->makeScalingJumper($this->getReportPrefix().'report',$page,$total_pages,$url,$q,'limit_page');            
+    }
+    */
+    /**
      * Return the root of this page since this is generally set up for special displays.
      */
     protected function getPageRoot() {

@@ -8,21 +8,21 @@
     <creator>Carl Leitner</creator>
     <email>litlfred@ibiblio.org</email>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.3.3.0</version>
+    <version>4.2.1.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <requirement name="I2CE">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="user">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="permissions">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="modules">
       <value>./modules</value>

@@ -5,19 +5,19 @@
     <displayName>PDF Reports</displayName>
     <category>Report Type</category>
     <description>Configuration options for reports that use PDF</description>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <link>http://launchpad.net/i2ce</link>
     <requirement name="CustomReports">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="textlayout">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="ColorPicker">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="templates">
       <value>./templates</value>

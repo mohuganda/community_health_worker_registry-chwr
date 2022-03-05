@@ -81,12 +81,6 @@ class I2CE_UserAccess_LDAP_DB extends I2CE_UserAccess_Mechanism{
      * @var protected resource $ldap the ldap connect;
      */
     protected $ldap = null;
-
-    /**
-     * @var PDO The database object
-     */
-    protected $db = null;
-
     /**
      * Get the ldap connection
      * @param boolean $cached.  Defaiults to true in which case we get the cached connection
@@ -124,7 +118,6 @@ class I2CE_UserAccess_LDAP_DB extends I2CE_UserAccess_Mechanism{
                 return $ldap;
             }
         }
-        $this->db = I2CE::PDO();
         return $this->ldap;
     }
 
@@ -250,20 +243,21 @@ class I2CE_UserAccess_LDAP_DB extends I2CE_UserAccess_Mechanism{
      */
     public function _getUserIds() {
         $qry = "SELECT id  FROM " . $this->options['user_table'];
-        try {
-            $sth = $this->db->prepare($qry);
-            $sth->execute( array());
-            $userIds= array();
-            while ( $data = $sth->fetch() ) {
-                $userIds[] = $data->id;
-            }
-            $result->free();
-            $sth->free();
-            return $userIds;
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error getting userids: " );
+        $sth = $this->db->prepare($qry, array(), MDB2_PREPARE_RESULT );
+        if (I2CE::pearError( $sth, "Error preparing to populate history:" ) ) {
             return array();
         }
+        $result = $sth->execute( array());
+        if ( I2CE::pearError( $result, "Error getting userids: " ) ) {
+            return array();
+        }
+        $userIds= array();
+        while ( $data = $result->fetchRow() ) {
+            $userIds[] = $data->id;
+        }
+        $result->free();
+        $sth->free();
+        return $userIds;
     }
 
 
@@ -277,16 +271,15 @@ class I2CE_UserAccess_LDAP_DB extends I2CE_UserAccess_Mechanism{
         $qry = "SELECT id "
             . ' FROM ' . $this->options['user_table'] . ' u'
             . ' WHERE u.username  = ? ';
-        try {
-            $row = I2CE_PDO::getRow( $qry, array( $username ) );
-            if (!$row || !$row->id) {
-                return false;
-            }
-            return $row->id;
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e,  "Cannot get user id for $username"  );
+        $row = $this->db->getRow( $qry, null, array( $username ), array('text') );
+        if (  I2CE::pearError($row,  "Cannot get user id for $username"  ) ) {
             return false;
         }
+        if (!$row instanceof MDB2_ROW || !$row->id) {
+            return false;
+        }
+        return $row->id;
+
     }
 
 
@@ -299,16 +292,14 @@ class I2CE_UserAccess_LDAP_DB extends I2CE_UserAccess_Mechanism{
         $qry = "SELECT role "
             . ' FROM ' . $this->options['user_table'] . ' u'
             . ' WHERE u.username  = ? ';
-        try {
-            $row = I2CE_PDO::getRow( $qry, array( $username ) );
-            if (!$row || !$row->role) {
-                return false;
-            }
-        return $row->row;
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e,  "Cannot get user role for $username"  );
+        $row = $this->db->getRow( $qry, null, array( $username ), array('text') );
+        if (  I2CE::pearError($row,  "Cannot get user role for $username"  ) ) {
             return false;
         }
+        if (!$row instanceof MDB2_ROW || !$row->role) {
+            return false;
+        }
+        return $row->row;
 
     }
 
@@ -322,16 +313,14 @@ class I2CE_UserAccess_LDAP_DB extends I2CE_UserAccess_Mechanism{
         $qry = "SELECT username "
             . ' FROM ' . $this->options['user_table'] . ' u'
             . ' WHERE u.id  = ? ';
-        try {
-            $row = I2CE_PDO::getRow( $qry, null, array( $userid ), array('integer') );
-            if (!$row || !$row->username) {
-                return false;
-            }
-            return $row->username;
-        catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Cannot get usename for $userid" );
+        $row = $this->db->getRow( $qry, null, array( $userid ), array('integer') );
+        if (  I2CE::pearError($row,  "Cannot get usename for $userid"  ) ) {
             return false;
         }
+        if (!$row instanceof MDB2_ROW || !$row->username) {
+            return false;
+        }
+        return $row->username;
     }
 
     /**
@@ -526,10 +515,7 @@ class I2CE_UserAccess_LDAP_DB extends I2CE_UserAccess_Mechanism{
         }        
         $qry = "INSERT INTO " . $this->options['user_table'] . " (role,username) VALUES (?, ?) ON DUPLICATE KEY UPDATE role = ?";
         $params = array($role,$username, $role);
-        try {
-            I2CE_PDO::execParam( $qry, $params );
-        catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Cannot update user role" );
+        if (I2CE::pearError($this->db->execParam($qry, $params,array('text', 'text','text') ), "Cannot update user role")) {
             return false;
         }        
         return true;

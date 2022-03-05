@@ -38,14 +38,15 @@ Author Email:lduncan@intrahealth.org
 
 class I2CE_Module_Float extends I2CE_Module {
     /**
-     * @var PDO The instance of the database to perform queries on.
+     * @var MDB2 The instance of the database to perform queries on.
      */
     private $db;
         
 
     public function __construct() {
         parent::__construct();
-        $this->db = I2CE::PDO();
+        $this->db = MDB2::singleton();
+        I2CE::pearError( $this->db, "Error getting database connection: " );
     }
 
 
@@ -60,26 +61,21 @@ class I2CE_Module_Float extends I2CE_Module {
         foreach( array('entry','last_entry') as $table ) {
             $qry_show = "SHOW COLUMNS FROM $table LIKE '%_value'";
             $qry_alter = "ALTER TABLE $table ADD COLUMN `float_value` float";
-            try {
-                $results = $this->db->query( $qry_show );
-                $found = false;
-                while( $row = $results->fetch() ) {
-                    if ($row->field == 'float_value') {
-                        $found = true;
-                    }
-                }
-                if (!$found) {
-                    //add the blob column to last_entry
-                    try { 
-                        $this->db->exec($qry_alter);
-                    } catch ( PDOException $e ) {
-                        I2CE::pdoError( $e, "Error adding float column to $table:");
-                        return false;
-                    }
-                }
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error getting columns from $table table: on {$qry_show}" );
+            $results = $this->db->query( $qry_show );
+            if ( I2CE::pearError( $results, "Error getting columns from $table table: on {$qry_show}" ) ) {
                 return false; 
+            }
+            $found = false;
+            while( $row = $results->fetchRow() ) {
+                if ($row->field == 'float_value') {
+                    $found = true;
+                }
+            }
+            if (!$found) {
+                //add the blob column to last_entry
+                if ( I2CE::pearError( $this->db->exec($qry_alter), "Error adding float column to $table:")) {
+                    return false;
+                }
             }
         }
         return true;

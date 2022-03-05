@@ -67,7 +67,7 @@ class I2CE_CustomReport_Display_Default extends I2CE_CustomReport_Display{
 
     /**
      * Process results
-     * @param array $results_data an array of results.  indices are 'results' and Buffered result and 'num_results' the
+     * @param array $results_data an array of results.  indices are 'results' and MDB2 Buffered result and 'num_results' the
      * number of results.  (these values may be false on failure)
      * @param DOMNode $contentNode.  Default to null a node to append the results onto
      */
@@ -291,7 +291,7 @@ class I2CE_CustomReport_Display_Default extends I2CE_CustomReport_Display{
         if ($page < 1) {
             $page = 1;
         }
-        if (I2CE::PDO()->getAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY)) {
+        if (MDB2::singleton()->getOption('result_buffering')) {
             $num_rows = $num_results;
             $total_pages = ceil( $num_rows / $per_page );
             if ( $page > $total_pages ) {

@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="fi">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -15,19 +15,19 @@
       <value>ar:Arabia</value>
       <value>as:Assami</value>
       <value>ay:Aimara</value>
-      <value>az:Azerbaidžani</value>
-      <value>ba:Baškiiri</value>
-      <value>be:Valkovenäjä</value>
+      <value>az:Azerbaid&#382;ani</value>
+      <value>ba:Ba&#353;kiiri</value>
+      <value>be:Valkoven&#228;j&#228;</value>
       <value>bg:Bulgaria</value>
       <value>bo:Tiibet</value>
       <value>br:Bretoni</value>
       <value>bs:Bosnia</value>
       <value>ca:Katalaani</value>
-      <value>ce:Tšetšeeni</value>
+      <value>ce:T&#353;et&#353;eeni</value>
       <value>co:Korsika</value>
-      <value>cs:Tšekki</value>
+      <value>cs:T&#353;ekki</value>
       <value>cu:Kirkkoslaavi</value>
-      <value>cv:Tšuvassi</value>
+      <value>cv:T&#353;uvassi</value>
       <value>cy:Wales</value>
       <value>da:Tanska</value>
       <value>de:Saksa</value>
@@ -40,18 +40,18 @@
       <value>eu:Baski</value>
       <value>fa:Farsi (Persia)</value>
       <value>fi:Suomi</value>
-      <value>fj:Fidži</value>
-      <value>fo:Fääri</value>
+      <value>fj:Fid&#382;i</value>
+      <value>fo:F&#228;&#228;ri</value>
       <value>fr:Ranska</value>
       <value>fy:Friisi</value>
       <value>ga:Irlannin gael</value>
       <value>gd:Gael</value>
       <value>gl:Gallicia</value>
-      <value>gu:Gudžarati</value>
+      <value>gu:Gud&#382;arati</value>
       <value>he:Heprea</value>
       <value>ho:Hiri-motu</value>
       <value>hr:Kroatia</value>
-      <value>hsb:Yläsorbi</value>
+      <value>hsb:Yl&#228;sorbi</value>
       <value>hu:Unkari</value>
       <value>hy:Armenia</value>
       <value>id:Indonesia</value>
@@ -63,9 +63,9 @@
       <value>ka:Georgia</value>
       <value>ki:Kikuju</value>
       <value>kk:Kazakki</value>
-      <value>kl:Grönlanti</value>
+      <value>kl:Gr&#246;nlanti</value>
       <value>ko:Korea</value>
-      <value>ks:Kašmiri</value>
+      <value>ks:Ka&#353;miri</value>
       <value>ku:Kurdi</value>
       <value>kw:Korni</value>
       <value>ky:Kirgiisi</value>
@@ -83,27 +83,27 @@
       <value>ms:Malaiji</value>
       <value>mt:Malta</value>
       <value>my:Burma</value>
-      <value>nb:Norja (bokmål)</value>
+      <value>nb:Norja (bokm&#229;l)</value>
       <value>nd:Ndebele, Pohjoinen</value>
       <value>nds:Alasaksa</value>
       <value>nl:Hollanti</value>
       <value>nn:Norja (nynorsk)</value>
-      <value>nr:Ndebele, Etelä</value>
+      <value>nr:Ndebele, Etel&#228;</value>
       <value>nso:Pohjoissotho</value>
       <value>nv:Navaho</value>
-      <value>ny:Njandža</value>
+      <value>ny:Njand&#382;a</value>
       <value>oc:Oksitaani</value>
       <value>or:Orija</value>
       <value>os:Osseetti</value>
-      <value>pa:Pandžabi</value>
+      <value>pa:Pand&#382;abi</value>
       <value>pl:Puola</value>
-      <value>ps:Paštu</value>
+      <value>ps:Pa&#353;tu</value>
       <value>pt:Portugali</value>
       <value>pt_BR:Brasilian Portugali</value>
-      <value>qu:Ketšua</value>
+      <value>qu:Ket&#353;ua</value>
       <value>ro:Romania</value>
       <value>rom:Romani</value>
-      <value>ru:Venäjä</value>
+      <value>ru:Ven&#228;j&#228;</value>
       <value>rw:Ruanda</value>
       <value>sc:Sardi</value>
       <value>se:Pohjoissaame</value>
@@ -111,7 +111,7 @@
       <value>sk:Slovakki</value>
       <value>sl:Sloveeni</value>
       <value>sm:Samoa</value>
-      <value>sn:šona</value>
+      <value>sn:&#353;ona</value>
       <value>sq:Albania</value>
       <value>sr:Serbian latina</value>
       <value>ss:Swazi</value>
@@ -119,10 +119,10 @@
       <value>su:Sunda</value>
       <value>sv:Ruotsi</value>
       <value>ta:Tamili</value>
-      <value>tg:Tadžikki</value>
+      <value>tg:Tad&#382;ikki</value>
       <value>ti:Tigrinja</value>
       <value>tk:Turkmeeni</value>
-      <value>tn:Tšwana</value>
+      <value>tn:T&#353;wana</value>
       <value>tr:Turkki</value>
       <value>tt:Tataari</value>
       <value>ty:Tahiti</value>
@@ -131,7 +131,7 @@
       <value>uz:Uzbekki</value>
       <value>vi:Vietnam</value>
       <value>wa:Valloni</value>
-      <value>yi:Jiddiš</value>
+      <value>yi:Jiddi&#353;</value>
       <value>yo:Joruba</value>
       <value>zh:Kiina</value>
       <value>zh_CN:Yksinkertaistettu kiina</value>

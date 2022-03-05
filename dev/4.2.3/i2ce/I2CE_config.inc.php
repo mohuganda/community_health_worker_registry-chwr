@@ -1,4 +1,5 @@
-<?php /*
+<?php
+/*
  * © Copyright 2007, 2008 IntraHealth International, Inc.
  * 
  * This File is part of iHRIS
@@ -62,7 +63,7 @@ require_once  'I2CE.php';
  * @param string $class_name The name of the class being loaded
  */
 function i2ce_class_autoload( $class_name ) {
-    $class_file = I2CE::getFileSearch()->search( 'CLASSES', $class_name . '.php',false,true );
+    $class_file = I2CE::getfileSearch()->search( 'CLASSES', $class_name . '.php',false,true );
 
 
     $class_found = false;

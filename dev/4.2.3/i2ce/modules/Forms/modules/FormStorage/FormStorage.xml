@@ -9,13 +9,10 @@
     <creator>Luke Duncan</creator>
     <email>lduncan@intrahealth.org</email>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.3.3.0</version>
-    <path name="configs">
-      <value>./configs</value>
-    </path>
+    <version>4.2.1.1</version>
     <requirement name="forms">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

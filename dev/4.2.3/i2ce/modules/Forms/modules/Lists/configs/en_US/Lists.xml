@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="Lists" path="/I2CE/">
   <metadata>
-    <version>4.3.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="Lists" path="/I2CE/" locale="en_US">
-    <version>4.3.0</version>
+    <version>4.2.0.9</version>
     <configurationGroup name="auto_list" path="/I2CE/page/auto_list">
       <configuration name="title" locale="en_US" values="single" type="string">
         <value>Administer Database Lists</value>

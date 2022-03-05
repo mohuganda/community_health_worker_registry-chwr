@@ -37,6 +37,10 @@ abstract class I2CE_FormField_DB_TEXT extends I2CE_FormField {
      * The database type for the field
      */
     const FIELD_TYPE_DB = 'TEXT COLLATE utf8_bin';
+    /**
+     * The MDB2 type for the field.
+     */
+    const FIELD_TYPE_MDB2 = 'clob';
 
 
 

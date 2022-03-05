@@ -12,29 +12,37 @@ msgstr ""
 "Project-Id-Version: iHRIS I2CE - Lists Link To List\n"
 "Report-Msgid-Bugs-To: translatewiki.net\n"
 "POT-Creation-Date: 2015-09-14 07:58+0000\n"
-"PO-Revision-Date: 2014-01-13 14:50+0000\n"
+"PO-Revision-Date: 2016-09-21 12:18:27+0000\n"
 "Last-Translator: MHolguin <Unknown>\n"
 "Language-Team: Spanish <https://translatewiki.net/wiki/Portal:es>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-09-02 05:23+0000\n"
-"X-Generator: Launchpad (build 18446)\n"
+"X-Launchpad-Export-Date: 2016-08-16 05:32+0000\n"
+"X-Generator: MediaWiki 1.28.0-alpha; Translate 2016-04-06\n"
 "X-Translation-Project: translatewiki.net <https://translatewiki.net>\n"
-"Language: es\n"
 "X-Language-Code: es\n"
 "X-Message-Group: #out-ihris-i2ce-lltl\n"
 "X-POT-Import-Date: 2013-10-07 17:23:47+0000\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L12 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml line 12]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L17 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml line 17]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L22 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml line 22]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L27 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml line 27]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L12
+#: i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml
+#: line 12]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L17
+#: 17]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L22
+#: 22]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L27
+#: 27]
 #, no-c-format
 msgid "Lists Linked to Lists"
 msgstr "Listado de Enlazados a Listas"
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L36 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml line 36]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml#L36
+#: i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/Lists/modules/ListLink/modules/ListLinkToList/configs/en_US/ListLinkToList.xml
+#: line 36]
 #, no-c-format
 msgid "Links To"
 msgstr "Enlaza a"

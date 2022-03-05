@@ -555,113 +555,111 @@ class I2CE_DataTree {
             $order_by = " ORDER BY " . implode( ',', $all_orders );
         }
         $qry = "SELECT * FROM $report_table $where_clause $order_by";
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         I2CE::raiseMessage($qry);
-        try {
-            $res = $db->query( $qry );
-            $phonebook = array();
-            $results = array();
-            $display_string = array();
-            $display_copy = $displays;
-            while ( $data = $res->fetch() ) {
-                foreach( $displays as $alias => $disp_data ) {
-                    $id_field = strtolower( $alias . "+id" );
-                    if ( $data->$id_field == null || array_key_exists( $data->$id_field, $phonebook ) ) {
-                        continue;
-                    }
-
-                    $curr = array();
-                    $add_this = false;
-                    if ( in_array( $disp_data['form'], $forms ) ) {
-                        $curr['value'] = $data->$id_field;
-                        $add_this = true;
-                    }
-
-                    if ( !$add_this ) {
-                        $check_ok = false;
-                        foreach( $display_copy as $alias_copy => $disp_data_copy ) {
-                            if ( $alias_copy == $alias ) {
-                                $check_ok = true;
-                                continue;
-                            }
-                            if ( !$check_ok ) {
-                                continue;
-                            }
-                            if ( array_key_exists( 'link_field', $disp_data_copy )
-                                    && $disp_data_copy['link_field'] != '' ) {
-                                $link_field_copy = $disp_data_copy['link_field'];
-                                if ( $data->$id_field == $data->$link_field_copy ) {
-                                    $add_this = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if ( !$add_this ) {
-                        continue;
-                    }
-
-
-                    if ( !array_key_exists( $disp_data['form'], $display_string ) ) {
-                        $display_string[ $disp_data['form'] ] = I2CE_List::getDisplayString( $disp_data['form'] );
-                    }
-                    $disp_array = array();
-                    $disp_str = $display_string[ $disp_data['form'] ];
-                    $disp_str_arr = explode( '%s', $disp_str );
-                    $fo = $formObjs[ $disp_data['form'] ];
-
-                    $disp_count = 0;
-                    foreach( $disp_data['fields'] as $field => $dbfield ) {
-                        $disp_count++;
-                        if ( $dbfield == $disp_data['link_field'] ) {
-                            // Don't include the data from the link field since it will already be there.
-                            if ( $disp_count == 1 ) {
-                                unset( $disp_str_arr[$disp_count] );
-                            } else {
-                                unset( $disp_str_arr[$disp_count-1] );
-                            }
-                            continue;
-                        }
-                        $dbfield = strtolower( $dbfield );
-                        $fieldObj = $fo->getField($field);
-                        if ( !$fieldObj instanceof I2CE_FormField ) {
-                            I2CE::raiseError( "Could not get field $field" );
-                            continue;
-                        }
-                        if ( isset( $data->$dbfield ) ) {
-                            $fieldObj->setFromDB( $data->$dbfield );
-                            $disp_array[$field] = $fieldObj->getDisplayValue();
-                        } else {
-                            $disp_array[$field] = null;
-                        }
-                    }
-                    $disp_str = implode( '%s', $disp_str_arr );
-                    $display = vsprintf( $disp_str, $disp_array );
-                    $curr['display'] = $display;
-
-                    $phonebook[ $data->$id_field ] = &$curr;
-
-                    if ( $disp_data['link_field'] != '' ) {
-                        $link_field = $disp_data['link_field'];
-                        if ( array_key_exists( $data->$link_field, $phonebook ) ) {
-                            $add_to = &$phonebook[ $data->$link_field ];
-                            if ( !array_key_exists( 'children', $phonebook[ $data->$link_field ] ) ) {
-                                $phonebook[ $data->$link_field ][ 'children' ] = array();
-                            }
-                            $phonebook[ $data->$link_field ]['children'][] = &$curr;
-                        } else {
-                            //I2CE::raiseMessage( "Couldn't find $link_field " . $data->$link_field . " in phonebook " );
-                        }
-                    } else {
-                        $results[] = &$curr;
-                    }
-                    unset( $curr );
-
-                }
-            }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $res, "Invalid report data tree query: " );
+        $res = $db->query( $qry );
+        if ( I2CE::pearError( $res, "Invalid report data tree query: " ) ) {
             return array();
+        }
+        $phonebook = array();
+        $results = array();
+        $display_string = array();
+        $display_copy = $displays;
+        while ( $data = $res->fetchRow() ) {
+            foreach( $displays as $alias => $disp_data ) {
+                $id_field = strtolower( $alias . "+id" );
+                if ( $data->$id_field == null || array_key_exists( $data->$id_field, $phonebook ) ) {
+                    continue;
+                }
+                
+                $curr = array();
+                $add_this = false;
+                if ( in_array( $disp_data['form'], $forms ) ) {
+                    $curr['value'] = $data->$id_field;
+                    $add_this = true;
+                }
+
+                if ( !$add_this ) {
+                    $check_ok = false;
+                    foreach( $display_copy as $alias_copy => $disp_data_copy ) {
+                        if ( $alias_copy == $alias ) {
+                            $check_ok = true;
+                            continue;
+                        }
+                        if ( !$check_ok ) {
+                            continue;
+                        }
+                        if ( array_key_exists( 'link_field', $disp_data_copy )
+                                && $disp_data_copy['link_field'] != '' ) {
+                            $link_field_copy = $disp_data_copy['link_field'];
+                            if ( $data->$id_field == $data->$link_field_copy ) {
+                                $add_this = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if ( !$add_this ) {
+                    continue;
+                }
+
+
+                if ( !array_key_exists( $disp_data['form'], $display_string ) ) {
+                    $display_string[ $disp_data['form'] ] = I2CE_List::getDisplayString( $disp_data['form'] );
+                }
+                $disp_array = array();
+                $disp_str = $display_string[ $disp_data['form'] ];
+                $disp_str_arr = explode( '%s', $disp_str );
+                $fo = $formObjs[ $disp_data['form'] ];
+
+                $disp_count = 0;
+                foreach( $disp_data['fields'] as $field => $dbfield ) {
+                    $disp_count++;
+                    if ( $dbfield == $disp_data['link_field'] ) {
+                        // Don't include the data from the link field since it will already be there.
+                        if ( $disp_count == 1 ) {
+                            unset( $disp_str_arr[$disp_count] );
+                        } else {
+                            unset( $disp_str_arr[$disp_count-1] );
+                        }
+                        continue;
+                    }
+                    $dbfield = strtolower( $dbfield );
+                    $fieldObj = $fo->getField($field);
+                    if ( !$fieldObj instanceof I2CE_FormField ) {
+                        I2CE::raiseError( "Could not get field $field" );
+                        continue;
+                    }
+                    if ( isset( $data->$dbfield ) ) {
+                        $fieldObj->setFromDB( $data->$dbfield );
+                        $disp_array[$field] = $fieldObj->getDisplayValue();
+                    } else {
+                        $disp_array[$field] = null;
+                    }
+                }
+                $disp_str = implode( '%s', $disp_str_arr );
+                $display = vsprintf( $disp_str, $disp_array );
+                $curr['display'] = $display;
+                
+                $phonebook[ $data->$id_field ] = &$curr;
+
+                if ( $disp_data['link_field'] != '' ) {
+                    $link_field = $disp_data['link_field'];
+                    if ( array_key_exists( $data->$link_field, $phonebook ) ) {
+                        $add_to = &$phonebook[ $data->$link_field ];
+                        if ( !array_key_exists( 'children', $phonebook[ $data->$link_field ] ) ) {
+                            $phonebook[ $data->$link_field ][ 'children' ] = array();
+                        }
+                        $phonebook[ $data->$link_field ]['children'][] = &$curr;
+                    } else {
+                        //I2CE::raiseMessage( "Couldn't find $link_field " . $data->$link_field . " in phonebook " );
+                    }
+                } else {
+                    $results[] = &$curr;
+                }
+                unset( $curr );
+
+            }
         }
         return $results;
     }

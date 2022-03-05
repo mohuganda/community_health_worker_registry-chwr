@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="web-services-lists" path="/modules/web-services">
   <metadata>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="web-services-lists" path="/modules/web-services" locale="en_US">
-    <version>4.3.0</version>
+    <version>4.2.0.0.4</version>
     <configurationGroup name="messages" locale="en_US">
       <configuration name="invalid_list" values="single" type="string">
         <value>That is not a valid list: '%s'</value>

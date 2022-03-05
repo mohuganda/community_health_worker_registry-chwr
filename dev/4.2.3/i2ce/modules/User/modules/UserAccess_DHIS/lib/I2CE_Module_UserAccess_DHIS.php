@@ -42,9 +42,10 @@ class I2CE_Module_UserAccess_DHIS extends I2CE_Module {
         if (!array_key_exists('userDB',$options)) {
             $options['userDB'] = '';
         }
+        $db = MDB2::singleton();
         $options['userDB'] = trim($options['userDB']);
         if (!$options['userDB']) {
-            $options['userDB'] =  '`' . I2CE_PDO::details('dbname') . '`';
+            $options['userDB'] =  '`' . $db->database_name  . '`';
         }
         if (!array_key_exists('detailTable',$options)) {
             $options['detailTable']=  $options['userDB'] . '.userinfo';
@@ -96,7 +97,7 @@ class I2CE_Module_UserAccess_DHIS extends I2CE_Module {
             }
         }        
         $options =  self::ensureDefaultOptions($options);
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         $qrs = array();
         $qrs[] = 'CREATE TABLE IF NOT EXISTS ' . $options['detailTable']. ' '
             .'(userinfoid integer NOT NULL,'
@@ -133,10 +134,7 @@ class I2CE_Module_UserAccess_DHIS extends I2CE_Module {
         
         I2CE::raiseError("Initializing User Table. Users' details table se stored in database {$options['userDB']}");
         foreach ($qrs as $qry) {
-            try {
-                $db->exec($qry);
-            } catch( PDOException $e ) {
-                I2CE::pdoError($e,"Cannot create user table");
+            if (I2CE::pearError($db->query($qry),"Cannot create user table")) {
                 I2CE::raiseError("Could not initialize I2CE user tables") ;
                 return false;
             }

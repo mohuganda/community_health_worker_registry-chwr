@@ -4,11 +4,11 @@
   <metadata>
     <displayName>Reference Field</displayName>
     <description>A module that allows the REFERENCE formfield</description>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="forms">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

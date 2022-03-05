@@ -3,7 +3,7 @@
 <I2CEConfiguration name="UserForm">
   <metadata>
     <displayName>User Form</displayName>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
@@ -11,16 +11,16 @@
     <longDescription>User Forms</longDescription>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="forms">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="forms-storage">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="LocaleForm">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

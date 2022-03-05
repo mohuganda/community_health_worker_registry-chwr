@@ -35,6 +35,10 @@ abstract class I2CE_FormField_DB_DATE extends I2CE_FormField {
      * The database type for the field
      */
     const FIELD_TYPE_DB = 'datetime default NULL';
+    /**
+     * The MDB2 type for the field.
+     */
+    const FIELD_TYPE_MDB2 = 'timestamp';
 
 
     /**

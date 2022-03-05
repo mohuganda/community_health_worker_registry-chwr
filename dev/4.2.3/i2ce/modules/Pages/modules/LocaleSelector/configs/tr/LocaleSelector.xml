@@ -4,50 +4,50 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="tr">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
       <version>4.0.0</version>
       <value>af:Afrika Dili</value>
-      <value>ar:Arapça</value>
+      <value>ar:Arap&#231;a</value>
       <value>az:Azerbeycanca</value>
       <value>be:Belarus Dili</value>
       <value>bg:Bulgarca</value>
       <value>bn:Bengal</value>
       <value>br:Britanya Dili</value>
-      <value>bs:Boşnakça</value>
+      <value>bs:Bo&#351;nak&#231;a</value>
       <value>ca:Katalan Dili</value>
-      <value>ce:Çeçen</value>
-      <value>cs:Çekçe</value>
+      <value>ce:&#199;e&#231;en</value>
+      <value>cs:&#199;ek&#231;e</value>
       <value>da:Danimarka Dili</value>
       <value>de:Almanca</value>
       <value>el:Yunanca</value>
-      <value>en:İngilizce</value>
-      <value>en_GB:İngiliz İngilizcesi</value>
-      <value>en_US:Amerikan İngilizcesi</value>
-      <value>es:İspanyolca</value>
+      <value>en:&#304;ngilizce</value>
+      <value>en_GB:&#304;ngiliz &#304;ngilizcesi</value>
+      <value>en_US:Amerikan &#304;ngilizcesi</value>
+      <value>es:&#304;spanyolca</value>
       <value>et:Estonca</value>
       <value>eu:Bask Dili</value>
-      <value>fa:İranca</value>
+      <value>fa:&#304;ranca</value>
       <value>fi:Fince</value>
-      <value>fr:Fransızca</value>
-      <value>ga:İrlanda Galik</value>
+      <value>fr:Frans&#305;zca</value>
+      <value>ga:&#304;rlanda Galik</value>
       <value>gd:Galik</value>
       <value>gl:Galce</value>
-      <value>he:İbranice</value>
-      <value>hr:Hırvatça</value>
-      <value>hsb:Yukarı Sırpça</value>
+      <value>he:&#304;branice</value>
+      <value>hr:H&#305;rvat&#231;a</value>
+      <value>hsb:Yukar&#305; S&#305;rp&#231;a</value>
       <value>hu:Macarca</value>
       <value>hy:Ermenice</value>
-      <value>id:İndonezya dili</value>
-      <value>is:İzlanda Dili</value>
-      <value>it:İtalyanca</value>
+      <value>id:&#304;ndonezya dili</value>
+      <value>is:&#304;zlanda Dili</value>
+      <value>it:&#304;talyanca</value>
       <value>ja:Japonca</value>
-      <value>ka:Gürcüce</value>
+      <value>ka:G&#252;rc&#252;ce</value>
       <value>ko:Korece</value>
-      <value>ku:Kürtçe</value>
-      <value>ky:Kırgız</value>
+      <value>ku:K&#252;rt&#231;e</value>
+      <value>ky:K&#305;rg&#305;z</value>
       <value>lt:Litvanya Dili</value>
       <value>lv:Litvanya Dili</value>
       <value>mi:Maori Dili</value>
@@ -55,34 +55,34 @@
       <value>mn:Mongolca</value>
       <value>mo:Moldavaca</value>
       <value>mt:Malta Dili</value>
-      <value>nb:Norveççe Bokmål</value>
-      <value>nds:Aşağı Sakson</value>
+      <value>nb:Norve&#231;&#231;e Bokm&#229;l</value>
+      <value>nds:A&#351;a&#287;&#305; Sakson</value>
       <value>ne:Nepalce</value>
       <value>nl:Flamanca</value>
-      <value>nn:Norveççe Nynorsk</value>
+      <value>nn:Norve&#231;&#231;e Nynorsk</value>
       <value>oc:Oksitan dili</value>
-      <value>pl:Lehçe</value>
+      <value>pl:Leh&#231;e</value>
       <value>pt:Portekizce</value>
       <value>pt_BR:Brezilya Portekizcesi</value>
       <value>ro:Romence</value>
-      <value>rom:Çingene Dili</value>
-      <value>ru:Rusça</value>
-      <value>sk:Slovakça</value>
+      <value>rom:&#199;ingene Dili</value>
+      <value>ru:Rus&#231;a</value>
+      <value>sk:Slovak&#231;a</value>
       <value>sl:Slovence</value>
-      <value>sr:Sırpça Latin</value>
-      <value>sv:İsveççe</value>
+      <value>sr:S&#305;rp&#231;a Latin</value>
+      <value>sv:&#304;sve&#231;&#231;e</value>
       <value>ta:Tamil Dili</value>
-      <value>tk:Türkmence</value>
-      <value>tr:Türkçe</value>
+      <value>tk:T&#252;rkmence</value>
+      <value>tr:T&#252;rk&#231;e</value>
       <value>ug:Uygurca</value>
       <value>uk:Ukrayna Dili</value>
-      <value>uz:Özbek</value>
+      <value>uz:&#214;zbek</value>
       <value>vi:Vietnamca</value>
       <value>wa:Valonca</value>
-      <value>zh:Çince</value>
-      <value>zh_CN:Basitleştirilmiş Çince</value>
-      <value>zh_HK:Çince (Hong Kong)</value>
-      <value>zh_TW:Geleneksel Çince</value>
+      <value>zh:&#199;ince</value>
+      <value>zh_CN:Basitle&#351;tirilmi&#351; &#199;ince</value>
+      <value>zh_HK:&#199;ince (Hong Kong)</value>
+      <value>zh_TW:Geleneksel &#199;ince</value>
     </configuration>
   </configurationGroup>
 </I2CEConfiguration>

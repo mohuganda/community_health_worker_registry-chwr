@@ -63,7 +63,7 @@ class I2CE_UserAccess_Mechanism extends I2CE_Fuzzy {
             $options['admin_user'] = 'i2ce_admin';
         }
         if (!array_key_exists('admin_pass',$options)) {
-            $options['admin_pass'] = I2CE_PDO::details( 'pass' );
+            $options['admin_pass'] = MDB2::singleton()->dsn['password'];
         }
         if (!array_key_exists('admin_details',$options) || !is_array($options['admin_details'])) {
             $options['admin_details']= array();

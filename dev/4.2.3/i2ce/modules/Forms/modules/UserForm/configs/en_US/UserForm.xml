@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="UserForm" path="/">
   <metadata>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="UserForm" path="/" locale="en_US">
-    <version>4.3.0</version>
+    <version>4.2.0.1</version>
     <configurationGroup name="invalid_formfield_message" path="/modules/forms/formfield_messages" locale="en_US">
       <configuration name="username" path="user/username/unique" values="single" type="string">
         <value>That username is already being used.</value>

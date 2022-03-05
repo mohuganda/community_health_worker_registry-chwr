@@ -895,20 +895,16 @@ class I2CE_FormRelationship extends I2CE_Fuzzy {
             "TRUNCATE $tmp_table",
             "INSERT INTO $tmp_table VALUES( " . implode(",", $fieldVals) . ")", 
             );
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         foreach ($qrys as $qry) {
-            try {
-                $res = $db->exec($qry);
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e,"Could not evaluate $qry");
+            $res = $db->exec($qry);
+            if (I2CE::pearError($res,"Could not evaluate $qry")) {
                 return '';
             }
         }
         $qry = 'SELECT ' . $details['qry'] . ' AS res FROM ' . $tmp_table;
-        try {
-            $res = I2CE_PDO::getRow($qry);
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e,"Could not evaluate $qry");
+        $res = $db->queryRow($qry);
+        if (I2CE::pearError($res,"Could not evaluate $qry")) {
             return '';
         }
         //$db->exec("DROP TABLE $tmp_table");                            
@@ -992,10 +988,11 @@ class I2CE_FormRelationship extends I2CE_Fuzzy {
             I2CE::raiseError("Could not instantiate $formName=>$form");
             return false;
         }
+        //$callback = create_function('$form,$field',"return \"`$formName+\$field`\";");
         if ( $formName == "primary_form" ) {
-            $callback = function($f,$field) use ($form) { return "`$form`.`$field`"; };
+            $callback = create_function('$form,$field',"return \"`$form`.`\$field`\";");
         } else {
-            $callback = function($f,$field) use ($formName) { return "`$formName`.`$field`"; };
+            $callback = create_function('$form,$field',"return \"`$formName`.`\$field`\";");
         }
         $where =  $formObj->generateWhereClause($this->formConfigs[$formName]->where->getAsArray(),$callback, "`" . $this->getParentFormNames($formName) . "+id`" );
         return $where;

@@ -5,13 +5,13 @@
     <displayName>Form Browser</displayName>
     <description>Enables Browsing of Forms</description>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <requirement name="forms">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

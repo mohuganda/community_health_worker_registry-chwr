@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="nds">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -32,8 +32,8 @@
       <value>cu:Ooltslaawsch</value>
       <value>cv:Tschuwasch</value>
       <value>cy:Waliessch</value>
-      <value>da:Däänsch</value>
-      <value>de:Hoochdüütsch</value>
+      <value>da:D&#228;&#228;nsch</value>
+      <value>de:Hoochd&#252;&#252;tsch</value>
       <value>el:Greeksch</value>
       <value>en:Engelsch</value>
       <value>en_GB:Britsch Engelsch</value>
@@ -44,17 +44,17 @@
       <value>fa:Farsi (Persisch)</value>
       <value>fi:Finnsch</value>
       <value>fj:Fidschi</value>
-      <value>fo:Färöösch</value>
-      <value>fr:Franzöösch</value>
+      <value>fo:F&#228;r&#246;&#246;sch</value>
+      <value>fr:Franz&#246;&#246;sch</value>
       <value>fy:Freesch</value>
-      <value>ga:Irsch Gäälsch</value>
-      <value>gd:Gäälsch</value>
+      <value>ga:Irsch G&#228;&#228;lsch</value>
+      <value>gd:G&#228;&#228;lsch</value>
       <value>gl:Galizsch</value>
       <value>gu:Gudscharati</value>
       <value>ha:Haussa</value>
-      <value>he:Hebrääsch</value>
+      <value>he:Hebr&#228;&#228;sch</value>
       <value>hr:Kroaatsch</value>
-      <value>hsb:Böversorbsch</value>
+      <value>hsb:B&#246;versorbsch</value>
       <value>hu:Ungaarsch</value>
       <value>hy:Armeensch</value>
       <value>id:Indoneesch</value>
@@ -84,13 +84,13 @@
       <value>ms:Malaiisch</value>
       <value>mt:Malteesch</value>
       <value>my:Burmeesch</value>
-      <value>nb:Norweegsch (Bokmål)</value>
+      <value>nb:Norweegsch (Bokm&#229;l)</value>
       <value>nd:Ndebele, Noord</value>
-      <value>nds:Plattdüütsch</value>
+      <value>nds:Plattd&#252;&#252;tsch</value>
       <value>ne:Nepaleesch</value>
       <value>nl:Nedderlannsch</value>
       <value>nn:Norweegsch Nynorsk</value>
-      <value>nr:Ndebele, Sööd</value>
+      <value>nr:Ndebele, S&#246;&#246;d</value>
       <value>nso:Noord-Sotho</value>
       <value>oc:Okzitaansch</value>
       <value>os:Osseetsch</value>
@@ -100,7 +100,7 @@
       <value>pt:Portugeesch</value>
       <value>pt_BR:Brasiliaansch Portugeesch</value>
       <value>qu:Ketschua</value>
-      <value>ro:Rumäänsch</value>
+      <value>ro:Rum&#228;&#228;nsch</value>
       <value>rom:Romaneesch</value>
       <value>ru:Russ'sch</value>
       <value>sc:Sardiensch</value>
@@ -112,13 +112,13 @@
       <value>sn:Schona</value>
       <value>sq:Albaansch</value>
       <value>sr:Serbsch (latiensch Schrift)</value>
-      <value>st:Sotho, Sööd</value>
+      <value>st:Sotho, S&#246;&#246;d</value>
       <value>su:Sundaneesch</value>
       <value>sv:Sweedsch</value>
       <value>ta:Tamielsch</value>
       <value>tg:Tadschiiksch</value>
       <value>tk:Turkmeensch</value>
-      <value>tr:Törksch</value>
+      <value>tr:T&#246;rksch</value>
       <value>tt:Tartaarsch</value>
       <value>ty:Tahiitsch</value>
       <value>ug:Uighuursch</value>

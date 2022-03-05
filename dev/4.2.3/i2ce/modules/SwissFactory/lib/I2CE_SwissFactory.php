@@ -343,28 +343,21 @@ abstract class I2CE_SwissFactory {
             return true;
         }
         $sucess = true;
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         $updates = array();
         $has_error = false;
-        if ($transact) {
-            if ( is_string($transact) ||  $db->inTransaction()) {
+        if ($transact && $db->supports('transactions')) {
+            if ( is_string($transact) ||  $db->in_transaction) {
                 if (!is_string($transact)) {
                     $transact = "`SWISSFACTORY_" . rand(1000,9999) . "`";
                 }
-                try {
-                    $db->exec('SAVEPOINT $transact');
-                    I2CE::raiseError("Set SAVEPOINT $transact");
-                } catch ( PDOException $e ) {
-                    I2CE::pdoError($e,"Cannot set savepoint $transact");
+                if (I2CE::pearError($this->db->execute('SAVEPOINT $transact'),"Cannot set savepoint $transact")) {
                     $transact = false;
+                } else {
+                    I2CE::raiseError("Set SAVEPOINT $transact");
                 }
             } else {
-                try {
-                    $db->beginTransaction(); 
-                } catch( PDOException $e ) {
-                    I2CE::pdoError($e, "Unable to begin transaction.");
-                    $transact = false;
-                }
+                $db->beginTransaction(); 
             }
         }       
         foreach ($vals['swissFactory']['values'] as $path=> $swissVals) {
@@ -380,34 +373,29 @@ abstract class I2CE_SwissFactory {
         }
         if (!$sucess) {
             I2CE::raiseError("Desired update is not valid");
-            if ($transact === true && $db->inTransaction())  {
+            if ($transact === true && $db->in_transaction)  {
                 I2CE::getConfig()->clearCache();
                 $db->rollback();
                 I2CE::raiseError("Rolled back transaction");
             } else if (is_string($transact)) {
                 I2CE::getConfig()->clearCache();
-                try {
-                    $db->exec("ROLLBACK TO SAVEPOINT $transact");
+                if (!I2CE::pearError($this->db->query("ROLLBACK TO SAVEPOINT $transact"),"Unable to rollback to $transact")) {
                     I2CE::raiseError("Rolled back to savepoint $transact");
-                } catch( PDOException $e ) {
-                    I2CE::pdoError($e,"Unable to rollback to $transact");
                 }
             }
             return false;
         }
         if ($transact) {
-            if ($trasact === true && $db->inTransaction()) { 
-                if ( !$db->commit() ) {
+            if ($trasact === true && $db->in_transaction) { 
+                $res =  $db->commit();
+                if ($res !== MDB2_OK) {
                     return false;
                 }
             } else { //save point 
-                try {
-                    $db->exec("RELEASE SAVEPOINT $transact");
-                    I2CE::raiseError("Released savepoint $transact");
-                } catch ( PDOException $e ) {
-                    I2CE::pdoError($e,"Unable to release $transact");
+                if (I2CE::pearError($this->db->execute("RELEASE SAVEPOINT $transact"),"Unable to release $transact")) {
                     return false;
                 }
+                I2CE::raiseError("Released savepoint $transact");
             }
         }
         return true;

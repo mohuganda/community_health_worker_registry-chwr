@@ -61,11 +61,9 @@ class I2CE_Module_FormRelationship extends I2CE_Module {
    KEY hash_rey ( hash, relationship (130) )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ';
-        $db = I2CE::PDO();
-        try {
-            $result = $db->query($qry);
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e,"Cannot execute  query:\n$qry");
+        $db = MDB2::singleton();
+        $result = $db->query($qry);
+        if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
             I2CE::raiseError("Could not create form_relationship_importer table");
             return false;
         }        

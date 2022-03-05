@@ -43,6 +43,11 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
     static protected $prepared;
 
     /**
+     * @var array A list of all cached callback functions.
+     */
+    static protected $callback;
+
+    /**
      * @var array Keys are form names values are arrays with keys fields 
      * and values an array for the form field id and details
      */
@@ -64,9 +69,29 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         if ( !is_array( self::$prepared ) ) {
             self::$prepared = array();
         }
+        if ( !is_array( self::$callback ) ) {
+            self::$callback = array();
+        }
         $this->form_field_data_cache = array();
         $this->form_id_cache = array();
         $this->field_id_cache = array();
+    }
+
+    /**
+     * Create a callback function or return it from the cache if
+     * it already exists.
+     * @param string $code The code for the function
+     * @return string
+     */
+    protected static function createCallback( $code ) {
+        $hash = md5( $code );
+        if ( !array_key_exists( $hash, self::$callback ) ) {
+            if ( false === (self::$callback[$hash] = create_function('$form,$field',$code))) {
+                I2CE::raiseError( "Could not create callback from:\n $code");
+                return false;
+            }
+        }
+        return self::$callback[$hash];
     }
 
     /**
@@ -158,7 +183,7 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
                 $select_list[] = "CONCAT(r.parent_form,'|',r.parent_id)  AS $ref";
                 if (!is_bool($parent) && is_scalar($parent)) {
                     list($parent_form, $parent_id) = array_pad( explode('|',$parent,2),2,'');
-                    $wheres[] = "(r.parent_form = ". $this->db->quote($parent_form) . " AND r.parent_id = " . $this->db->quote($parent_id) . ")";
+                    $wheres[] = "(r.parent_form = '". mysql_real_escape_string($parent_form) . "' AND r.parent_id = '" . mysql_real_escape_string($parent_id) . "')";
                     //$wheres[] = "(CONCAT(r.parent_form,'|',r.parent_id) = '$parent')";
                 }
             }
@@ -472,36 +497,36 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
      */
     protected function getFormId( $form, $nocreate = false ) {
         if (!$this->get_form_id_qry) {
-            try {
-                $this->get_form_id_qry = $this->db->prepare( "SELECT id FROM form WHERE name = ?" ); 
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Failed to prepare form ID query." );
-                return 0;
-            }
+            $this->get_form_id_qry = 
+                $this->db->prepare( "SELECT id FROM form WHERE name = ?", 
+                                    array('text'),array('integer'), MDB2_PREPARE_RESULT);
         }
         if (array_key_exists($form,$this->form_id_cache)) {
             return $this->form_id_cache[$form];
         }
-        try {
-            $this->get_form_id_qry->execute(array( $form ));
-            $row = $this->get_form_id_qry->fetch();
-            $this->get_form_id_qry->closeCursor();
-            if ( $row !== false ) {
+        $results = $this->get_form_id_qry->execute(array( $form ));
+        $row = $results->fetchRow();
+        if ( isset( $row ) ) {
+            if ( !I2CE::pearError( $row, "Error getting form id:" ) ) {
                 $this->form_id_cache[$form] = $row->id;
                 return $row->id;
-            } elseif ( !$nocreate ) {
+            }
+        } elseif ( !$nocreate ) {
+            $form_id = $this->db->getBeforeID( 'form', 'id', true, true );                
+            if ( !I2CE::pearError( $form_id, "Error getting form id" ) ) {
                 $field_values = array( $form_id, $form );
                 if ( !$this->prepareFormIDGetStatement() ) {
                     I2CE::raiseError( "Unable to setup form id insert query!" );
                 }
 
-                self::$prepared['formIDGet']->execute($field_values);
-                $form_id = $this->db->lastInsertId();
-                $this->form_id_cache[$form] = $form_id;
-                return $form_id;
+                $res =  self::$prepared['formIDGet']->execute($field_values);
+
+                $form_id = $this->db->getAfterID( $form_id, 'form', 'id' );
+                if ( !I2CE::pearError( $res, "Error creating form id:" ) ) {
+                    $this->form_id_cache[$form] = $form_id;
+                    return $form_id;
+                }
             }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error getting form id." );
         }
         return 0;
     }
@@ -520,21 +545,23 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         if (array_key_exists($name,$this->field_id_cache)) {
             return $this->field_id_cache[$name];
         }
-        try {
-            $row = I2CE_PDO::getRow( "SELECT id FROM field WHERE name = ? AND type = ?", array( $name, $type ) ); 
-            if ( $row !== false ) {
-                $this->field_id_cache[$name] = $row->id;
-                return $row->id;
-            } else {
-                $field_values = array( $name, $type );
-                I2CE_PDO::execParam( "INSERT INTO field ( id, name, type ) VALUES ( 0, ?, ? )", $field_values );
-                $field_id = $this->db->lastInsertId();
-                I2CE::raiseMessage("Adding field id for $name $type is $field_id");
-                $this->field_id_cache[$name] = $field_id;
-                return $field_id;
+         $row = $this->db->getRow( "SELECT id FROM field WHERE name = ? AND type = ?",
+                array( 'integer' ), array( $name, $type ), array( 'text', 'text' ) ); 
+        if ( isset( $row ) && !I2CE::pearError( $row, "Error getting field id:" ) ) {
+            $this->field_id_cache[$name] = $row->id;
+            return $row->id;
+        } else {
+            $field_id = $this->db->getBeforeID( 'field', 'id', true, true );
+            if ( !I2CE::pearError( $field_id, "Error getting field id:" ) ) {
+                $field_values = array( 'id' => $field_id, 'name' => $name, 'type' => $type );
+                $res = $this->db->autoExecute( "field", $field_values, MDB2_AUTOQUERY_INSERT, null, 
+                        array( 'integer', 'text', 'text' ) ); 
+                $field_id = $this->db->getAfterID( $field_id, 'field', 'id' );
+                if ( !I2CE::pearError( $res, "Error creating field id:" ) ) {
+                    $this->field_id_cache[$name] = $field_id;
+                    return $field_id;
+                }
             }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error getting field id:" );
         }
         I2CE::raiseError("Failed getting field id for field $name"); 
         return null;
@@ -584,13 +611,12 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             return $this->form_field_data_cache[$form_name][$field_name];
         }
         if ($this->ff_id_type_prep === null) {
-            try {
-                $this->ff_id_type_prep =                    
-                    $this->db->prepare(             
-                        "SELECT ff.id AS id,field.type AS type FROM form_field ff JOIN field ON field.id = ff.field JOIN form ON form.id = ff.form WHERE form.name = ? AND field.name = ?"
-                        );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Could not prepare ff id and type" );
+            $this->ff_id_type_prep =                    
+                $this->db->prepare(             
+                    "SELECT ff.id AS id,field.type AS type FROM form_field ff JOIN field ON field.id = ff.field JOIN form ON form.id = ff.form WHERE form.name = ? AND field.name = ?",
+                    array( 'text', 'text' ) , array('integer', 'text')
+                    );
+            if (I2CE::pearError( $this->ff_id_type_prep, "Could not prepare ff id and type") ) {                   
                 $this->ff_id_type_prep = null;
                 return null;
             }
@@ -598,15 +624,16 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
 //        $row = $this->db->getRow( "SELECT ff.id,field.type FROM form_field ff JOIN field ON field.id = ff.field JOIN form ON form.id = ff.form WHERE form.name = ? AND field.name = ?",
 //                array('integer', 'text'), array( $form_name, $field_name ), array( 'text', 'text' ) );
 
-        try {
-            $this->ff_id_type_prep->execute(array( $form_name, $field_name ));
-            $data = $this->ff_id_type_prep->fetch(PDO::FETCH_ASSOC);
-            $this->ff_id_type_prep->closeCursor();
-        
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error executing query to get field id and type:" );
+        $result= $this->ff_id_type_prep->execute(array( $form_name, $field_name ));
+        if (I2CE::pearError( $result, "Error executing query to get field id and type:" ) ) {
             return null;
         }
+        $data = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
+        if (I2CE::pearError( $data, "Error getting  field id and type:" ) ) {
+            return null;
+        }
+        $result->free();
+        
 
         $this->form_field_data_cache[$form_name][$field_name] = $data;
         return $data;
@@ -641,6 +668,7 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             $e = $table_prefix . $field_count;
             $formObj = I2CE_FormFactory::instance()->createContainer( $form );
             $sql['field_type'] = $details['type'];
+            $sql['field_mdb2_type'] = $formObj->getField( $field )->getMDB2Type();
             $sql['field'] =  $e . "." . $details['type'] . "_value";
             $sql['where'] = $e . ".form_field = ?";
             $sql['param'] = $details['id'];
@@ -679,15 +707,10 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         if ( !$this->prepareSetupFormStatement( "select" ) ) {
             I2CE::raiseError( "Unable to setup form select query!" );
         }
-        try {
-            self::$prepared['setupForm']['select']->execute( array( $form_id ) );
-            while( $row = self::$prepared['setupForm']['select']->fetch() ) {
-                $form_fields[ $row->field ] = $row->id;
-            }
-            self::$prepared['setupForm']['select']->closeCursor();
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error setting up form in the database:" );
-            return;
+        $result = self::$prepared['setupForm']['select']->execute( $form_id );
+        I2CE::pearError( $result, "Error setting up form in the database:" );
+        while( $row = $result->fetchRow() ) {
+            $form_fields[ $row->field ] = $row->id;
         }
 
         foreach( $form as $key => $field ) {
@@ -703,7 +726,6 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
                 I2CE::raiseError("Bad field id for $field");
                 continue;
             }
-            $form_field_id = 0;
             if ( array_key_exists( $field_id, $form_fields ) ) {
                 $form_field_id = $form_fields[$field_id];
             } else {
@@ -720,24 +742,19 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
                     I2CE::raiseError( "Unable to setup form id insert query!" );
                 }
 
-                try {
-                    self::$prepared['setupForm']['delete']->execute( array( $form_id, $field->getName() ) );
-                    $deleted = self::$prepared['setupForm']['delete']->rowCount();
-                    if ( is_numeric( $deleted ) && $deleted > 0 ) {
-                        I2CE::raiseError( "Deleted extra $deleted row(s) from form_field to block field name collisions. Form: $form_id Field: " . $field->getName() . " Field Type: " . $field->getTypeString() . " Field Class: " . get_class( $field ) );
-                    } 
-                } catch ( PDOException $e ) {
-                    I2CE::pdoError( $e, "Tried to delete invalid rows from form_field:" );
+                $deleted = self::$prepared['setupForm']['delete']->execute( array( $form_id, $field->getName() ) );
+                if ( is_numeric( $deleted ) && $deleted > 0 ) {
+                    I2CE::raiseError( "Deleted extra $deleted row(s) from form_field to block field name collisions. Form: $form_id Field: " . $field->getName() . " Field Type: " . $field->getTypeString() . " Field Class: " . get_class( $field ) );
+                } else {
+                    I2CE::pearError( $deleted, "Tried to delete invalid rows from form_field:" );
                 }
+                $form_field_id = $this->db->getBeforeID( 'form_field', 'id', true, true );
                 
-                $field_values = array( $form_id, $field_id );
+                $field_values = array(  $form_field_id,  $form_id, $field_id );
                 
-                try {
-                    self::$prepared['formIDInsert']->execute($field_values);
-                    $form_field_id = $this->db->lastInsertId();
-                } catch ( PDOException $e ) {
-                    I2CE::pdoError( $e, "Error setting up form field in the database:" );
-                }
+                $res =  self::$prepared['formIDInsert']->execute($field_values);
+                $form_field_id = $this->db->getAfterID( $form_field_id, 'form_field', 'id' );
+                I2CE::pearError( $res, "Error setting up form field in the database:" );
             }
             $field->setStaticAttribute( "DBEntry_field_id", $field_id );
             $field->setStaticAttribute( "DBEntry_form_field_id", $form_field_id );
@@ -750,21 +767,24 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
      *
      * @param string $field_type_db
      * @param string $field_type_string
+     * @param string $field_type_mdb2
      * @return boolean
      */
-    protected function prepareSaveStatement( $field_type_db, $field_type_string ) {
+    protected function prepareSaveStatement( $field_type_db, $field_type_string, $field_type_mdb2 ) {
         if ( !array_key_exists( 'save', self::$prepared ) || !is_array( self::$prepared['save'] ) ) {
             self::$prepared['save'] = array();
         }
         if ( !isset( self::$prepared['save'][$field_type_db][$field_type_string] ) ) {
-            try {
-                if ( $field_type_db == "save_entry" ) {
-                    self::$prepared['save'][$field_type_db][$field_type_string] = $this->db->prepare( "INSERT INTO entry SELECT * FROM last_entry WHERE record = ? AND form_field = ?" ); 
-                } else {
-                    self::$prepared['save'][$field_type_db][$field_type_string] = $this->db->prepare( "REPLACE INTO last_entry ( record, form_field, date, who, change_type, {$field_type_string}_value ) VALUES ( ?, ?, NOW(), ?, ?, ? )" );
-                }
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error preparing entry insert of type ({$field_type_db}/{$field_type_string}):" );
+            if ( $field_type_db == "save_entry" ) {
+                self::$prepared['save'][$field_type_db][$field_type_string] = $this->db->prepare( "INSERT INTO entry SELECT * FROM last_entry WHERE record = ? AND form_field = ?", 
+                        array( 'integer', 'integer' ), MDB2_PREPARE_MANIP );
+            } else {
+                self::$prepared['save'][$field_type_db][$field_type_string] = $this->db->prepare( "REPLACE INTO last_entry ( record, form_field, date, who, change_type, {$field_type_string}_value ) VALUES ( ?, ?, NOW(), ?, ?, ? )", 
+                        array( 'integer', 'integer', 'integer', 'integer', $field_type_mdb2 ), 
+                        MDB2_PREPARE_MANIP );
+            }
+            if ( I2CE::pearError( self::$prepared['save'][$field_type_db][$field_type_string], 
+                        "Error preparing entry insert of type ({$field_type_db}/{$field_type_string}):" ) ) {
                 return false;
             }
         }
@@ -782,27 +802,33 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             self::$prepared['record'] = array();
         }
         if ( !isset( self::$prepared['record'][$type] ) ) {
-            try {
-                if ( $type == "insert" ) {
-                    self::$prepared['record'][$type] = $this->db->prepare( "INSERT INTO record ( id, last_modified, form, parent_form, parent_id,created ) VALUES ( ?, NOW(), ?, ?, ?, NOW() )" );
-                } elseif ($type == "lookupdbform") {
-                    self::$prepared['record'][$type] = 
-                        $this->db->prepare( "SELECT form FROM record WHERE id = ?" );
+            if ( $type == "insert" ) {
+                self::$prepared['record'][$type] = $this->db->prepare( "INSERT INTO record ( id, last_modified, form, parent_form, parent_id,created ) VALUES ( ?, NOW(), ?, ?, ?, NOW() )",  
+                        array( 'integer', 'integer', 'text', 'text' ),
+                        MDB2_PREPARE_MANIP );
+            } elseif ($type == "lookupdbform") {
+                self::$prepared['record'][$type] = 
+                    $this->db->prepare(             
+                        "SELECT form FROM record WHERE id = ?",
+                        array( 'integer' ),array('integer'));
 
-                } elseif ( $type == "update" ) {
-                    self::$prepared['record'][$type] = $this->db->prepare( 
-                            "INSERT INTO record (parent_form,parent_id,last_modified,created,id,form) VALUES (?,?,NOW(),NOW(),?,?) "
-                            . "ON DUPLICATE KEY UPDATE "
-                            . "  parent_form = VALUES(parent_form)   "
-                            . "  ,parent_id = VALUES(parent_id)   "
-                            . "  ,parent_id = VALUES(parent_id)   "
-                            . "  ,last_modified = VALUES(last_modified)   " );
-                } elseif ( $type == "updatetime" ) { 
-                    self::$prepared['record'][$type] = $this->db->prepare( "UPDATE record SET last_modified = ? WHERE id = ?" );
-                }
+            } elseif ( $type == "update" ) {
+                self::$prepared['record'][$type] = $this->db->prepare( 
+                    "INSERT INTO record (parent_form,parent_id,last_modified,created,id,form) VALUES (?,?,NOW(),NOW(),?,?) "
+                    . "ON DUPLICATE KEY UPDATE "
+                    . "  parent_form = VALUES(parent_form)   "
+                    . "  ,parent_id = VALUES(parent_id)   "
+                    . "  ,parent_id = VALUES(parent_id)   "
+                    . "  ,last_modified = VALUES(last_modified)   "
+                    , array( 'text','text', 'integer','integer'), MDB2_PREPARE_MANIP );
+            } elseif ( $type == "updatetime" ) { 
+                self::$prepared['record'][$type] = $this->db->prepare( "UPDATE record SET last_modified = ? WHERE id = ?", 
+                        array( 'timestamp', 'integer'), 
+                        MDB2_PREPARE_MANIP );
+            }
 
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error in preparing save record $type statement:" );
+            if ( I2CE::pearError( self::$prepared['record'][$type],
+                        "Error in preparing save record $type statement:" ) ) {
                 return false;
             }
         }
@@ -817,10 +843,9 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
      */
     protected function prepareFormIDInsertStatement( ) {
         if ( !array_key_exists( 'formIDInsert', self::$prepared ) || !isset( self::$prepared['formIDInsert'] ) ) {
-            try {
-                self::$prepared['formIDInsert'] = $this->db->prepare( "INSERT INTO form_field ( id,  form,  field ) VALUES ( 0, ?, ? )" );
-            } catch  ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error in preparing form id insert statement:" );
+            $qry = "INSERT INTO form_field ( id,  form,  field ) VALUES ( ?, ?,? )";
+            self::$prepared['formIDInsert'] = $this->db->prepare( $qry,   array( 'integer', 'integer', 'integer' ),  MDB2_PREPARE_MANIP );
+            if ( I2CE::pearError( self::$prepared['formIDInsert'], "Error in preparing form id insert statement:" ) ) {
                 return false;
             }
         }
@@ -837,10 +862,9 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
 
 
         if ( !array_key_exists( 'formIDGet', self::$prepared ) || !isset( self::$prepared['formIDGet'] ) ) {
-            try {
-                self::$prepared['formIDGet'] = $this->db->prepare( "INSERT INTO form ( id,  name ) VALUES ( ?,? )" );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error in preparing form id get statement:" );
+            $qry = "INSERT INTO form ( id,  name ) VALUES ( ?,? )";
+            self::$prepared['formIDGet'] = $this->db->prepare( $qry,   array( 'integer', 'text' ),  MDB2_PREPARE_MANIP );
+            if ( I2CE::pearError( self::$prepared['formIDGet'], "Error in preparing form id get statement:" ) ) {
                 return false;
             }
         }
@@ -858,17 +882,20 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             self::$prepared['setupForm'] = array();
         }
         if ( !isset( self::$prepared['setupForm'][$type] ) ) {
-            try {
-                if ( $type == "select" ) {
-                    self::$prepared['setupForm'][$type] = $this->db->prepare( 
-                            "SELECT id,field FROM form_field WHERE form = ?" );
-                } elseif ( $type == "delete" ) {
-                    self::$prepared['setupForm'][$type] = $this->db->prepare( 
-                            "DELETE FROM form_field WHERE form = ? AND field IN (SELECT ID FROM field WHERE name = ? )" );
-                }
+            if ( $type == "select" ) {
+                self::$prepared['setupForm'][$type] = $this->db->prepare( 
+                        "SELECT id,field FROM form_field WHERE form = ?", 
+                        array('integer'), 
+                        MDB2_PREPARE_RESULT );
+            } elseif ( $type == "delete" ) {
+                self::$prepared['setupForm'][$type] = $this->db->prepare( 
+                            "DELETE FROM form_field WHERE form = ? AND field IN (SELECT ID FROM field WHERE name = ? )", 
+                            array( 'integer', 'text' ), 
+                            MDB2_PREPARE_MANIP );
+            }
 
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error in preparing setupForm $type statement:" );
+            if ( I2CE::pearError( self::$prepared['setupForm'][$type],
+                        "Error in preparing setupForm $type statement:" ) ) {
                 return false;
             }
         }
@@ -889,11 +916,11 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             self::$prepared['check'] = array();
         }
         if ( !isset( self::$prepared['check'][$type_string] ) ) {
-            try {
-                self::$prepared['check'][$type_string] = $this->db->prepare( "SELECT " . $type_string 
-                    . "_value AS value FROM last_entry WHERE record = ? AND form_field = ?" );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error preparing string duplicate check:" );
+            self::$prepared['check'][$type_string] = $this->db->prepare( "SELECT " . $type_string 
+                    . "_value AS value FROM last_entry WHERE record = ? AND form_field = ?", 
+                    array('integer', 'integer' ), MDB2_PREPARE_RESULT );
+            if ( I2CE::pearError( self::$prepared['check'][$type_string], 
+                        "Error preparing string duplicate check:" ) ) {
                 return false;
             }
         }
@@ -911,21 +938,22 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             self::$prepared['delete'] = array();
         }
         if ( !isset( self::$prepared['delete'][$delete_type] ) ) {
-            try {
-                switch( $delete_type ) {
-                    case "record" :
-                        self::$prepared['delete'][$delete_type] = $this->db->prepare( "DELETE FROM record WHERE id = ?" ); 
-                        break;
-                    case "entry" :
-                    case "last_entry" :
-                        self::$prepared['delete'][$delete_type] = $this->db->prepare( "DELETE FROM $delete_type WHERE record = ?" );
-                        break;
-                    default :
-                        I2CE::raiseMessage("Unable to prepare delete statement for $delete_type.");
-                        return false;
-                }
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error preparing delete statement $delete_type:" );
+            switch( $delete_type ) {
+                case "record" :
+                    self::$prepared['delete'][$delete_type] = $this->db->prepare( "DELETE FROM record WHERE id = ?", 
+                            array( 'integer' ), MDB2_PREPARE_MANIP );
+                    break;
+                case "entry" :
+                case "last_entry" :
+                    self::$prepared['delete'][$delete_type] = $this->db->prepare( "DELETE FROM $delete_type WHERE record = ?", 
+                                          array( 'integer' ), MDB2_PREPARE_MANIP );
+                    break;
+                default :
+                    I2CE::raiseMessage("Unable to prepare delete statement for $delete_type.");
+                    return false;
+            }
+            if ( I2CE::pearError( self::$prepared['delete'][$delete_type], 
+                        "Error preparing delete statement $delete_type:" ) ) {
                 return false;
             }
         }
@@ -958,10 +986,8 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             return false;
         }
         $datetime = I2CE_Date::now( I2CE_Date::DATE_TIME, $timestamp )->dbFormat();
-        try {
-            self::$prepared['record']['updatetime']->execute( array($datetime,$form->getId()));
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error updating record timestamp:" );
+        $res = self::$prepared['record']['updatetime']->execute( array($datetime,$form->getId()));
+        if ( I2CE::pearError( $res, "Error updateing record timestamp:" ) ) {
             return false;
         }
         return true;
@@ -979,13 +1005,8 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         if ( $user === null ) {
             I2CE::raiseError( "Invalid arguments passed to I2CE_Form::save. ");
         }
-        if ( $transact && !$this->db->inTransaction() ) {
-            try {
-                $this->db->beginTransaction();
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Tried to create transaction, but not supported." );
-                $transact = false;
-            }
+        if ( $transact && $this->db->supports( 'transactions' ) && !$this->db->in_transaction ) {
+            $this->db->beginTransaction();
         } else {
             $transact = false;
         }
@@ -994,63 +1015,59 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         $do_check = false;
         if ( $form->getId() == '0' ) {
             if ( !$this->prepareRecordStatement( "insert" ) ) {
-                if ( $transact && $this->db->inTransaction() ) { 
+                if ( $transact && $this->db->in_transaction ) { 
                     $this->db->rollback();
                 }
                 return false;
             }
-            try {
-                self::$prepared['record']['insert']->execute( 
-                array( 0, $form->getStaticAttribute( "DBEntry_form_id" ), 
+            $new_id = $this->db->getBeforeID( 'record', 'id', true, true ); 
+            $res = self::$prepared['record']['insert']->execute( 
+                array( $new_id, $form->getStaticAttribute( "DBEntry_form_id" ), 
                     $form->getParentForm(), $form->getParentID() ) );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error saving record:" );
-                if ($transact && $this->db->inTransaction() ) { 
+            if ( I2CE::pearError( $res, "Error saving record:" ) ) {
+                if ($transact && $this->db->in_transaction) { 
                     $this->db->rollback();
                 }
                 return false;
             }
-            $new_id = $this->db->lastInsertId();
+            $new_id = $this->db->getAfterID( $new_id, 'record', 'id' );
             $form->setId( $new_id );
             $form->setChangeType( I2CE_FormStorage_Mechanism::CHANGE_INITIAL );
         } else {
             $db_form_id = $form->getStaticAttribute( "DBEntry_form_id" );
             if ( !$this->prepareRecordStatement( "lookupdbform" ) ) {
-                if ( $transact && $this->db->inTransaction() ) { 
+                if ( $transact && $this->db->in_transaction ) { 
                     $this->db->rollback();
                 }
                 return false;
             }            
-            try {
-                self::$prepared['record']['lookupdbform']->execute( array(  $form->getId() ));
-                if ( is_array($row = self::$prepared['record']['lookupdbform']->fetch(PDO::FETCH_ASSOC))
-                        && array_key_exists('form',$row)
-                        && $row['form']
-                        && $db_form_id != $row['form']) {
-                    I2CE::raiseError("Internal consitency error.  Record " . $form->getID() . " has mismatch of form references: " . $db_form_id . " != " . $row['form']);
-                    return false;
-                }
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error in lookup of record form type:" );
-                if ($transact && $this->db->inTransaction()) { 
+            $res = self::$prepared['record']['lookupdbform']->execute( array(  $form->getId() ));
+            if (I2CE::pearError( $res, "Error in lookup of record form type:" )) {
+                if ($transact && $this->db->in_transaction) { 
                     $this->db->rollback();
                 }
                 return false;
             }
+            if ( is_array($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))
+                && array_key_exists('form',$row)
+                && $row['form']
+                && $db_form_id != $row['form']) {
+                I2CE::raiseError("Internal consitency error.  Record " . $form->getID() . " has mismatch of form references: " . $db_form_id . " != " . $row['form']);
+                return false;
+            }
+                                                 
             if ( !$this->prepareRecordStatement( "update" ) ) {
-                if ( $transact && $this->db->inTransaction() ) { 
+                if ( $transact && $this->db->in_transaction ) { 
                     $this->db->rollback();
                 }
                 return false;
             }
 
-            try {
-                self::$prepared['record']['update']->execute( 
-                        array( $form->getParentForm() , $form->getParentID(), 
-                            $form->getId() , $db_form_id ));
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error updating record:" );
-                if ($transact && $this->db->inTransaction()) { 
+            $res = self::$prepared['record']['update']->execute( 
+                array( $form->getParentForm() , $form->getParentID(), 
+                       $form->getId() , $db_form_id ));
+            if (I2CE::pearError( $res, "Error updating record:" )) {
+                if ($transact && $this->db->in_transaction) { 
                     $this->db->rollback();
                 }
                 return false;
@@ -1067,16 +1084,16 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             }
             $field->setStaticAttribute( "DBEntry_change_type", $change_type );
             if ( !$field->save( $do_check, $user ) ) {
-                if ($transact && $this->db->inTransaction()) { 
+                if ($transact && $this->db->in_transaction) { 
                     $this->db->rollback();
                 }
                 return false;
             }
         }
 
-        if ( $transact && $this->db->inTransaction() ) {
+        if ( $transact && $this->db->in_transaction ) {
             $res = $this->db->commit();
-            if ( $res ) {
+            if ( $res == MDB2_OK ) {
                 return true;
             } else {
                 return false;
@@ -1099,25 +1116,21 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
      * @return mixed
      */
     public static function massDelete( $records, $children, $calculate=true, $transact=true ) {
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         $record_table = "record_list_" . uniqid();
         $child_table = "child_list_" . uniqid();
 
         $parents = 0;
         $directs = 0;
         if ( count($children) > 0 ) {
-            try {
-                $parents = $db->exec( "CREATE TEMPORARY TABLE IF NOT EXISTS $record_table (id INT PRIMARY KEY) SELECT parent_id AS id FROM record WHERE id IN ( " . implode( ',', $children ) . ")" );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error massDelete: " );
+            $parents = $db->exec( "CREATE TEMPORARY TABLE IF NOT EXISTS $record_table (id INT PRIMARY KEY) SELECT parent_id AS id FROM record WHERE id IN ( " . implode( ',', $children ) . ")" );
+            if ( I2CE::pearError( $parents, "Error massDelete: " ) ) {
                 return false;
             }
         }
         if ( count($records) > 0 ) {
-            try {
-                $directs = $db->exec( "CREATE TEMPORARY TABLE IF NOT EXISTS $record_table (id INT PRIMARY KEY) SELECT id FROM record WHERE id IN ( " . implode( ',', $records ) . " )");
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error massDelete: " );
+            $directs = $db->exec( "CREATE TEMPORARY TABLE IF NOT EXISTS $record_table (id INT PRIMARY KEY) SELECT id FROM record WHERE id IN ( " . implode( ',', $records ) . " )");
+            if ( I2CE::pearError( $directs, "Error massDelete: " ) ) {
                 return false;
             }
         }
@@ -1135,58 +1148,75 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
                 return false;
             }
 
-            try {
-                $result = $db->exec( "CREATE TEMPORARY TABLE IF NOT EXISTS $child_table (id INT PRIMARY KEY) IGNORE SELECT id FROM record WHERE parent_id IN (SELECT id FROM $record_table)");
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error massDelete: " );
+            $result = $db->exec( "CREATE TEMPORARY TABLE IF NOT EXISTS $child_table (id INT PRIMARY KEY) IGNORE SELECT id FROM record WHERE parent_id IN (SELECT id FROM $record_table)");
+            if ( I2CE::pearError( $result, "Error massDelete: " ) ) {
                 return false;
             }
-            try {
-                $result = $db->exec( "INSERT IGNORE INTO $record_table SELECT * from $child_table" );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error massDelete: " );
+            $result = $db->exec( "INSERT IGNORE INTO $record_table SELECT * from $child_table" );
+            if ( I2CE::pearError( $result, "Error massDelete: " ) ) {
                 return false;
             }
         }
-        try {
-            $result = I2CE_PDO::getRow("SELECT COUNT(*) AS total FROM $record_table");
-            if ( $calculate ) {
-                return $result->total;
-            }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e, "Error getting count to delete: " );
+        $result = $db->getRow("SELECT COUNT(*) AS total FROM $record_table");
+        if ( I2CE::pearError($result, "Error getting count to delete: " ) ) {
             return false;
+        }
+        if ( $calculate ) {
+            return $result->total;
         }
 
         // Now we have all the necessary records to be deleted in $record_table so back them up and delete them.
-        if ( $transact && !$db->inTransaction() ) {
-            try {
-                $db->beginTransaction();
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Tried to create transaction, but not supported." );
-                $transact = false;
-            }
+        if ( $transact && $db->supports( 'transactions' ) && $db->in_transaction) {
+            $db->beginTransaction();
         } else {
             $transact = false;
         }
-        try {
-            $result = $db->exec("CREATE TABLE IF NOT EXISTS deleted_entry IGNORE SELECT * FROM entry WHERE record IN (SELECT id FROM $record_table)" );
-            $result = $db->exec("CREATE TABLE IF NOT EXISTS deleted_last_entry IGNORE SELECT * FROM last_entry WHERE record IN (SELECT id FROM $record_table)" );
-            $result = $db->exec("INSERT IGNORE INTO deleted_record SELECT * FROM record WHERE id IN (SELECT id FROM $record_table)" );
-            $deleted_records = $db->exec("DELETE FROM record WHERE id IN (SELECT id FROM $record_table)");
-            $result = $db->exec("DELETE FROM last_entry WHERE record IN (SELECT id FROM $record_table)");
-            $result = $db->exec("DELETE FROM entry WHERE record IN (SELECT id FROM $record_table)");
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error on mass delete: " );
-            if ( $transact && $db->inTransaction() ) {
+        $result = $db->exec("CREATE TABLE IF NOT EXISTS deleted_entry IGNORE SELECT * FROM entry WHERE record IN (SELECT id FROM $record_table)" );
+        if ( I2CE::pearError( $result, "Error backing up entry for mass delete: " ) ) {
+            if ( $transact && $db->in_transaction ) {
+                $db->rollback();
+            }
+            return false;
+        }
+        $result = $db->exec("CREATE TABLE IF NOT EXISTS deleted_last_entry IGNORE SELECT * FROM last_entry WHERE record IN (SELECT id FROM $record_table)" );
+        if ( I2CE::pearError( $result, "Error backing up last_entry for mass delete: " ) ) {
+            if ( $transact && $db->in_transaction ) {
+                $db->rollback();
+            }
+            return false;
+        }
+        $result = $db->exec("INSERT IGNORE INTO deleted_record SELECT * FROM record WHERE id IN (SELECT id FROM $record_table)" );
+        if ( I2CE::pearError( $result, "Error backing up record for mass delete: " ) ) {
+            if ( $transact && $db->in_transaction ) {
+                $db->rollback();
+            }
+            return false;
+        }
+        $deleted_records = $db->exec("DELETE FROM record WHERE id IN (SELECT id FROM $record_table)");
+        if ( I2CE::pearError( $deleted_records, "Error deleting record for mass delete: " ) ) {
+            if ( $transact && $db->in_transaction ) {
+                $db->rollback();
+            }
+            return false;
+        }
+        $result = $db->exec("DELETE FROM last_entry WHERE record IN (SELECT id FROM $record_table)");
+        if ( I2CE::pearError( $result, "Error deleting last_entry for mass delete: " ) ) {
+            if ( $transact && $db->in_transaction ) {
+                $db->rollback();
+            }
+            return false;
+        }
+        $result = $db->exec("DELETE FROM entry WHERE record IN (SELECT id FROM $record_table)");
+        if ( I2CE::pearError( $result, "Error deleting entry for mass delete: " ) ) {
+            if ( $transact && $db->in_transaction ) {
                 $db->rollback();
             }
             return false;
         }
 
-        if ( $transact && $db->inTransaction() ) {
+        if ( $transact && $db->in_transaction ) {
             $res = $db->commit();
-            if ( $res ) {
+            if ( $res == MDB2_OK ) {
                 I2CE::raiseError("$deleted_records have been mass deleted!");
                 return $deleted_records;
             } else {
@@ -1209,28 +1239,20 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         if ( $form->getId() == '0' ) {
             return false;
         }
-        if ( $transact && !$this->db->inTranscation() ) {
-            try {
-                $this->db->beginTransaction();
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Tried to create transaction, but not supported." );
-                $transact = false;
-            }
+        if ( $transact && $this->db->supports( 'transactions' ) && !$this->db->in_transcation) {
+            $this->db->beginTransaction();
         } else {
             $transact = false;
         }
 
         if ( !$this->prepareDeleteStatement('record') ) {
-            if ( $transact && $this->db->inTransaction() ) {
+            if ( $transact && $this->db->in_transaction ) {
                 $this->db->rollback();
             }
             return false;
         }
-        try {
-            self::$prepared['delete']['record']->execute( array( $form->getId() ) );
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Delete failed from record for " . $form->getId() );
-            if ( $transact && $this->db->inTransaction() ) {
+        if ( I2CE::pearError( self::$prepared['delete']['record']->execute( $form->getId() ), "Delete failed from record for " . $form->getId() ) ) {
+            if ( $transact && $this->db->in_transaction ) {
                 $this->db->rollback();
             }
             return false;
@@ -1239,24 +1261,26 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         foreach( array( 'entry', 'last_entry' ) as $table ) {
             
             if ( !$this->prepareDeleteStatement( $table ) ) {
-                if ( $transact && $this->db->inTransaction() ) {
+                if ( $transact && $this->db->in_transaction ) {
                     $this->db->rollback();
                 }
                 return false;
             }
-            try {
-                self::$prepared['delete'][$table]->execute( array( $form->getId() ) );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Delete failed from $table for " . $form->getId() );
-                if ( $transact && $this->db->inTransaction() ) {
+            if ( I2CE::pearError( self::$prepared['delete'][$table]->execute( $form->getId() ), "Delete failed from $table for " . $form->getId() ) ) {
+                if ( $transact && $this->db->in_transaction ) {
                     $this->db->rollback();
                 }
                 return false;
             }
         }
 
-        if ( $transact && $this->db->inTransaction() ) {
-            return $this->db->commit();
+        if ( $transact && $this->db->in_transaction ) {
+            $res = $this->db->commit();
+            if ( $res == MDB2_OK ) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         return true;
@@ -1278,19 +1302,13 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             if ( !$this->prepareCheckStatement( $form_field->getTypeString() ) ) {
                 return false;
             }
-            try {
-                self::$prepared['check'][$form_field->getTypeString()]->execute( 
-                        array( $form_field->getContainer()->getId(), $form_field->getStaticAttribute( "DBEntry_form_field_id" ) ) );
-                $check = self::$prepared['check'][$form_field->getTypeString()]->fetch();
-                self::$prepared['check'][$form_field->getTypeString()]->closeCursor();
-                if ( !$check ) {
-                    return false;
-                }
+            $res = self::$prepared['check'][$form_field->getTypeString()]->execute( 
+                    array( $form_field->getContainer()->getId(), $form_field->getStaticAttribute( "DBEntry_form_field_id" ) ) );
+            if ( isset( $res ) && !I2CE::pearError( $res, "Error checking duplicate value:" ) 
+                    && $check = $res->fetchRow() ) {
                 if ( $form_field->isSameValue( $check->value ) ) {
                     return true;
                 }
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error checking duplicate value:" );
             }
         }
         return false;
@@ -1312,30 +1330,26 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             return true;
         }
         $this->setupForm( $form_field->getContainer() );
-        if ( !$this->prepareSaveStatement( $form_field->getDBType(), $form_field->getTypeString() ) 
-             || !$this->prepareSaveStatement( "save_entry", "save_entry" ) ) {
+        if ( !$this->prepareSaveStatement( $form_field->getDBType(), $form_field->getTypeString(), $form_field->getMDB2Type() ) 
+             || !$this->prepareSaveStatement( "save_entry", "save_entry", null ) ) {
             return false;
         }
-        try {
-            self::$prepared['save'][$form_field->getDBType()][$form_field->getTypeString()]->execute( 
-                    array( $form_field->getContainer()->getId(),  //record 
-                        $form_field->getStaticAttribute( "DBEntry_form_field_id" ),  //form_field 
-                        $user->getId(), //who 
-                        $form_field->getStaticAttribute( "DBEntry_change_type" ),  //change_type 
-                        $form_field->getDBValue() //db_value
-                        ) );
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error inserting new value for " . $form_field->getName() . " (Make sure triggers are removed.");
+        $result = self::$prepared['save'][$form_field->getDBType()][$form_field->getTypeString()]->execute( 
+            array( $form_field->getContainer()->getId(),  //record 
+                   $form_field->getStaticAttribute( "DBEntry_form_field_id" ),  //form_field 
+                   $user->getId(), //who 
+                   $form_field->getStaticAttribute( "DBEntry_change_type" ),  //change_type 
+                   $form_field->getDBValue() //db_value
+                ) );
+        if ( I2CE::pearError( $result, "Error inserting new value for " . $form_field->getName() . " (Make sure triggers are removed.") ) {
             /* save can fail if you have upgraded from version 2 and
-               haven't removed the trigger.  To fix this problem, drop
-               the trigger as a mysql admin user. */
+            haven't removed the trigger.  To fix this problem, drop
+            the trigger as a mysql admin user. */
             return false;
         }
-        try {
-            self::$prepared['save']["save_entry"]["save_entry"]->execute( 
-                    array( $form_field->getContainer()->getId(), $form_field->getStaticAttribute( "DBEntry_form_field_id" ) ) );
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error copying to entry table: " );
+        $save_entry = self::$prepared['save']["save_entry"]["save_entry"]->execute( 
+                array( $form_field->getContainer()->getId(), $form_field->getStaticAttribute( "DBEntry_form_field_id" ) ) );
+        if ( I2CE::pearError( $save_entry, "Error copying to entry table: " ) ) {
             return false;
         }
         return true;
@@ -1355,14 +1369,13 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             . $form_field_id . ", LAST_INSERT_ID( IFNULL( MAX(sequence), 0) +1 ) FROM (SELECT MAX(integer_value) AS sequence FROM last_entry WHERE form_field = " . $form_field_id . " UNION SELECT sequence FROM field_sequence WHERE form_field = " . $form_field_id . ") as next_sequence ON DUPLICATE KEY UPDATE sequence = values(sequence)";
         $select_query = "SELECT LAST_INSERT_ID() AS sequence";
         I2CE::raiseError( $update_query );
-        try {
-            $this->db->exec( $update_query );
-            $res = I2CE_PDO::getRow( $select_query );
-            $form_field->setValue( $res->sequence );
-            $form_field->setGenerate( false );
-            unset( $res );
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error setting new field sequence:" );
+        $res = $this->db->exec( $update_query );
+        if ( !I2CE::pearError( $res, "Error setting new field sequence:" ) ) {
+            $res = $this->db->getRow( $select_query );
+            if ( !I2CE::pearError( $res, "Error getting new field sequence:" ) ) {
+                $form_field->setValue( $res->sequence );
+                $form_field->setGenerate( false );
+            }
         }
     }
  
@@ -1374,30 +1387,31 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
      */
     public function FF_populateHistory( $form_field) {
         if ($form_field->getName() == 'parent') {
-            try {
-                $result = $this->db->prepare( "SELECT last_modified AS date,0 AS who,0 AS change_type, CONCAT(parent_form,'|',parent_id) as value FROM record WHERE id = ? " );
-                $result->execute( array( $form_field->getContainer()->getId()));
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error preparing to populate history:" );
+            $sth = $this->db->prepare( "SELECT last_modified AS date,0 AS who,0 AS change_type, CONCAT(parent_form,'|',parent_id) as value FROM record WHERE id = ? ",
+                                       array( "integer" ), MDB2_PREPARE_RESULT );
+            if ( I2CE::pearError( $sth, "Error preparing to populate history:" ) ) {
                 return false;
             }
+            $result = $sth->execute( array( $form_field->getContainer()->getId()));
         } else {
             if ( !($formObj =$form_field->getContainer()) instanceof I2CE_Form) {
                 return false;
             }
             $this->setupForm( $formObj );
-            try {
-                $result = $this->db->prepare( "SELECT date,who,change_type," . $form_field->getTypeString() 
-                                        . "_value as value FROM entry WHERE record = ? AND form_field = ? ORDER BY date" );
-                $result->execute( array( $form_field->getContainer()->getId(),
-                            $form_field->getStaticAttribute( "DBEntry_form_field_id" ) ) );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, "Error executing populate history: " );
+            $sth = $this->db->prepare( "SELECT date,who,change_type," . $form_field->getTypeString() 
+                                       . "_value as value FROM entry WHERE record = ? AND form_field = ? ORDER BY date",
+                                       array( "integer", "integer" ), MDB2_PREPARE_RESULT );
+            if ( I2CE::pearError( $sth, "Error preparing to populate history:" ) ) {
+                return false;
+            }
+            $result = $sth->execute( array( $form_field->getContainer()->getId(),
+                                            $form_field->getStaticAttribute( "DBEntry_form_field_id" ) ) );
+            if ( I2CE::pearError( $result, "Error executing populate history: " ) ) {
                 return false;
             }
         }
         $has_been_set = false;
-        while ( $data = $result->fetch() ) {
+        while ( $data = $result->fetchRow() ) {
             if (!$has_been_set && !isset($data->value)) {  
                 continue;
             }
@@ -1410,8 +1424,8 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
                 );
             $form_field->addHistory( $entry );
         }
-        $result->closeCursor();
-        unset( $result );
+        $result->free();
+        $sth->free();
         return true;
     }
 
@@ -1429,20 +1443,17 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         //form storage check that $form|$oldid exists and $form|$newid does not.
         //but as entry can have $otherform|$newid we need to do an addiional check here/
         $qry = "SELECT COUNT(record.id) AS hasrecord from record WHERE record.id = " . $newid;
-        try {
-            $res = $this->db->query($qry); 
-            if ( !$row = $res->fetch() ) {
-                I2CE::raiseError("Badness checking for validity of new $newid");
-                return false;
-            }
-            unset ( $res );
-            if ($row->hasrecord == 1) {
-                I2CE::raiseError("Cannot change $oldid to $newid -- $newid is already in use");
-                return false;
-            }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error checking for validity of new id $form|$newid" );
+        $res = $this->db->query($qry); 
+        if ( I2CE::pearError( $res, "Error checking for validity of new id $form|$newid" ) ) {
             return false;
+        }
+        if ( !$row = $res->fetchRow() ) {
+            I2CE::raiseError("Badness checking for validity of new $newid");
+            return false;
+        }
+        if ($row->hasrecord == 1) {
+            I2CE::raiseError("Cannot change $oldid to $newid -- $newid is already in use");
+            return  false;
         }
         //now we need to change the record, entry and last_entry tables
         $qrys = array(
@@ -1451,10 +1462,8 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             "UPDATE last_entry set record = $newid WHERE record = $oldid"=>"Could not update $oldid to $newid in last_entry table"
             );
         foreach ($qrys as $qry=>$msg) {
-            try {
-                $res = $this->db->exec($qry);
-            } catch ( PDOException $e ) {
-                I2CE::pdoError( $e, $msg );
+            $res = $this->db->exec($qry);
+            if (I2CE::pearError($msg,$res)) {
                 return false;
             }
         }
@@ -1475,17 +1484,14 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
             return false;
         }
         $qry = "SELECT COUNT(record.id) AS hasrecord from record WHERE form = " . $int_form_id . ' AND record.id = ' . $form_id;
-        try {
-            $res = $this->db->query($qry);
-            if ( !$row = $res->fetch() ) {
-                return false;
-            }
-            unset( $res );
-            return $row->hasrecord == 1;
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error checking for formid $form_name|$form_id" );
+        $res = $this->db->query($qry);
+        if ( I2CE::pearError( $res, "Error checking for formid $form_name|$form_id" ) ) {
             return false;
         }
+        if ( !$row = $res->fetchRow() ) {
+            return false;
+        }
+        return $row->hasrecord == 1;
     }
 
 
@@ -1507,29 +1513,28 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         if (is_string($fields)) {
             $fields = array($fields);
         }
-        $deets = array();
+        $internal_callback_code = 'switch($field) {';
+        $internal_callback_code .= " case 'id': return 'id' ;";
+        $internal_callback_code .= " case 'parent': return 'parent';";
+        $internal_callback_code .= " case 'last_modified': return 'last_modified';";
+        $internal_callback_code .= " case 'created': return 'created';";
         foreach ($fields as $field) {
-            $deets["$form+$field"] = $this->getFormFieldIdAndType($form,$field);
-        }
-
-        return function($form,$field) use($deets) {
-            switch($field) {
-                case 'id': return 'id' ;
-                case 'parent': return 'parent';
-                case 'last_modified': return 'last_modified';
-                case 'created': return 'created';
-            }
-            if ( array_key_exists("$form+$field", $deets ) ) {
-                $details = $deets["$form+$field"];
-                if (!is_array($details) || !array_key_exists('type',$details)) {
-                    return 'NULL';
-                } else {
-                    return "`$field`";
-                }
+            $details = $this->getFormFieldIdAndType($form,$field);
+            if (!is_array($details) || !array_key_exists('type',$details)) {
+                // This should be rare but could happen if no data has been saved yet.
+                
+                $internal_callback_code .= " case '$field': return 'NULL' ;";
             } else {
-                return "'BAD_FIELD_REFERENCE FOR_$field'";
+                //$internal_callback_code .= " case '$field': return '`$field`' ;";
+                $internal_callback_code .= " case '$field': return '`$field`' ;";
             }
-        };
+        }
+        $internal_callback_code .= "default: return \"`BAD_FIELD_REFERENCE_FOR_\$field`\"; }";
+        if ( false === ($internal_reference_callback = self::createCallback($internal_callback_code))) {
+            I2CE::raiseError("Could not create callback from:\n $internal_callback_code");
+            return false;
+        }        
+        return $internal_reference_callback;
     }
 
     /**
@@ -1548,30 +1553,27 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
         if (is_string($fields)) {
             $fields = array($fields);
         }
+        $internal_callback_code2 = 'switch($field) {';
+        $internal_callback_code2 .= " case 'id': return 'id' ;";
+        $internal_callback_code2 .= " case 'parent': return \"CONCAT(r.parent_form,'|',r.parent_id)\";  ";
+        $internal_callback_code2 .= " case 'last_modified': return 'r.last_modified';";
+        $internal_callback_code2 .= " case 'created': return 'r.created';";
         foreach ($fields as $field) {
-            $deets["$form+$field"] = $this->getFormFieldIdAndType($form,$field);
-        }
-
-        return function ($form,$field) use ($deets) {
-            switch($field) {
-                case 'id': return 'id' ;
-                case 'parent': return "CONCAT(r.parent_form,'|',r.parent_id)";
-                case 'last_modified': return 'r.last_modified';
-                case 'created': return 'r.created';
-            }
-            if ( array_key_exists("$form+$field", $deets ) ) {
-                $details = $deets["$form+$field"];
-                if (!is_array($details) || !array_key_exists('type',$details)) {
-                    return 'NULL';
-                } else {
-                    return "`e_$field`.`{$details['type']}_value`";
-                }
+            $details = $this->getFormFieldIdAndType($form,$field);
+            if (!is_array($details) || !array_key_exists('type',$details)) {
+                // This should be rare but could happen if no data has been saved yet.
+                $internal_callback_code2 .= " case '$field': return 'NULL' ;";
             } else {
-                return "`BAD_FIELD_REFERENCE2_FOR_$field`";
+                $internal_callback_code2 .= " case '$field': return '`e_$field`.`{$details['type']}_value`';";
             }
-        };
-
-     }
+        }
+        $internal_callback_code2 .= "default: return \"`BAD_FIELD_REFERENCE2_FOR_\$field`\"; }";
+        if ( false === ($internal_reference_callback2 = self::createCallback($internal_callback_code2))) {
+            I2CE::raiseError("Could not create callback from:\n $internal_callback_code2");
+            return false;
+        }        
+        return $internal_reference_callback2;
+    }
 
 
 
@@ -1635,10 +1637,8 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
                 "record.parent_form = SUBSTR($set_sql,1,LOCATE('|',$set_sql)-1)," .
                 "record.parent_id = CONVERT(SUBSTR($set_sql,LOCATE('|',$set_sql)+1),SIGNED INTEGER) WHERE ( (record.form = $formID  )AND ($where_qry))" ;
             //I2CE::raiseError("Updating by $qry");
-            try {
-                $res = $this->db->exec($qry);
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e, "Cannot update by:\n$qry");
+            $res = $this->db->exec($qry);
+            if (I2CE::pearError("Cannot update by:\n$qry",$res)) {
                 return false;
             }            
         } else {
@@ -1663,20 +1663,16 @@ class I2CE_FormStorage_entry extends I2CE_FormStorage_DB {
                 'last_entry.`' . $details['type'] . '_value`  = ' . $set_sql  
                 . ' WHERE (last_entry.form_field = ' . $details['id']  ." AND ($where_qry))";
             //I2CE::raiseError("Updating by $qry");
-            try {
-                $res = $this->db->exec($qry);
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e, "Cannot update by:\n$qry");
+            $res = $this->db->exec($qry);
+            if (I2CE::pearError("Cannot update by:\n$qry",$res)) {
                 return false;
             }
             $qry = "UPDATE entry  JOIN ($entry_fields_qry ) AS data ON entry.record = data.`$form+id` SET  ".
                 'entry.`' . $details['type'] . '_value`  = ' . $set_sql  
                 . ' WHERE (entry.form_field = ' . $details['id']  ." AND ($where_qry) )";
             //I2CE::raiseError("Updating by $qry");
-            try {
-                $res = $this->db->exec($qry);
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e, "Cannot update by:\n$qry");
+            $res = $this->db->exec($qry);
+            if (I2CE::pearError("Cannot update by:\n$qry",$res)) {
                 return false;
             }
         }

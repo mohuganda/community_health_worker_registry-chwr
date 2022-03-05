@@ -215,7 +215,7 @@ class I2CE_FileDump extends I2CE_Page{
             $ttl = $config->modules->FileDump->ttl * 60;
         }
         if (I2CE_Dumper::dumpContents($file_loc, $headers,   $cacheTime)) {
-            I2CE_Dumper::cacheFileLocation(I2CE_PDO::details('dbname'), $file_name, $locale ,$headers,$file_loc, $cacheTime, $ttl);
+            I2CE_Dumper::cacheFileLocation(MDB2::singleton()->database_name, $file_name, $locale ,$headers,$file_loc, $cacheTime, $ttl);
         }
     }
 

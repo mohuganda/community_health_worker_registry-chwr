@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="Lists-LinkTo-String" path="/modules/forms/">
   <metadata>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="Lists-LinkTo-String" path="/modules/forms/" locale="en_US">
-    <version>4.3.0</version>
+    <version>4.2.0</version>
     <configurationGroup name="forms">
       <configurationGroup name="list_linkto_string_magicdata">
         <configuration name="display" values="single" locale="en_US" type="string">

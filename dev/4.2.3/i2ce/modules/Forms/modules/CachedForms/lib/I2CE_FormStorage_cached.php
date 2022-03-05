@@ -324,10 +324,9 @@ class I2CE_FormStorage_cached extends I2CE_FormStorage_flat {
                     . implode( ',', $all_orders ) : "" );
         //I2CE::raiseMessage( $join_query );
 
-        try {
-            $res = $this->db->query( $join_query );
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Bad query -- $join_query" );
+        $res = $this->db->query( $join_query );
+
+        if ( I2CE::pearError( $res, "Bad query -- $join_query" ) ) {
             return array();
         }
         $prev_ids = array();
@@ -346,7 +345,7 @@ class I2CE_FormStorage_cached extends I2CE_FormStorage_flat {
             }
         }
         $display_copy = $displays;
-        while( $data = $res->fetch() ) {
+        while( $data = $res->fetchRow() ) {
             unset( $prev_disp );
             foreach( $displays as $alias => $disp_data ) {
                 $id_field = strtolower($alias . "+id");

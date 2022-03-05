@@ -117,14 +117,12 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
     public function getIDs() {
         $ids = array();
         $qry = "SELECT id from {$this->table_name}";
-        try {
-            $results =$db->query($qry);
-            while($result = $results->fetch() ) {
-                $ids[] = $result->id();
-            }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e,"Cannot access database:\n$qry");
+        $results =$db->query($qry);
+        if (I2CE::pearError($results,"Cannot access database:\n$qry")) {
             return $ids;
+        }
+        while($result = $results->fetchRow) {
+            $ids[] = $result->id();
         }
         return $ids;
     }
@@ -137,7 +135,7 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
         $db_name = '';
         I2CE::getConfig()->setIfIsSet($db_name,"/modules/CachedForms/database_options/database");        
         if ( !$db_name || $db_name == "" ) {
-            $db_name = I2CE_PDO::details('dbname');
+            $db_name = MDB2::singleton()->database_name;
         }
         return $db_name;
     }
@@ -267,15 +265,11 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
      */
     public function dropTable()  {
         $qry = "DROP TABLE IF EXISTS " . $this->table_name ;
-        $db =  I2CE::PDO();
-
-        try {
-            $result = $db->exec($qry);
-        } catch( PDOException $e ) {
-            I2CE::pdoError( $e, "Failed to drop " . $this->table_name );
+        $db =  MDB2::singleton();
+        $result =$db->query($qry);
+        if (I2CE::pearError($result,"Cannot access database:\n$qry")) {
             return false;
         }
-
         $timeConfig = I2CE::getConfig()->traverse("/modules/CachedForms/times/generation/{$this->form}",false,false);
         if ($timeConfig instanceof I2CE_MagicDataNode) {
             $timeConfig->erase();
@@ -294,54 +288,48 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
         } else {
             $qry = "SHOW TABLES  LIKE '" . $this->short_table_name . "'";
         }
-        $db =  I2CE::PDO();
-        try {
-            $result = $db->query( $qry );
-            if ( $result->rowCount() == 0 ) {
-                return false;
-            }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e, "Failed to show tables:\n$qry" );
+        $db =  MDB2::singleton();
+        $result =$db->query($qry);
+        if (I2CE::pearError($result,"Cannot access database:\n$qry")) {
             return false;
         }
-
-        try {
-            $qry = "SHOW COLUMNS FROM ". $this->table_name  ;
-            $results =$db->query($qry);
-            $factory = I2CE_FormFactory::instance();
-            $field_defs = array();
-            foreach ($this->formObj as $field=>$fieldObj) {            
-                $field_defs[$field] = $fieldObj->getDBType();  //we really should be checking that the column types are correct.
-            }
-            $special = array();
-            while ( $row = $results->fetch()) {
-                $field = $row->field;
-                if ($field == 'id' || $field=='parent' || $field =='last_modified' || $field =='created') {
-                    $special[$field] = true;
-                    continue;
-                }
-                $fieldObj = $this->formObj->getField($field);
-                if (!$fieldObj instanceof I2CE_FormField) {
-                    I2CE::raiseError("The form field, {$this->form}:$field, is present in the cached table but is not a valid I2CE_FormField");
-                    $this->dropTable();
-                    return false;
-                }
-                if (!$fieldObj->isInDB()) {
-                    I2CE::raiseError("The form field, {$this->form}:$field, is present in the cached table but is not supposed to be saved to the cached table");
-                    $this->dropTable();
-                    return false;
-                }
-                if (!array_key_exists($field,$field_defs)) {
-                    I2CE::raiseError("Field $field present in cached table but not the form");
-                    $this->dropTable();
-                    return false;
-                }
-                unset($field_defs[$field]);
-            }
-            unset( $results );
-        } catch( PDOException $e ) {
-            I2CE::pdoError($e,"Cannot access database:\n$qry");
+        if ($result->numRows() == 0) {
             return false;
+        }
+        $qry = "SHOW COLUMNS FROM ". $this->table_name  ;
+        $results =$db->query($qry);
+        if (I2CE::pearError($results,"Cannot access database:\n$qry")) {
+            return false;
+        }
+        $factory = I2CE_FormFactory::instance();
+        $field_defs = array();
+        foreach ($this->formObj as $field=>$fieldObj) {            
+            $field_defs[$field] = $fieldObj->getDBType();  //we really should be checking that the column types are correct.
+        }
+        $special = array();
+        while ( $row = $results->fetchRow()) {
+            $field = $row->field;
+            if ($field == 'id' || $field=='parent' || $field =='last_modified' || $field =='created') {
+                $special[$field] = true;
+                continue;
+            }
+            $fieldObj = $this->formObj->getField($field);
+            if (!$fieldObj instanceof I2CE_FormField) {
+                I2CE::raiseError("The form field, {$this->form}:$field, is present in the cached table but is not a valid I2CE_FormField");
+                $this->dropTable();
+                return false;
+            }
+            if (!$fieldObj->isInDB()) {
+                I2CE::raiseError("The form field, {$this->form}:$field, is present in the cached table but is not supposed to be saved to the cached table");
+                $this->dropTable();
+                return false;
+            }
+            if (!array_key_exists($field,$field_defs)) {
+                I2CE::raiseError("Field $field present in cached table but not the form");
+                $this->dropTable();
+                return false;
+            }
+            unset($field_defs[$field]);
         }
         if (count($special) !== 4) {
             I2CE::raiseError("Could not find id, parent, created or last_modified");
@@ -472,12 +460,14 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
     protected function fastPopulate($subselect,$check_mod = -1, $id =null) {
         $fields = array();
         $default_values =array();
+        $type_fields = array();
         foreach ($this->formObj as $field=>$fieldObj) {
             if (!$fieldObj->isInDB()) {
                 continue;
             }
             $fields[] = $field;
             $default_values[] = $fieldObj->getDBValue();
+            $type_fields[] = $fieldObj->getMDB2Type();
         }
         $insert_fields = $fields;
         $insert_fields[] ='id';
@@ -500,47 +490,45 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
             $d_fields[] = "IFNULL(`$field`, ?) as `$field`";
         }
         $select = "SELECT  concat('{$this->form}|',id) as id, parent , IFNULL(`last_modified`,'1900-01-01 00:00:00') as `last_modified`, IFNULL(`created`,'0000-00-00 00:00:00') as `created`, " . implode(',',$d_fields) . " FROM ($subselect) AS cached_table";
-        $db = I2CE::PDO();
         if ($id ) {
-            $select .= " WHERE cached_table.id = " . $db->quote($id);
+            $select .= " WHERE cached_table.id = '" . mysql_real_escape_string($id) . "'";
         }
         $insertQry = 'INSERT INTO ' . $this->table_name . '(id,parent,`last_modified`,created,`' . implode( '`,`', $fields) . '`) ('  .  $select    .") ON DUPLICATE KEY UPDATE " . implode(',',$update_fields) ;
+        I2CE::raiseError($insertQry);
+        $db = MDB2::singleton();
         $hash = md5($insertQry);
         if (array_key_exists($hash, self::$prepared_stash)) {
             $prp = self::$prepared_stash[$hash];
-        } else {
-            try {
-                self::$prepared_stash[$hash] =  ($prp = $db->prepare( $insertQry ));
-            } catch ( PDOException $e ) {
-                try { 
-                    $db = I2CE_PDO::reconnect();
+        } else {             
+            self::$prepared_stash[$hash] =  ($prp = $db->prepare( $insertQry,$type_fields, MDB2_PREPARE_MANIP ));
+            if (I2CE::pearError($prp,"Could not prepare fast populate - trying to reestablish db connection to clear prepared statement cache")) {
+                if (!    $db = I2CE::dbReconnect()) {
+                    die("COULD NOT RECONNECT TO DB");
+                }  else {
                     I2CE::raiseError("Successful reconnect");
-                    self::$prepared_stash[$hash] =  ($prp = $db->prepare( $insertQry ));
-                } catch ( PDOException $e ) {
-                    I2CE::pdoError($e, "Failed to prepare queries for fastPopulate");
-                    return false;
                 }
+                self::$prepared_stash[$hash] =  ($prp = $db->prepare( $insertQry,$type_fields, MDB2_PREPARE_MANIP ));
             }
+        }
+        if (I2CE::pearError($prp,"Could not prepare fast populate")) {
+            return false;
         }
         if (I2CE_CachedForm::$spam) {
             I2CE::raiseError("Fast Populate Query:$insertQry\n");
         }
-        try {
-            $res = $prp->execute($default_values);
-            if (I2CE_CachedForm::$spam) {
-                I2CE::raiseError("Updated $res records for {$this->form}".($id!==null?" ($id)":""));
-            }
-            $prp->closeCursor();
-            if ( $id || $check_mod ) {
-                unset( $prp );
-                unset( self::$prepared_stash[$hash] );
-            }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Could not populate cache for {$this->form}:");
+        $res = $prp->execute($default_values);
+            
+        if (I2CE::pearError( $res, "Could not populate cache for {$this->form}:")) {
             return false;
         }
-
-       return true;
+        if ( $id || $check_mod ) {
+            $prp->free();
+            unset( self::$prepared_stash[$hash] );
+        }
+        if (I2CE_CachedForm::$spam) {
+            I2CE::raiseError("Updated $res records for {$this->form}".($id!==null?" ($id)":""));
+        }
+        return true;
     }
 
 
@@ -551,12 +539,14 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
      */
     protected function slowPopulate($mod_time = -1, $id = null) {
         $fields = array();
+        $mdb2_types = array();
         $default_values = array();
         foreach ($this->formObj as $field=>$fieldObj) {
             if (!$fieldObj->isInDB()) {
                 continue;
             }
             $fields[] = $field;
+            $mdb2_types[] = $fieldObj->getMDB2Type();
             $default_values[$field] = $fieldObj->getDBValue();
         }
         $default_values['last_modified'] = '1900-01-01 00:00:00';
@@ -582,55 +572,55 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
         if (I2CE_CachedForm::$spam) {
             I2CE::raiseError("Slow populate:\n$insertQry");
         }
-        $db = I2CE::PDO();
-        try {
-            $prep = $db->prepare($insertQry);
-            $storage = I2CE_FormStorage::getStorageMechanism($this->form);
-            if (!$storage instanceof I2CE_FormStorage_Mechanism) {
-                I2CE::raiseError("form $form does not have valid form storage mechanism");
-                return false;
-            }
-            if (I2CE_CachedForm::$spam) {
-                I2CE::raiseError("Mod Time =$mod_time");
-            }
-            if ( $id !== null ) {
-                $ids = array( $id );
-            } else {
-                $ids = $storage->getRecords($this->form,$mod_time);
-            }
-            if (I2CE_CachedForm::$spam) {
-                I2CE::raiseError(implode("\n", $ids));
-            }
-            foreach ($ids as $id) {
-                $data = $storage->lookupField($this->form,$id,$fields,false);
-                if (!is_array($data)) {
-                    continue;
-                }
-                $t_data = array();
-                foreach ($fields as $field) {
-                    if (array_key_exists($field,$data)) {
-                        $t_data[] = $data[$field];
-                    } else {
-                        $t_data[] = $default_values[$field];
-                    }
-                }
-                $t_data[] = $this->form . "|" . $id;
-                try {
-                    $res = $prep->execute($t_data);
-                    $prep->closeCursor();
-                } catch ( PDOException $e ) {
-                    I2CE::pdoError( $e, "Error insert into cache table:" );
-                    return false;
-                }            
-            }
-            unset( $prep );
-            I2CE_FormStorage::releaseStorage($this->form);
-            if (I2CE_CachedForm::$spam) {
-                I2CE::raiseError("Populated " . count($ids)  . " entries for {$this->form}");
-            }
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error setting up form in the database:" );
+        $db = MDB2::singleton();
+        $prep = $db->prepare($insertQry, $mdb2_types, MDB2_PREPARE_MANIP);
+        if (I2CE::pearError( $prep, "Error setting up form in the database:" )) {
             return false;
+        }
+        if ($check_mod) {
+            $mod_time = $this->getLastCachedTime();
+        } else {
+            $mod_time = -1;
+        }
+        $storage = I2CE_FormStorage::getStorageMechanism($this->form);
+        if (!$storage instanceof I2CE_FormStorage_Mechanism) {
+            I2CE::raiseError("form $form does not have valid form storage mechanism");
+            return false;
+        }
+        if (I2CE_CachedForm::$spam) {
+            I2CE::raiseError("Mod Time =$mod_time");
+        }
+        if ( $id !== null ) {
+            $ids = array( $id );
+        } else {
+            $ids = $storage->getRecords($this->form,$mod_time);
+        }
+        if (I2CE_CachedForm::$spam) {
+            I2CE::raiseError(implode("\n", $ids));
+        }
+        foreach ($ids as $id) {
+            $data = $storage->lookupField($this->form,$id,$fields,false);
+            if (!is_array($data)) {
+                continue;
+            }
+            $t_data = array();
+            foreach ($fields as $field) {
+                if (array_key_exists($field,$data)) {
+                    $t_data[] = $data[$field];
+                } else {
+                    $t_data[] = $default_values[$field];
+                }
+            }
+            $t_data[] = $this->form . "|" . $id;
+            $res = $prep->execute($t_data);
+            if ( I2CE::pearError( $res, "Error insert into cache table:" ) ) {
+                return false;
+            }            
+
+        }
+        I2CE_FormStorage::releaseStorage($this->form);
+        if (I2CE_CachedForm::$spam) {
+            I2CE::raiseError("Populated " . count($ids)  . " entries for {$this->form}");
         }
         return true;
 
@@ -667,14 +657,11 @@ class I2CE_CachedForm extends I2CE_Fuzzy{
         }
         $createQuery =  "CREATE TABLE  " . $this->table_name ." ( "  .  implode(',', $createFields) . ")  ENGINE=InnoDB DEFAULT CHARSET=utf8  DEFAULT COLLATE=utf8_bin";        
         I2CE::raiseError("Creating table for {$this->form} as:\n$createQuery");
-        try {
-            $db =  I2CE::PDO();
-            $result =$db->exec($createQuery);
-        } catch (PDOException $e ) {
-            I2CE::pdoError($e,"Cannot create cached table for {$this->form}:\n$createQuery");
+        $db =  MDB2::singleton();
+        $result =$db->query($createQuery);
+        if (I2CE::pearError($result,"Cannot create cached table for {$this->form}:\n$createQuery")) {
             return false;
         }
-
         return true;
     }
 

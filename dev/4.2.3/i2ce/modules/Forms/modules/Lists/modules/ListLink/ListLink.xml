@@ -3,15 +3,15 @@
 <I2CEConfiguration name="Lists-LinkTo">
   <metadata>
     <displayName>List Link to Data</displayName>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <description>Lists that are linked to other data. This module is meant to be extended to defined what type of data this list links to. You can extend the I2CE_ListLink class to add new fields to link to. Alone this class doesn't do much.</description>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="Lists">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="modules">
       <value>./modules</value>

@@ -3,35 +3,35 @@
 <I2CEConfiguration name="Lists-LinkTo-String">
   <metadata>
     <displayName>List Link to String</displayName>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <description>Lists that are linked to a string (id). Multiple forms are defined here that can be used to link lists to strings for different storage mechanisms. You must enable the required form storage module yourself to avoid extra modules being loaded. You should use the same form storage that is used for the List form you're linking. Certain storage mechanisms may need extra storage options defined.</description>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="Lists-LinkTo">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="forms-storage-CSV">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="forms-storage-flat">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="forms-storage-multiflat">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="forms-storage-magicdata">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="Lists-LinkTo">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
   </metadata>
   <configurationGroup name="Lists-LinkTo-String" path="/modules/forms/">

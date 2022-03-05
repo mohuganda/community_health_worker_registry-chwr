@@ -5,10 +5,10 @@
     <displayName>Mod Documentor</displayName>
     <description>Enables Documenting of existing mods and their relationship from the command line</description>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <requirement name="pages">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

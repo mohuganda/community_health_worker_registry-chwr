@@ -91,6 +91,10 @@ abstract class I2CE_FormField extends I2CE_Fuzzy{
      * The database type for the field
      */
     const FIELD_TYPE_DB = "varchar( 255 ) COLLATE utf8_bin default NULL";
+    /**
+     * The MDB2 type for the field.
+     */
+    const FIELD_TYPE_MDB2 = "text";
 
 
     /**
@@ -347,6 +351,20 @@ abstract class I2CE_FormField extends I2CE_Fuzzy{
      */
     public  function getDBType() {
         return eval( 'return ' . get_class( $this ) . '::FIELD_TYPE_DB;' );
+    }
+        
+    /**
+     * Return the MDB2 field type for this field.
+     * If it isn't set return the DB type.
+     * @return string
+     */
+    public function getMDB2Type() {
+        $mdb2_type = eval( 'return ' . get_class( $this ) . '::FIELD_TYPE_MDB2;' );
+        if ( isset( $mdb2_type ) ) {
+            return $mdb2_type;
+        } else {
+            return $this->getDBType();
+        }
     }
         
     /**

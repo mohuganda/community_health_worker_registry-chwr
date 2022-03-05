@@ -121,26 +121,22 @@ abstract class I2CE_FormField_STORE_BINARY_FILE extends I2CE_FormField_DB_BLOB {
             return false;
         }
         if (! self::$setStmt) {
-            $db = I2CE::PDO();
-            try {
-                self::$setStmt = $db->prepare("SELECT `value` FROM `temp_upload` WHERE `key` = ?" );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e, "Error creating temp_upload read stement");
+            $db = MDB2::singleton();       
+            $stmt = $db->prepare("SELECT `value` FROM `temp_upload` WHERE `key` = ?",  array( 'text' ), MDB2_PREPARE_RESULT );            
+            if (I2CE::pearError($stmt, "Error creating temp_upload read stement")) {
                 return false;
             }
+            self::$setStmt = $stmt;
         }
-        try {
-            self::$setStmt->execute( array( $this->tmp_key ) );
-            if ( !($row = self::$setStmt->fetch() ) || !$row->value) {
-                I2CE::raiseError("No data read");
-                return ;
-            }
-            $this->setFromDB($row->value);
-            self::$setStmt->closeCursor();
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e,"Error reading from tmp_upload temporary ");
+        $res = self::$setStmt->execute($this->tmp_key);
+        if (I2CE::pearError($res,"Error reading from tmp_upload temporary ")) {
             return false;
         }
+        if ( !($row = $res->fetchRow() ) || !$row->value) {
+            I2CE::raiseError("No data read");
+            return ;
+        }
+        $this->setFromDB($row->value);
         //$this->tmp_key = false;
     }
 
@@ -153,14 +149,16 @@ abstract class I2CE_FormField_STORE_BINARY_FILE extends I2CE_FormField_DB_BLOB {
             return false;
         }
         if (! self::$storeStmt) {
-            $db = I2CE::PDO();
-            try {
-                self::$storeStmt = $db->prepare( "REPLACE INTO `temp_upload` (`key`,`value`) VALUES (?,?)" );
-                $res = self::$storeStmt->execute(array($this->tmp_key,$this->getDBValue()));
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e, "Could not store into temp_upload");
+            $db = MDB2::singleton();
+            $stmt = $db->prepare( "REPLACE INTO `temp_upload` (`key`,`value`) VALUES (?,?)",  array( 'text', 'blob' ), MDB2_PREPARE_MANIP );            
+            if (I2CE::pearError($stmt,"Error creating store stement")) {
                 return false;
             }
+            self::$storeStmt = $stmt;
+        }
+        $res = self::$storeStmt->execute(array($this->tmp_key,$this->getDBValue()));
+        if (I2CE::pearError($res, "Could not store into temp_upload")) {
+            return false;
         }
     }
 

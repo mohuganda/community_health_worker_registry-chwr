@@ -4,176 +4,176 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="tt">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
       <version>4.0.0</version>
-      <value>aa:Afarça</value>
-      <value>ab:Abxazça</value>
-      <value>ae:Avestança</value>
-      <value>af:Afrikança</value>
-      <value>am:Amharça</value>
-      <value>ar:Ğäräpçä</value>
-      <value>as:Assamesçä</value>
-      <value>ay:Aymarça</value>
-      <value>az:Äzerçä</value>
-      <value>ba:Başqortça</value>
-      <value>be:Belarusça</value>
-      <value>bg:Bulgarça</value>
-      <value>bh:Biharça</value>
-      <value>bi:Bislamaça</value>
-      <value>bn:Bengalça</value>
-      <value>bo:Tibetçä</value>
-      <value>br:Bretonça</value>
-      <value>bs:Bosniçä</value>
-      <value>ca:Katalança</value>
-      <value>ce:Çäçänçä</value>
-      <value>ch:Çamorroça</value>
-      <value>co:Korsikça</value>
-      <value>cs:Çexçä</value>
-      <value>cu:Slavça, Çerkäw</value>
-      <value>cv:Çuaşça</value>
-      <value>cy:Welşçä</value>
-      <value>da:Dança</value>
-      <value>de:Almança</value>
-      <value>dz:Dzongxaça</value>
-      <value>el:Yunança</value>
-      <value>en:İnglizçä</value>
-      <value>en_GB:İnglizçä (Britania)</value>
-      <value>en_US:İnglizçä (Amerika)</value>
-      <value>eo:Esperantoça</value>
-      <value>es:İspança</value>
-      <value>et:Estonça</value>
-      <value>eu:Basqça</value>
-      <value>fa:Farsı</value>
-      <value>fi:Finçä</value>
-      <value>fj:Fijiçä</value>
-      <value>fo:Farosça</value>
-      <value>fr:Fransça</value>
-      <value>ga:Galça (İrland)</value>
-      <value>gd:Galça</value>
-      <value>gl:Galisçä</value>
-      <value>gn:Guarança</value>
-      <value>gv:Manksça</value>
-      <value>ha:Hausça</value>
-      <value>he:Yähüdçä</value>
-      <value>hi:Hindçä</value>
-      <value>hr:Kroatça</value>
-      <value>hsb:Sorbça, Öske</value>
-      <value>hu:Macarça</value>
-      <value>hy:Ärmänçä</value>
-      <value>hz:Hereroça</value>
-      <value>ia:İnterlingua</value>
-      <value>id:İndonesçä</value>
-      <value>ie:İnterlingue</value>
-      <value>ik:İnupiaqça</value>
-      <value>io:İdoça</value>
-      <value>is:İslandça</value>
-      <value>it:İtalça</value>
-      <value>iu:İnuktitutça</value>
-      <value>ja:Japança</value>
-      <value>jv:Javaça</value>
-      <value>ka:Görceçä</value>
-      <value>ki:Kikuyuça</value>
-      <value>kk:Qazaqça</value>
-      <value>kl:Kalaallisutça</value>
-      <value>km:Xmerçä</value>
-      <value>kn:Kannadça</value>
-      <value>ko:Koreyçä</value>
-      <value>ks:Kaşmirçä</value>
-      <value>ku:Kördçä</value>
-      <value>kv:Komiçä</value>
-      <value>kw:Kornişçä</value>
-      <value>ky:Qırğızça</value>
-      <value>la:Latínça</value>
-      <value>lb:Lüksemburgça</value>
-      <value>li:Limburgça</value>
-      <value>ln:Lingalaça</value>
-      <value>lo:Laoça</value>
-      <value>lt:Litçä</value>
-      <value>lv:Latça</value>
-      <value>mg:Malagasça</value>
-      <value>mh:Marşallça</value>
-      <value>mi:Maoriça</value>
-      <value>mk:Makedonça</value>
-      <value>mn:Moğolça</value>
-      <value>mo:Moldavça</value>
-      <value>mr:Maratça</value>
-      <value>ms:Malayça</value>
-      <value>mt:Maltesçä</value>
-      <value>my:Burmesçä</value>
-      <value>nb:Norvegçä (ädäbi)</value>
-      <value>nd:Ndebeleçä, Tönyaq</value>
-      <value>nds:Saksonça, Asqı</value>
-      <value>ne:Nepalça</value>
-      <value>ng:Ndongaça</value>
-      <value>nl:Dutça</value>
-      <value>nn:Norwejçä (Ninorsk)</value>
-      <value>nr:Ndebeleçä, Könyaq</value>
-      <value>nso:Tönyaq Sotho</value>
-      <value>nv:Navaxoça</value>
-      <value>ny:Çiçewaça</value>
-      <value>oc:Okkitança</value>
-      <value>om:Oromoça</value>
-      <value>os:Ossetinçä</value>
-      <value>pa:Panjabça</value>
-      <value>pi:Paliçä</value>
-      <value>pl:Polça</value>
-      <value>ps:Puştu Farsíçası</value>
-      <value>pt:Portugalça</value>
-      <value>pt_BR:Portugalça, Brasil</value>
-      <value>qu:Queçuaça</value>
-      <value>rn:Rundiçä</value>
-      <value>ro:Romança</value>
-      <value>ru:Urısça</value>
-      <value>rw:Kinyarwandaça</value>
-      <value>sa:Sanskritçä</value>
-      <value>sc:Sardinça</value>
-      <value>sd:Sindihçä</value>
-      <value>se:Tönyaq Sami</value>
-      <value>sg:Sangoça</value>
-      <value>si:Sinhalçä</value>
-      <value>sk:Slovakça</value>
-      <value>sl:Slovençä</value>
-      <value>sm:Samoaça</value>
-      <value>sn:Şonaça</value>
-      <value>so:Somaliçä</value>
-      <value>sq:Albança</value>
-      <value>sr:Serbçä</value>
-      <value>ss:Swatça</value>
-      <value>st:Sothoça, Könyaq</value>
-      <value>su:Sundanesçä</value>
-      <value>sv:İswäcçä</value>
-      <value>sw:Swahiliçä</value>
-      <value>ta:Tamilça</value>
-      <value>te:Teluguça</value>
-      <value>tg:Tajıqça</value>
-      <value>th:Tayça</value>
-      <value>ti:Tigrinyaça</value>
-      <value>tk:Törkmänçä</value>
-      <value>tn:Tswanaça</value>
-      <value>tr:Törekçä</value>
-      <value>ts:Tsongaça</value>
-      <value>tt:Tatarça</value>
-      <value>tw:Twiçä</value>
-      <value>ty:Tahitçä</value>
-      <value>ug:Uyğurça</value>
-      <value>uk:Ukrainça</value>
-      <value>ur:Urduça</value>
-      <value>uz:Üzbäkçä</value>
-      <value>ven:Vendaça</value>
-      <value>vi:Vietnamça</value>
-      <value>vo:Volapükçä</value>
-      <value>wa:Walonça</value>
-      <value>wo:Wolofça</value>
-      <value>yi:Yidiş</value>
-      <value>yo:Yorubaça</value>
-      <value>za:Cuañça</value>
-      <value>zh:Çinçä</value>
-      <value>zh_CN:Çinçä (Ciñel)</value>
-      <value>zh_TW:Çinçä (Ğädäti)</value>
-      <value>zu:Zuluça</value>
+      <value>aa:Afar&#231;a</value>
+      <value>ab:Abxaz&#231;a</value>
+      <value>ae:Avestan&#231;a</value>
+      <value>af:Afrikan&#231;a</value>
+      <value>am:Amhar&#231;a</value>
+      <value>ar:&#286;&#228;r&#228;p&#231;&#228;</value>
+      <value>as:Assames&#231;&#228;</value>
+      <value>ay:Aymar&#231;a</value>
+      <value>az:&#196;zer&#231;&#228;</value>
+      <value>ba:Ba&#351;qort&#231;a</value>
+      <value>be:Belarus&#231;a</value>
+      <value>bg:Bulgar&#231;a</value>
+      <value>bh:Bihar&#231;a</value>
+      <value>bi:Bislama&#231;a</value>
+      <value>bn:Bengal&#231;a</value>
+      <value>bo:Tibet&#231;&#228;</value>
+      <value>br:Breton&#231;a</value>
+      <value>bs:Bosni&#231;&#228;</value>
+      <value>ca:Katalan&#231;a</value>
+      <value>ce:&#199;&#228;&#231;&#228;n&#231;&#228;</value>
+      <value>ch:&#199;amorro&#231;a</value>
+      <value>co:Korsik&#231;a</value>
+      <value>cs:&#199;ex&#231;&#228;</value>
+      <value>cu:Slav&#231;a, &#199;erk&#228;w</value>
+      <value>cv:&#199;ua&#351;&#231;a</value>
+      <value>cy:Wel&#351;&#231;&#228;</value>
+      <value>da:Dan&#231;a</value>
+      <value>de:Alman&#231;a</value>
+      <value>dz:Dzongxa&#231;a</value>
+      <value>el:Yunan&#231;a</value>
+      <value>en:&#304;ngliz&#231;&#228;</value>
+      <value>en_GB:&#304;ngliz&#231;&#228; (Britania)</value>
+      <value>en_US:&#304;ngliz&#231;&#228; (Amerika)</value>
+      <value>eo:Esperanto&#231;a</value>
+      <value>es:&#304;span&#231;a</value>
+      <value>et:Eston&#231;a</value>
+      <value>eu:Basq&#231;a</value>
+      <value>fa:Fars&#305;</value>
+      <value>fi:Fin&#231;&#228;</value>
+      <value>fj:Fiji&#231;&#228;</value>
+      <value>fo:Faros&#231;a</value>
+      <value>fr:Frans&#231;a</value>
+      <value>ga:Gal&#231;a (&#304;rland)</value>
+      <value>gd:Gal&#231;a</value>
+      <value>gl:Galis&#231;&#228;</value>
+      <value>gn:Guaran&#231;a</value>
+      <value>gv:Manks&#231;a</value>
+      <value>ha:Haus&#231;a</value>
+      <value>he:Y&#228;h&#252;d&#231;&#228;</value>
+      <value>hi:Hind&#231;&#228;</value>
+      <value>hr:Kroat&#231;a</value>
+      <value>hsb:Sorb&#231;a, &#214;ske</value>
+      <value>hu:Macar&#231;a</value>
+      <value>hy:&#196;rm&#228;n&#231;&#228;</value>
+      <value>hz:Herero&#231;a</value>
+      <value>ia:&#304;nterlingua</value>
+      <value>id:&#304;ndones&#231;&#228;</value>
+      <value>ie:&#304;nterlingue</value>
+      <value>ik:&#304;nupiaq&#231;a</value>
+      <value>io:&#304;do&#231;a</value>
+      <value>is:&#304;sland&#231;a</value>
+      <value>it:&#304;tal&#231;a</value>
+      <value>iu:&#304;nuktitut&#231;a</value>
+      <value>ja:Japan&#231;a</value>
+      <value>jv:Java&#231;a</value>
+      <value>ka:G&#246;rce&#231;&#228;</value>
+      <value>ki:Kikuyu&#231;a</value>
+      <value>kk:Qazaq&#231;a</value>
+      <value>kl:Kalaallisut&#231;a</value>
+      <value>km:Xmer&#231;&#228;</value>
+      <value>kn:Kannad&#231;a</value>
+      <value>ko:Korey&#231;&#228;</value>
+      <value>ks:Ka&#351;mir&#231;&#228;</value>
+      <value>ku:K&#246;rd&#231;&#228;</value>
+      <value>kv:Komi&#231;&#228;</value>
+      <value>kw:Korni&#351;&#231;&#228;</value>
+      <value>ky:Q&#305;r&#287;&#305;z&#231;a</value>
+      <value>la:Lat&#237;n&#231;a</value>
+      <value>lb:L&#252;ksemburg&#231;a</value>
+      <value>li:Limburg&#231;a</value>
+      <value>ln:Lingala&#231;a</value>
+      <value>lo:Lao&#231;a</value>
+      <value>lt:Lit&#231;&#228;</value>
+      <value>lv:Lat&#231;a</value>
+      <value>mg:Malagas&#231;a</value>
+      <value>mh:Mar&#351;all&#231;a</value>
+      <value>mi:Maori&#231;a</value>
+      <value>mk:Makedon&#231;a</value>
+      <value>mn:Mo&#287;ol&#231;a</value>
+      <value>mo:Moldav&#231;a</value>
+      <value>mr:Marat&#231;a</value>
+      <value>ms:Malay&#231;a</value>
+      <value>mt:Maltes&#231;&#228;</value>
+      <value>my:Burmes&#231;&#228;</value>
+      <value>nb:Norveg&#231;&#228; (&#228;d&#228;bi)</value>
+      <value>nd:Ndebele&#231;&#228;, T&#246;nyaq</value>
+      <value>nds:Sakson&#231;a, Asq&#305;</value>
+      <value>ne:Nepal&#231;a</value>
+      <value>ng:Ndonga&#231;a</value>
+      <value>nl:Dut&#231;a</value>
+      <value>nn:Norwej&#231;&#228; (Ninorsk)</value>
+      <value>nr:Ndebele&#231;&#228;, K&#246;nyaq</value>
+      <value>nso:T&#246;nyaq Sotho</value>
+      <value>nv:Navaxo&#231;a</value>
+      <value>ny:&#199;i&#231;ewa&#231;a</value>
+      <value>oc:Okkitan&#231;a</value>
+      <value>om:Oromo&#231;a</value>
+      <value>os:Ossetin&#231;&#228;</value>
+      <value>pa:Panjab&#231;a</value>
+      <value>pi:Pali&#231;&#228;</value>
+      <value>pl:Pol&#231;a</value>
+      <value>ps:Pu&#351;tu Fars&#237;&#231;as&#305;</value>
+      <value>pt:Portugal&#231;a</value>
+      <value>pt_BR:Portugal&#231;a, Brasil</value>
+      <value>qu:Que&#231;ua&#231;a</value>
+      <value>rn:Rundi&#231;&#228;</value>
+      <value>ro:Roman&#231;a</value>
+      <value>ru:Ur&#305;s&#231;a</value>
+      <value>rw:Kinyarwanda&#231;a</value>
+      <value>sa:Sanskrit&#231;&#228;</value>
+      <value>sc:Sardin&#231;a</value>
+      <value>sd:Sindih&#231;&#228;</value>
+      <value>se:T&#246;nyaq Sami</value>
+      <value>sg:Sango&#231;a</value>
+      <value>si:Sinhal&#231;&#228;</value>
+      <value>sk:Slovak&#231;a</value>
+      <value>sl:Sloven&#231;&#228;</value>
+      <value>sm:Samoa&#231;a</value>
+      <value>sn:&#350;ona&#231;a</value>
+      <value>so:Somali&#231;&#228;</value>
+      <value>sq:Alban&#231;a</value>
+      <value>sr:Serb&#231;&#228;</value>
+      <value>ss:Swat&#231;a</value>
+      <value>st:Sotho&#231;a, K&#246;nyaq</value>
+      <value>su:Sundanes&#231;&#228;</value>
+      <value>sv:&#304;sw&#228;c&#231;&#228;</value>
+      <value>sw:Swahili&#231;&#228;</value>
+      <value>ta:Tamil&#231;a</value>
+      <value>te:Telugu&#231;a</value>
+      <value>tg:Taj&#305;q&#231;a</value>
+      <value>th:Tay&#231;a</value>
+      <value>ti:Tigrinya&#231;a</value>
+      <value>tk:T&#246;rkm&#228;n&#231;&#228;</value>
+      <value>tn:Tswana&#231;a</value>
+      <value>tr:T&#246;rek&#231;&#228;</value>
+      <value>ts:Tsonga&#231;a</value>
+      <value>tt:Tatar&#231;a</value>
+      <value>tw:Twi&#231;&#228;</value>
+      <value>ty:Tahit&#231;&#228;</value>
+      <value>ug:Uy&#287;ur&#231;a</value>
+      <value>uk:Ukrain&#231;a</value>
+      <value>ur:Urdu&#231;a</value>
+      <value>uz:&#220;zb&#228;k&#231;&#228;</value>
+      <value>ven:Venda&#231;a</value>
+      <value>vi:Vietnam&#231;a</value>
+      <value>vo:Volap&#252;k&#231;&#228;</value>
+      <value>wa:Walon&#231;a</value>
+      <value>wo:Wolof&#231;a</value>
+      <value>yi:Yidi&#351;</value>
+      <value>yo:Yoruba&#231;a</value>
+      <value>za:Cua&#241;&#231;a</value>
+      <value>zh:&#199;in&#231;&#228;</value>
+      <value>zh_CN:&#199;in&#231;&#228; (Ci&#241;el)</value>
+      <value>zh_TW:&#199;in&#231;&#228; (&#286;&#228;d&#228;ti)</value>
+      <value>zu:Zulu&#231;a</value>
     </configuration>
   </configurationGroup>
 </I2CEConfiguration>

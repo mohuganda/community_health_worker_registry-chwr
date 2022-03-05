@@ -43,7 +43,7 @@ class I2CE_Module_UserAccess extends I2CE_Module {
         }
         $options['userDB'] = trim($options['userDB']);
         if (!$options['userDB']) {
-            $options['userDB'] =  '`' . I2CE_PDO::details('dbname') . '`';
+            $options['userDB'] =  '`' . MDB2::singleton()->database_name  . '`';
         }
         if (!array_key_exists('detailTable',$options)) {
             $options['detailTable']=  $options['userDB'] . '.user';
@@ -88,7 +88,7 @@ class I2CE_Module_UserAccess extends I2CE_Module {
             }
         }        
         $options =  self::ensureDefaultOptions($options);
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         $qrs = array();
         $qrs[] = 'CREATE TABLE IF NOT EXISTS ' . $options['detailTable']. ' '
             .'(`id` int(11) NOT NULL auto_increment,'
@@ -118,15 +118,13 @@ class I2CE_Module_UserAccess extends I2CE_Module {
             .') ENGINE=MyISAM DEFAULT CHARSET=utf8';
         
         I2CE::raiseError("Initializing User Table. Users' details table se stored in database {$options['userDB']}");
-        try {
-            foreach ($qrs as $qry) {
-                $db->exec($qry);
+        foreach ($qrs as $qry) {
+            if (I2CE::pearError($db->query($qry),"Cannot create user access table: $qry")) {
+                I2CE::raiseError("Could not initialize I2CE user tables") ;
+                return false;
             }
-            return true;
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Cannot create user access tables." );
-            return false;
         }
+        return true;
     }
 
     /**    
@@ -181,41 +179,36 @@ class I2CE_Module_UserAccess extends I2CE_Module {
     }
 
     protected function updateAccessTable() {
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         $options = self::getInitOptions(I2CE::getUserAccessInit('DEFAULT'));
-        try {
-            $result = $db->query("SHOW FULL COLUMNS FROM " . $options['accessTable'] . " WHERE Field='role'");
-            $rows = $result->fetchAll();
+        $rows = $db->queryAll("SHOW FULL COLUMNS FROM " . $options['accessTable'] . " WHERE Field='role'");
 
-            if(substr($rows[0]->type, 0, 3) != 'int') {
-                I2CE::raiseError("NOT doing access table");
-                return true;
-            }
-
-            I2CE::raiseError("Altering access table to 3.x format");
-            return I2CE::runSQLScript('update-access-table.sql');
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Failed to get format details for updating access table." );
-            return false;
+        if(substr($rows[0]->type, 0, 3) != 'int') {
+            I2CE::raiseError("NOT doing access table");
+            return true;
         }
+
+        I2CE::raiseError("Altering access table to 3.x format");
+        return I2CE::runSQLScript('update-access-table.sql');
     }
 
 
     protected function updateUserDetailTable(){
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         $qry_show = "SHOW COLUMNS FROM user LIKE 'default_password'"; 
         $qry_alter = "ALTER TABLE user ADD COLUMN `default_password` int(11) default 1"; 
-        try {
-            $results = $db->query( $qry_show );
-            if( $results->rowCount() != 1) { //the logic is vague: I could not find another logic to confirm the field is found
-                $qry_alter_results = $db->exec($qry_alter);
-            }
-            return true;
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error getting columns from user table." );
+        $results = $db->query( $qry_show );
+        if ( I2CE::pearError( $results, "Error getting columns from user table: on {$qry_show}" ) ) {
             return false;
         }
-    }
+        if( $results->numRows() != 1) { //the logic is vague: I could not find another logic to confirm the field is found
+          $qry_alter_results = $db->query($qry_alter);
+          if ( I2CE::pearError( $qry_alter_results, "Error getting columns from user table: on {$qry_alter}" ) ) {
+            return false;
+          }
+        }
+        return true;
+      }
 
 
 

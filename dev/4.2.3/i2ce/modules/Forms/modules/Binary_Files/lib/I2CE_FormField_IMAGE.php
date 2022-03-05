@@ -278,7 +278,7 @@ class I2CE_FormField_IMAGE extends I2CE_FormField_BINARY_FILE {
         $data = file_get_contents($tmp_file);
         unlink($tmp_file);
         $content_length = strlen($data);
-        $this->value = rtrim($data,"\0"); //This was for MDB2, need to test if it's necessary with PDO
+        $this->value = rtrim($data,"\0"); //MDB2 strips off terminating \0 when returning results
         $this->null_term = $content_length - strlen($this->value);
         return true;
         

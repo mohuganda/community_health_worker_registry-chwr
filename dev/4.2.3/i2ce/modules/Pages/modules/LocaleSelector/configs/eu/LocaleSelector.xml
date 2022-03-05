@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="eu">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -78,7 +78,7 @@
       <value>mt:Maltera</value>
       <value>my:Birmaniera</value>
       <value>na:Nauruera</value>
-      <value>nb:Norvegiera (Bokmål)</value>
+      <value>nb:Norvegiera (Bokm&#229;l)</value>
       <value>nd:Ndebelera (iparraldekoa)</value>
       <value>nds:Beheko Sajoniera</value>
       <value>ne:Nepalera</value>

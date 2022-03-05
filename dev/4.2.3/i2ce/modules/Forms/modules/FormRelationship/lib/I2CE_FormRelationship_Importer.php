@@ -75,26 +75,20 @@ class I2CE_FormRelationship_Importer extends I2CE_Fuzzy{
             return null;
         }
         if (self::$lookup_stmt === null) {
-            $db = I2CE::PDO();
-            try {
-                self::$lookup_stmt =   $db->prepare( "SELECT id FROM form_relationship_importer WHERE relationship = ? and hash= ?"); 
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e,"Could not prepare lookup statement");
+            $db = MDB2::singleton();
+            self::$lookup_stmt =   $db->prepare( "SELECT id FROM form_relationship_importer WHERE relationship = ? and hash= ?", 
+                                                       array('text','text'),array('text'), MDB2_PREPARE_RESULT);
+            if (I2CE::pearError(self::$lookup_stmt,"Could not prepare lookup statement")) {
                 return null;
             }
         }
         if (!self::$lookup_stmt) {
             return null;
         }
-        self::$lookup_stmt->execute(array( $relationship,$hash ));
-        try {
-            $row = self::$lookup_stmt->fetch();
-            self::$lookup_stmt->closeCursor();
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Error getting form id:" );
-            return false;
-        }
-        if ( !isset( $row ) ) {
+        $results = self::$lookup_stmt->execute(array( $relationship,$hash ));
+        $row = $results->fetchRow();
+        if ( !isset( $row )
+             || I2CE::pearError( $row, "Error getting form id:" ) ) {
             return false;
         }
         return $row->id;
@@ -112,23 +106,17 @@ class I2CE_FormRelationship_Importer extends I2CE_Fuzzy{
             return null;
         }
         if (self::$mark_stmt === null) {
-            $db = I2CE::PDO();
-            try {
-                self::$mark_stmt = $db->prepare( "INSERT INTO form_relationship_importer (id,relationship,hash) VALUES (?, ?, ?)" );
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e,"Could not prepare mark statement");
+            $db = mdb2::singleton();
+            self::$mark_stmt =   $db->prepare( "INSERT INTO form_relationship_importer (id,relationship,hash) VALUES (?, ?, ?)", 
+                                                     array('text','text','text'), MDB2_PREPARE_MANIP);
+            if (I2CE::pearError(self::$mark_stmt,"Could not prepare mark statement")) {
                 return null;
             }
         }
         if (!self::$mark_stmt) {
             return null;
         }
-        try {
-            self::$mark_stmt->execute(array($id,$relationship,$hash));
-        } catch ( PDOException $e ) {
-            I2CE::pdoError($e,"Could not mark processed");
-            return false;
-        }
+        return !I2CE::pearError(self::$mark_stmt->execute(array($id,$relationship,$hash)),"Could not mark processed");
     }
 
 
@@ -425,7 +413,7 @@ class I2CE_FormRelationship_Importer extends I2CE_Fuzzy{
         $save_ids = array();
         $this->raiseError("BEGIN QUEUE PROCESSING");
         $exec = array('max_execution_time'=>20*60, 'memory_limit'=> (256 * 1048576));	    
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         $db->beginTransaction();
         foreach ($queue as $queue_entry) {
             I2CE::longExecution($exec);

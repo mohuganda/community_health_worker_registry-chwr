@@ -5,11 +5,11 @@
     <displayName>Float</displayName>
     <className>I2CE_Module_Float</className>
     <description>A module that allows the float formfield</description>
-    <version>4.3.0</version>
+    <version>4.2.1.0</version>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="forms-storage-entry">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

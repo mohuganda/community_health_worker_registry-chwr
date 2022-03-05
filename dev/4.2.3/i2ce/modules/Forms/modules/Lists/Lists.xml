@@ -4,27 +4,27 @@
   <metadata>
     <displayName>Form Lists</displayName>
     <className>I2CE_Module_Lists</className>
-    <version>4.3.3.0</version>
+    <version>4.2.1.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <description>Database Lists</description>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="forms">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="forms-storage-magicdata">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="TreeSelect">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <requirement name="jumper">
-      <atLeast version="4.3" />
-      <lessThan version="4.4" />
+      <atLeast version="4.2" />
+      <lessThan version="4.3" />
     </requirement>
     <enable name="tabbed-pages" />
     <path name="classes">

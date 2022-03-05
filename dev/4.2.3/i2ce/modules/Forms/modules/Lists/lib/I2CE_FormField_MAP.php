@@ -71,8 +71,8 @@ class I2CE_FormField_MAP extends I2CE_FormField_MAPPED {
             'data'=>array('value'=>"$form|$oldid")
             );
 
-        $set_sql = I2CE::PDO()->quote($form .'|'  . $newid);
-        $set_func = function($val) use($form,$newid) { return "$form|$newid"; };
+        $set_sql = "'" . mysql_real_escape_string($form .'|'  . $newid) . "'";
+        $set_func = create_function('$val',"return '$form|$newid';");
         return $this->globalFieldUpdate($where,$set_func,$set_sql);
     }
 

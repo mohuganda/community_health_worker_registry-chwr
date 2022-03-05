@@ -102,16 +102,7 @@ class I2CE_FormField_MAP_MULT extends I2CE_FormField_MAPPED {
                       )
                 );
 
-        $set_func = function($val) use ($form, $oldid) { 
-            $vals = explode(",", $val); 
-            foreach ($vals as &$v) {
-                if ($v == $form . '|' . $oldid ) {
-                    $v = $form . '|' . $newid;
-                }
-            } 
-            unset($v); 
-            return implode(",",$vals); 
-        };
+        $set_func = create_function('$val','$vals = explode(",", $val); foreach ($vals as &$v) {if ($v == "' . $form . '|' . $oldid . '") {$v = "' . $form . '|' . $newid .'"}} unset($v); return implode(",",$vals);');
         return $this->globalFieldUpdate($where,$set_func);
     }
 
@@ -143,7 +134,7 @@ class I2CE_FormField_MAP_MULT extends I2CE_FormField_MAPPED {
      * @returns string The componentized db_value
      */
     public function getSQLComponentization($db_ref,$forms, $component) {
-        return "formfield_mult_map_componentize(" . $db_ref .",". I2CE::PDO()->quote(implode($forms)) . "," . I2CE::PDO()->quote($component) . ")";
+        return "formfield_mult_map_componentize(" . $db_ref .",'". mysql_real_escape_string(implode($forms)) . "','" . mysql_real_escape_string($component) . "')";
     }
 
     public function getDefaultDisplayStyle($type) {

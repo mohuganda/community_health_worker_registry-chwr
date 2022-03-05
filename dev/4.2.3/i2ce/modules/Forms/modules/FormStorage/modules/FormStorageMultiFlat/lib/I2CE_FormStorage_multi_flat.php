@@ -63,22 +63,20 @@ class I2CE_FormStorage_multi_flat extends I2CE_FormStorage_DB {
         $d_t = $database . '.' . $table;
         if (!array_key_exists($d_t,self::$columnList)) {
             self::$columnList[$d_t] = array();
-            $db = I2CE::PDO();
-            try {
-                $res = $db->query("SHOW COLUMNS IN $table FROM $database");
-                while ($row = $res->fetch()) {
-                    if (!isset($row->field)) {
-                        continue;
-                    }
-                    self::$columnList[$d_t][] = $row->field;
-                }
-                unset( $res->free() );
-                return in_array($col,self::$columnList[$d_t]);
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e,"Could determine columns on $d_t");
+            $db = MDB2::singleton();
+            $res = $db->query("SHOW COLUMNS IN $table FROM $database");
+            if (I2CE::pearError($res,"Could determine columns on $d_t")) {
                 return false;
             }
+            while ($row = $res->fetchRow()) {
+                if (!isset($row->field)) {
+                    continue;
+                }
+                self::$columnList[$d_t][] = $row->field;
+            }
+            $res->free();
         }
+        return in_array($col,self::$columnList[$d_t]);
     }
 
     protected function getFieldData($data,$database = null, $table = null) {
@@ -307,24 +305,20 @@ class I2CE_FormStorage_multi_flat extends I2CE_FormStorage_DB {
         }
 
         //now verify that the databases and associated table are indeed present:
-        $db = I2CE::PDO();
+        $db = MDB2::singleton();
         
         foreach ($databases as $component=>$database) {
             $check_qry = "SELECT null FROM information_schema.TABLES WHERE TABLE_SCHEMA = '" . addslashes($database) . "'"
                 . " AND TABLE_NAME = '" . addslashes($table) . "'";
-            try {
-                $result = $db->query($check_qry);
-                if ($result->rowCount() > 0) {
-                    //the table exists.
-                    unset( $result );
-                    continue;                
-                }
-                unset( $result );
-                unset($databases[$component]);
-            } catch ( PDOException $e ) {
-                I2CE::pdoError($e,"Cannot execute  query:\n$check_qry");
+            $result = $db->query($check_qry);
+            if (I2CE::pearError($result,"Cannot execute  query:\n$check_qry")) {
                 return false;
             }
+            if ($result->numRows() > 0) {
+                //the table exists.
+                continue;                
+            }
+            unset($databases[$component]);
         }
         if (count($databases) == 0) {
             I2CE::raiseError("No databases defined for multi-flat formstorage on table $table");
@@ -334,9 +328,9 @@ class I2CE_FormStorage_multi_flat extends I2CE_FormStorage_DB {
         foreach ($databases as $component=>$database) {
             $select_list = array();
             if ($form_prepended) {
-                $select_list[] =   "CONCAT( SUBSTRING(" . $id_qry . "," .  (strlen($form) + 2) . "),'@'," . $db->quote($component)  . ") AS $id_ref";
+                $select_list[] =   "CONCAT( SUBSTRING(" . $id_qry . "," .  (strlen($form) + 2) . "),'@','" . mysql_real_escape_string($component)  . "') AS $id_ref";
             } else {
-                $select_list[] =   "CONCAT( " . $id_qry . ",'@'," . $db->quote($component)  . ") AS $id_ref";
+                $select_list[] =   "CONCAT( " . $id_qry . ",'@','" . mysql_real_escape_string($component)  . "') AS $id_ref";
             }
             foreach ($formObj as $field=>$fieldObj) {
                 if (!in_array($field,$fields)) {
@@ -465,9 +459,9 @@ class I2CE_FormStorage_multi_flat extends I2CE_FormStorage_DB {
                 $select_list[] = I2CE_List::componentizeQuery($p_qry,$componentParentForms,$component). " AS $p_ref";
                 if (!is_bool($parent) && is_scalar($parent)) {
                     if (!$p_componentized) {
-                        $wheres[] = " ( " . I2CE_List::componentizeQuery($p_qry,$componentParentForms,$component) . " = " . $db->quote($parent) . " ) ";
+                        $wheres[] = " ( " . I2CE_List::componentizeQuery($p_qry,$componentParentForms,$component) . " = '" . mysql_real_escape_string($parent) . "' ) ";
                     } else {
-                        $wheres[] = " ( $p_qry = " . $db->quote($p_form . '|' . $p_id_no_comp) . ") ";
+                        $wheres[] = " ( $p_qry = '" . mysql_real_escape_string($p_form . '|' . $p_id_no_comp) . "') ";
                     }
                 }            
             }
@@ -482,9 +476,9 @@ class I2CE_FormStorage_multi_flat extends I2CE_FormStorage_DB {
             $qry = 'SELECT ' . implode(',', $select_list) . " FROM `$database`.`$table`";
             if (is_scalar($id)) {
                 if ($form_prepended) {
-                    $wheres[] = " ($id_qry =" . $db->quote($form . '|' . $id_no_comp) . ") ";
+                    $wheres[] = " ($id_qry ='" . mysql_real_escape_string($form . '|' . $id_no_comp) . "') ";
                 } else {
-                    $wheres[] = " ($id_qry =" . $db->quote($id_no_comp) . ") ";
+                    $wheres[] = " ($id_qry ='" . mysql_real_escape_string($id_no_comp) . "') ";
                 }
             }
             if (count($wheres) >  0 ) {

@@ -257,14 +257,8 @@ class I2CE_Page_CachedForm extends I2CE_Page{
             &&  preg_match( '/^(\d+)-(\d+)-(\d+)$/', $this->request('mod_date') ) ) {            
             $mod_date = $this->request('mod_date');
         }
-        $db = I2CE::PDO();
-        try {
-            $result = $db->query( "SHOW TABLES FROM " . I2CE_PDO::details('dbname') );
-            $tables = $result->fetchAll( PDO::FETCH_COLUMN, 0 );
-        } catch ( PDOException $e ) {
-            I2CE::pdoError( $e, "Unable to get table names." );
-            return false;
-        }
+        $db = MDB2::singleton();
+        $tables = $db->queryCol("SHOW TABLES FROM " . $db->database_name  );
         $uncached = array();
         foreach ($forms  as $i=>&$form) {
             $form = I2CE_CachedForm::getCachedTableName($form,false);
@@ -291,9 +285,9 @@ class I2CE_Page_CachedForm extends I2CE_Page{
             $opts = " --no-create-info ";
         }
         $cmd = $mysqldump . '  --quick --dump-date --complete-insert  ' .
-            ' --user=' . escapeshellarg(I2CE_PDO::details('user')) . 
-            ' --password=' . escapeshellarg(I2CE_PDO::details('pass')) . ' ' . 
-            escapeshellarg(I2CE_PDO::details('dbname')) . " " . 
+            ' --user=' . escapeshellarg($db->dsn['username']) . 
+            ' --password=' . escapeshellarg($db->dsn['password']) . ' ' . 
+            escapeshellarg($db->database_name) . " " . 
             implode(" " , $forms)  ;
         if ($mod_date) {
             $cmd .= " --where=\"DATE(last_modified) >= '$mod_date'\" ";

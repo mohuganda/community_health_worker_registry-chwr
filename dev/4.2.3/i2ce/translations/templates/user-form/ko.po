@@ -3,7 +3,6 @@
 #
 # Author: Hwangjy9
 # Author: Ykhwong
-# Author: 아라
 # --
 # Copyright (c) 2011-2016 <hris@capacityproject.org> Capacity Project partnership via IntraHealth International, Inc.
 # Copyright (c) 2011-2016 Rosetta Contributors and Canonical Ltd
@@ -15,21 +14,21 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-14 07:58+0000\n"
-"PO-Revision-Date: 2017-01-26 16:08+0000\n"
+"PO-Revision-Date: 2016-09-21 20:00+0000\n"
 "Last-Translator: Siebrand Mazeland <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-09-02 05:24+0000\n"
-"X-Generator: Launchpad (build 18446)\n"
+"X-Launchpad-Export-Date: 2016-09-22 08:26+0000\n"
+"X-Generator: Launchpad (build 18204)\n"
 "Language: ko\n"
 "X-POT-Import-Date: 2014-03-23 14:34:01+0000\n"
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/UserForm/templates/en_US/button_confirm_user.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/UserForm/templates/en_US/button_confirm_user.html line 12]
 #, no-c-format
 msgid "return (do not save changes)"
-msgstr "반환 (변경사항 저장 안 함)"
+msgstr "반환 (변경 사항 저장 안 함)"
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/UserForm/templates/en_US/user_list.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Forms/modules/UserForm/templates/en_US/user_list.html line 2]
 #, no-c-format

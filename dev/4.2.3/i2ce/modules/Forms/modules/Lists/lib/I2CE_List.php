@@ -133,10 +133,10 @@ abstract class I2CE_List extends I2CE_Form {
         //there are parent forms.  we need to examine this vlaue to
         //see if it is a componentized form.
         foreach ($forms as &$form) {
-            $form = I2CE::PDO()->quote($form);
+            $form = '\'' . mysql_real_escape_string($form)  . '\'';
         }
         $form_qry = 'SUBSTRING(' . $qry . ",1, LOCATE('|'," . $qry . ") - 1)";        
-        $l_qry = 'IF ( ' . $form_qry . ' IN (' . implode(',',$forms) . '), CONCAT( ' . $qry . "," . I2CE::PDO()->quote('@'.$component) . ")," . $qry . ')';
+        $l_qry = 'IF ( ' . $form_qry . ' IN (' . implode(',',$forms) . '), CONCAT( ' . $qry . ",'@" . mysql_real_escape_string($component) . "')," . $qry . ')';
         return "IF ( LOCATE('|'," . $qry . ") > 0 , " .  $l_qry . ',' . $qry .")";
     }
 
