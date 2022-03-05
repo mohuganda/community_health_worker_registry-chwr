@@ -48,7 +48,7 @@
  * You might need to set this depending on your installation
  *    Default value is  ../../../../I2CE
  */
-$i2ce_site_i2ce_path = "/var/lib/iHRIS/dev/4.2.3/i2ce";
+$i2ce_site_i2ce_path = "/var/lib/iHRIS/community_registry/dev/4.2.3/i2ce";
 
 
 /**
@@ -68,7 +68,7 @@ $i2ce_site_user_access_init = null;
 /**
  * the configuration xml file for the site module.  You need to set this.
  */
-$i2ce_site_module_config = "/var/lib/iHRIS/dev/sites/Uganda-community-health-worker-registry/Uganda-community-health-worker-registry.xml";
+$i2ce_site_module_config = "/var/lib/iHRIS/community_registry/dev/sites/Uganda-community-health-worker-registry/Uganda-community-health-worker-registry.xml";
 
 
 /*****************************************************************
