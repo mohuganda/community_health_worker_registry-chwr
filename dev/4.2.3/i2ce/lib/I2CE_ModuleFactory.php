@@ -56,9 +56,7 @@ class I2CE_ModuleFactory {
     public function __construct() {
         $this->setStorage();
         $this->loadedPaths = array();
-        /* Taken out in 4.3 because it doesn't appear to be used, plus the field isn't defined elsewhere in the class.
-        $this->db = I2CE::PDO();
-        */
+        $this->db = MDB2::singleton();
         //I2CE::pearError($this->db,"Cannot connect to DB");
         $this->classCache = array();
     }

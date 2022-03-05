@@ -49,15 +49,16 @@ if(!class_exists("I2CE_MagicDataStorageMongoDB",false)) {
          */
         public function __construct( $name ) {
             parent::__construct($name);
-            if (! ($db_name = I2CE_PDO::details('dbname') )) {
+            $db = MDB2::singleton();
+            if (! ($db_name = $db->database_name)) {
                 I2CE::raiseError("No database to connect to MongoDB");
                 return false;
             }
-            if (! ($db_password = I2CE_PDO::details('pass') )) {
+            if (! ($db_password = $db->dsn['password'])) {
                 I2CE::raiseError("No password to connect to MongoDB");
                 return false;
             }
-            if ( !($db_user = I2CE_PDO::details('user') )) {
+            if ( !($db_user = $db->dsn['username'])) {
                 I2CE::raiseError("No user to connect to MongoDB");
                 return false;
             }
@@ -78,7 +79,8 @@ if(!class_exists("I2CE_MagicDataStorageMongoDB",false)) {
             if (!$this->m instanceof Mongo) {
                 return false;
             }
-            if (! ($db_name = I2CE_PDO::details('dbname') )) {
+            $db = MDB2::singleton();
+            if (! ($db_name = $db->database_name)) {
                 I2CE::raiseError("No database to connect to MongoDB");
                 return false;
             }
