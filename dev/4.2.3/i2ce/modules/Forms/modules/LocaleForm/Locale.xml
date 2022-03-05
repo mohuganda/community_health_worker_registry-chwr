@@ -3,7 +3,7 @@
 <I2CEConfiguration name="LocaleForm">
   <metadata>
     <displayName>Locale Form</displayName>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
@@ -11,12 +11,12 @@
     <longDescription>Maps Selectable/Available Local to a User Forms</longDescription>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="forms">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="forms-storage-eval">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
   </metadata>
   <configurationGroup name="LocaleForm" path="/">

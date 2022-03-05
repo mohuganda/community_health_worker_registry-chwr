@@ -36,10 +36,6 @@ abstract class I2CE_FormField_DB_INT extends I2CE_FormField {
      * The database type for the field
      */
     const FIELD_TYPE_DB = 'int( 11 ) default NULL';
-    /**
-     * The MDB2 type for the field.
-     */
-    const FIELD_TYPE_MDB2 = 'integer';
 
 
     /**

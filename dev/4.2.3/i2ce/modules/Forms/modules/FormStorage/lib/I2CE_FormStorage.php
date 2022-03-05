@@ -77,24 +77,26 @@ class I2CE_FormStorage extends I2CE_Module {
         if ($table[0] != '`') {
             $table = '`'  . $table . '`';
         }
-        $db = MDB2::singleton();
-        $database = $db->database_name ; 
+        $db = I2CE::PDO();
+        $database = I2CE_PDO::details('dbname');
         if ($database[0] != '`') {
             $database = '`'  . $database . '`';
         }
         $d_t = $database . '.' . $table;
-        $res = $db->query("SHOW COLUMNS IN $table FROM $database");
-        if (I2CE::pearError($res,"Could determine columns on $d_t")) {
+        try {
+            $res = $db->query("SHOW COLUMNS IN $table FROM $database");
+            $cols = array();
+            while ($row = $res->fetch()) {
+                if (!isset($row->field)) {
+                    continue;
+                }
+                $cols[] =  $row->field;
+            }
+            unset( $res );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Could determine columns on $d_t");
             return false;
         }
-        $cols = array();
-        while ($row = $res->fetchRow()) {
-            if (!isset($row->field)) {
-                continue;
-            }
-            $cols[] =  $row->field;
-        }
-        $res->free();
         return in_array($col,$cols);
     }
 
@@ -109,8 +111,11 @@ class I2CE_FormStorage extends I2CE_Module {
             return true;
         }
         $qry = 'ALTER TABLE `form_history` ADD `version` TINYINT UNSIGNED NOT NULL DEFAULT \'0\'';
-        $db = MDB2::singleton();
-        if (I2CE::pearError($db->exec($qry), "Could not add version column to form_history table")) {
+        $db = I2CE::PDO();
+        try {
+            $db->exec($qry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e, "Could not add version column to form_history table");
             return false;
         }
         return true;
@@ -201,8 +206,8 @@ class I2CE_FormStorage extends I2CE_Module {
             'field'=>'parent',
             'data'=>array('value'=>"$form|$oldid")
             );        //will get all ids where parent=$form|$oldid
-        $set_sql = "'" . mysql_real_escape_string($form .'|'  . $newid) . "'";
-        $set_func = create_function('$val',"return '$form|$newid';");
+        $set_sql = I2CE::PDO()->quote($form .'|'  . $newid);
+        $set_func = function($val) use($form,$newid) { return $form.'|'.$newid; };
         if (!is_callable($set_func)) {
             I2CE::raiseError("Could not create parent update funciton");
             return false;
@@ -1827,7 +1832,7 @@ class I2CE_FormStorage extends I2CE_Module {
 
 
     /**
-     * @var MDB2_PreparedStatemnt $store_stmt  Insert statment for storing form history
+     * @var PDOStatemnt $store_stmt  Insert statment for storing form history
      */
     protected $store_stmt =false;
 
@@ -1845,10 +1850,12 @@ class I2CE_FormStorage extends I2CE_Module {
             I2CE::raiseError("Invalid form id");
             return false;
         }
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         if (!$this->store_stmt) {
-            $this->store_stmt = $db->prepare("INSERT INTO form_history (formid,history,date,version) VALUES (?,?,NOW(),1)"   , array( 'text', 'blob' ) ,MDB2_PREPARE_MANIP);
-            if ( I2CE::pearError( $this->store_stmt,"Could prepare  store  statment")) {
+            try {
+                $this->store_stmt = $db->prepare("INSERT INTO form_history (formid,history,date,version) VALUES (?,?,NOW(),1)" );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e,"Could prepare  store  statment");
                 return false;
             }
         }
@@ -1865,7 +1872,10 @@ class I2CE_FormStorage extends I2CE_Module {
             $history = json_encode($history);
         }
         $formID = $form->getFormID();
-        if ( I2CE::pearError($this->store_stmt->execute(array($formID,$history)),"Could not store form data for $formID")) {
+        try {
+            $this->store_stmt->execute(array($formID,$history));
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Could not store form data for $formID");
             return false;
         }
         return true;

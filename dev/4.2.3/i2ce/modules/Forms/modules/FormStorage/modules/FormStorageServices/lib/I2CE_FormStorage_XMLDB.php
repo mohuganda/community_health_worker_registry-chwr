@@ -254,7 +254,7 @@ class I2CE_FormStorage_XMLDB extends I2CE_FormStorage_Service{
                     if (!$val) {
                         $val = ' "0" ';
                     } else {
-                        $val = ' "' . mysql_real_escape_string($val) . '" ';
+                        $val = ' ' . I2CE::PDO()->quote($val) . ' ';
                     }
                 } else if (! $field_objs[$sel_field]) {
                     $val = ' NULL ';
@@ -263,7 +263,7 @@ class I2CE_FormStorage_XMLDB extends I2CE_FormStorage_Service{
                     switch ($types[$sel_field]) {
                     case 'string':
                     case 'text':
-                        $val = " '" . mysql_real_escape_string($val) . "' ";
+                        $val = " " . I2CE::PDO()->quote($val) . " ";
                         break;
                     case 'date':
                         if ($val) {

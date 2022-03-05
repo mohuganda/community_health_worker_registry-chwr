@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="cy">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -66,7 +66,7 @@
       <value>ja:Japaneg</value>
       <value>jv:Javaneg</value>
       <value>ka:Georgeg</value>
-      <value>ko:Kore&#195;&#171;g</value>
+      <value>ko:KoreÃ«g</value>
       <value>ku:Kwrdeg</value>
       <value>kw:Cernyweg</value>
       <value>la:Lladin</value>

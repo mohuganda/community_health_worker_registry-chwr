@@ -35,10 +35,6 @@ abstract class I2CE_FormField_DB_BLOB extends I2CE_FormField {
      * The database type for the field
      */
     const FIELD_TYPE_DB = 'longblob';
-    /**
-     * The MDB2 type for the field.
-     */
-    const FIELD_TYPE_MDB2 = "blob";
 
 
     /**

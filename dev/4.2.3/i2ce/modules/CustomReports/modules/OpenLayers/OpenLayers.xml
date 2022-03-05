@@ -5,21 +5,21 @@
     <displayName>Open Layers</displayName>
     <category>Report Type</category>
     <description>Configuration options for reports that use Open Layers maps</description>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="CustomReports">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="OpenLayers">
       <atLeast version="3.0" />
     </requirement>
     <requirement name="CustomReports_Export">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <path name="templates">
       <value>./templates</value>

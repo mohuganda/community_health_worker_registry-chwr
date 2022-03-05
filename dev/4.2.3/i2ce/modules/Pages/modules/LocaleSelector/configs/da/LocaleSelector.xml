@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="da">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -27,7 +27,7 @@
       <value>cy:Walisisk</value>
       <value>da:Dansk</value>
       <value>de:Tysk</value>
-      <value>el:Gr&#230;sk</value>
+      <value>el:Græsk</value>
       <value>en:Engelsk</value>
       <value>en_GB:Britisk engelsk</value>
       <value>en_US:Amerikansk engelsk</value>
@@ -37,16 +37,16 @@
       <value>fa:Farsi (Persisk)</value>
       <value>fi:Finsk</value>
       <value>fj:Fijiansk</value>
-      <value>fo:F&#230;r&#248;sk</value>
+      <value>fo:Færøsk</value>
       <value>fr:Fransk</value>
       <value>fy:Frisisk</value>
-      <value>ga:Irsk g&#230;lisk</value>
-      <value>gd:G&#230;lisk</value>
+      <value>ga:Irsk gælisk</value>
+      <value>gd:Gælisk</value>
       <value>gl:Galicisk</value>
       <value>gv:Mansk</value>
       <value>he:Hebraisk</value>
       <value>hr:Kroatisk</value>
-      <value>hsb:&#216;vre Sorbisk</value>
+      <value>hsb:Øvre Sorbisk</value>
       <value>hu:Ungarsk</value>
       <value>hy:Armensk</value>
       <value>id:Indonesisk</value>
@@ -67,7 +67,7 @@
       <value>mn:Mongolsk</value>
       <value>mo:Moldovisk</value>
       <value>mt:Maltesisk</value>
-      <value>nb:Norsk bokm&#229;l</value>
+      <value>nb:Norsk bokmål</value>
       <value>nd:Ndebele, nord</value>
       <value>nds:Nedersaksisk</value>
       <value>nl:Hollandsk</value>
@@ -77,7 +77,7 @@
       <value>pl:Polsk</value>
       <value>pt:Portugisisk</value>
       <value>pt_BR:Brasiliansk portugisisk</value>
-      <value>ro:Rum&#230;nsk</value>
+      <value>ro:Rumænsk</value>
       <value>ru:Russisk</value>
       <value>sc:Sardinsk</value>
       <value>se:Nordsamisk</value>

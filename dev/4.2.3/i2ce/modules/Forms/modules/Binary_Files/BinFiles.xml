@@ -5,22 +5,22 @@
     <displayName>Binary Fields</displayName>
     <className>I2CE_Module_BinaryFiles</className>
     <description>A module that allows binary files for form fields</description>
-    <version>4.2.1.0</version>
+    <version>4.3.3.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <link>https://launchpad.net/i2ce</link>
     <requirement name="forms">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="pages">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="MimeTypes">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

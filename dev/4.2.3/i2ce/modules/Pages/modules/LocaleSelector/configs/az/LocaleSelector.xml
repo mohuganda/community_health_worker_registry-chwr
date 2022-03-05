@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="az">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -13,150 +13,150 @@
       <value>ab:Abxazca</value>
       <value>ae:Avestanca</value>
       <value>af:Dili Afrika</value>
-      <value>am:Amharikc&#601;</value>
-      <value>ar:&#399;rabc&#601;</value>
-      <value>as:Assamesc&#601;</value>
+      <value>am:Amharikcə</value>
+      <value>ar:Ərabcə</value>
+      <value>as:Assamescə</value>
       <value>ay:Aymaraca</value>
-      <value>az:Az&#601;rbaycanca</value>
-      <value>ba:Ba&#351;kirc&#601;</value>
+      <value>az:Azərbaycanca</value>
+      <value>ba:Başkircə</value>
       <value>be:Belarusca</value>
       <value>bg:Bolqarca</value>
-      <value>bh:Biharic&#601;</value>
+      <value>bh:Biharicə</value>
       <value>bi:Bislamaca</value>
       <value>bn:Benqalca</value>
-      <value>bo:Tibetc&#601;</value>
+      <value>bo:Tibetcə</value>
       <value>br:Bretonca</value>
       <value>bs:Bosnakca</value>
       <value>ca:Katalanca</value>
-      <value>ce:&#199;exenc&#601;</value>
+      <value>ce:Çexencə</value>
       <value>ch:Xamorroca</value>
       <value>co:Korsikaca</value>
-      <value>cs:&#199;exc&#601;</value>
-      <value>cu:Slavcas&#305; Kilis&#601;</value>
-      <value>cv:&#199;uva&#351;ca</value>
-      <value>cy:Uelsc&#601;</value>
+      <value>cs:Çexcə</value>
+      <value>cu:Slavcası Kilisə</value>
+      <value>cv:Çuvaşca</value>
+      <value>cy:Uelscə</value>
       <value>da:Danimarkaca</value>
       <value>de:Almanca</value>
       <value>dz:Dzunqxaca</value>
       <value>el:Yunanca</value>
-      <value>en:&#304;nglisc&#601;</value>
+      <value>en:İngliscə</value>
       <value>eo:Esperantoca</value>
-      <value>es:&#304;spanca</value>
+      <value>es:İspanca</value>
       <value>et:Estonca</value>
       <value>eu:Baskca</value>
-      <value>fi:Finc&#601;</value>
+      <value>fi:Fincə</value>
       <value>fj:Fijiyaca</value>
-      <value>fo:Faroezc&#601;</value>
-      <value>fr:Frans&#305;zca</value>
-      <value>fy:Frisc&#601;</value>
-      <value>gd:Qaelikc&#601;</value>
+      <value>fo:Faroezcə</value>
+      <value>fr:Fransızca</value>
+      <value>fy:Friscə</value>
+      <value>gd:Qaelikcə</value>
       <value>gn:Quaranca</value>
-      <value>gu:Qujaratic&#601;</value>
+      <value>gu:Qujaraticə</value>
       <value>gv:Manksca</value>
-      <value>he:Y&#601;hudic&#601;</value>
+      <value>he:Yəhudicə</value>
       <value>hr:Xorvatca</value>
       <value>hu:Macarca</value>
-      <value>hy:Erm&#601;nic&#601;</value>
-      <value>ia:&#304;nterlinqua</value>
-      <value>id:&#304;ndoneziyaca</value>
-      <value>ik:&#304;nupiaqca</value>
-      <value>is:&#304;slandiyaca</value>
-      <value>it:&#304;talyanca</value>
+      <value>hy:Ermənicə</value>
+      <value>ia:İnterlinqua</value>
+      <value>id:İndoneziyaca</value>
+      <value>ik:İnupiaqca</value>
+      <value>is:İslandiyaca</value>
+      <value>it:İtalyanca</value>
       <value>ja:Yaponca</value>
       <value>jv:Yavonca</value>
-      <value>ka:G&#252;rc&#252;c&#601;</value>
+      <value>ka:Gürcücə</value>
       <value>ki:Kikuyuca</value>
       <value>kk:Qazaxca</value>
       <value>kl:Kalaallisutca</value>
-      <value>km:Xmerc&#601;</value>
+      <value>km:Xmercə</value>
       <value>kn:Kannadaca</value>
       <value>ko:Koreyaca</value>
-      <value>ks:Ka&#351;mirc&#601;</value>
-      <value>ku:K&#252;rdc&#601;</value>
-      <value>kv:Komic&#601;</value>
-      <value>kw:Korni&#351;c&#601;</value>
-      <value>ky:Q&#305;r&#287;&#305;zca</value>
-      <value>la:Lat&#305;nca</value>
+      <value>ks:Kaşmircə</value>
+      <value>ku:Kürdcə</value>
+      <value>kv:Komicə</value>
+      <value>kw:Kornişcə</value>
+      <value>ky:Qırğızca</value>
+      <value>la:Latınca</value>
       <value>lb:Lyuksemburqca</value>
       <value>li:Limburqca</value>
       <value>ln:Linqalaca</value>
       <value>lo:Laoca</value>
       <value>lt:Litovca</value>
-      <value>lv:Lat&#305;&#351;ca</value>
-      <value>mg:Malaqasic&#601;</value>
-      <value>mh:Mar&#351;allca</value>
-      <value>mi:Maoric&#601;</value>
+      <value>lv:Latışca</value>
+      <value>mg:Malaqasicə</value>
+      <value>mh:Marşallca</value>
+      <value>mi:Maoricə</value>
       <value>mk:Makedonca</value>
       <value>ml:Malayamca</value>
       <value>mn:Monqolca</value>
       <value>mo:Moldavca</value>
-      <value>mr:Maratic&#601;</value>
+      <value>mr:Maraticə</value>
       <value>ms:Malayca</value>
       <value>mt:Maltaca</value>
       <value>my:Burmaca</value>
       <value>na:Nauruca</value>
-      <value>nb:(Bokm&#229;l) Norve&#231;c&#601;</value>
-      <value>nd:&#350;imal Ndebele,</value>
+      <value>nb:(Bokmål) Norveçcə</value>
+      <value>nd:Şimal Ndebele,</value>
       <value>ne:Nepalca</value>
-      <value>nl:Flamenkc&#601;</value>
-      <value>nn:(Nynorsk) Norve&#231;c&#601;</value>
-      <value>nr:C&#601;nub Ndebele,</value>
-      <value>nso:Sotho &#350;imali</value>
+      <value>nl:Flamenkcə</value>
+      <value>nn:(Nynorsk) Norveçcə</value>
+      <value>nr:Cənub Ndebele,</value>
+      <value>nso:Sotho Şimali</value>
       <value>nv:Navayoca</value>
-      <value>ny:&#199;i&#231;eva</value>
+      <value>ny:Çiçeva</value>
       <value>oc:Oksitan</value>
       <value>om:Oromoca</value>
       <value>or:Oriyaca</value>
       <value>os:Osetiyaca</value>
-      <value>pa:Panjabic&#601;</value>
-      <value>pi:Palic&#601;</value>
+      <value>pa:Panjabicə</value>
+      <value>pi:Palicə</value>
       <value>pl:Polyakca</value>
-      <value>ps:Pu&#351;toca</value>
+      <value>ps:Puştoca</value>
       <value>pt:Portuqalca</value>
-      <value>pt_BR:Portuqalcas&#305; Braziliya</value>
-      <value>qu:Kve&#231;c&#601;</value>
-      <value>rn:Rundic&#601;</value>
-      <value>ro:Rum&#305;nca</value>
+      <value>pt_BR:Portuqalcası Braziliya</value>
+      <value>qu:Kveçcə</value>
+      <value>rn:Rundicə</value>
+      <value>ro:Rumınca</value>
       <value>ru:Rusca</value>
       <value>rw:Kinyarvandaca</value>
-      <value>sa:Sanskritc&#601;</value>
-      <value>se:Sami &#350;imali</value>
+      <value>sa:Sanskritcə</value>
+      <value>se:Sami Şimali</value>
       <value>sg:Sagno</value>
       <value>si:Sinhalca</value>
       <value>sk:Slovakca</value>
-      <value>sl:Slovenc&#601;</value>
+      <value>sl:Slovencə</value>
       <value>sq:Albanca</value>
-      <value>sr:Serbc&#601;</value>
+      <value>sr:Serbcə</value>
       <value>ss:Svati</value>
-      <value>st:C&#601;nubi Sotho,</value>
+      <value>st:Cənubi Sotho,</value>
       <value>su:Sundanca</value>
-      <value>sv:&#304;sve&#231;c&#601;</value>
-      <value>sw:Svahilc&#601;</value>
+      <value>sv:İsveçcə</value>
+      <value>sw:Svahilcə</value>
       <value>ta:Dili Tamil</value>
       <value>te:Teluguca</value>
-      <value>tg:Tacikc&#601;</value>
+      <value>tg:Tacikcə</value>
       <value>th:Tayca</value>
       <value>ti:Tigrinyaca</value>
-      <value>tk:T&#252;rkm&#601;nc&#601;</value>
+      <value>tk:Türkməncə</value>
       <value>tn:Tsvanaca</value>
       <value>to:Tongaca</value>
-      <value>tr:T&#252;rkc&#601;</value>
+      <value>tr:Türkcə</value>
       <value>ts:Tsongaca</value>
       <value>tt:Tatarca</value>
-      <value>tw:Tvic&#601;</value>
-      <value>ty:Taitic&#601;</value>
-      <value>ug:Uy&#287;urca</value>
+      <value>tw:Tvicə</value>
+      <value>ty:Taiticə</value>
+      <value>ug:Uyğurca</value>
       <value>uk:Dili Ukrayna</value>
       <value>ur:Urduca</value>
-      <value>uz:&#214;zb&#601;kc&#601;</value>
+      <value>uz:Özbəkcə</value>
       <value>vi:Vyetnamca</value>
-      <value>vo:Volap&#252;kc&#601;</value>
+      <value>vo:Volapükcə</value>
       <value>wa:Valonca</value>
       <value>wo:Volofca</value>
-      <value>yi:Yiddi&#351;c&#601;</value>
+      <value>yi:Yiddişcə</value>
       <value>yo:Yorubaca</value>
       <value>za:Zhuangca</value>
-      <value>zh:&#199;inc&#601;</value>
+      <value>zh:Çincə</value>
     </configuration>
   </configurationGroup>
 </I2CEConfiguration>

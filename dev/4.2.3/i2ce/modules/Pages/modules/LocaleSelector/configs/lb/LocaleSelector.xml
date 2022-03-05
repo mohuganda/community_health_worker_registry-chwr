@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="lb">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -16,7 +16,7 @@
       <value>ay:Aimara</value>
       <value>az:Asserbaidschanesch</value>
       <value>ba:Baschkiresch</value>
-      <value>be:W&#233;isrussesch</value>
+      <value>be:Wéisrussesch</value>
       <value>bg:Bulgaresch</value>
       <value>bh:Biharesch</value>
       <value>bn:Bengalesch</value>
@@ -30,8 +30,8 @@
       <value>cu:Kiircheslawesch</value>
       <value>cv:Chuvas</value>
       <value>cy:Walisesch</value>
-      <value>da:D&#228;nesch</value>
-      <value>de:D&#228;itsch</value>
+      <value>da:Dänesch</value>
+      <value>de:Däitsch</value>
       <value>el:Griichesch</value>
       <value>en:Englesch</value>
       <value>en_GB:Britescht Englesch</value>
@@ -42,14 +42,14 @@
       <value>fa:Farsi (Persesch)</value>
       <value>fi:Finnesch</value>
       <value>fj:Fidschi-Sprooch</value>
-      <value>fo:Far&#246;esch</value>
-      <value>fr:Franz&#233;isch</value>
+      <value>fo:Faröesch</value>
+      <value>fr:Franzéisch</value>
       <value>fy:Friesesch</value>
-      <value>ga:Irescht G&#228;llesch</value>
-      <value>gd:G&#228;llesch</value>
+      <value>ga:Irescht Gällesch</value>
+      <value>gd:Gällesch</value>
       <value>gl:Galizesch</value>
       <value>ha:Haussa-Sprooch</value>
-      <value>he:Hebr&#228;esch</value>
+      <value>he:Hebräesch</value>
       <value>ho:Hiri-Motu</value>
       <value>hr:Kroatesch</value>
       <value>hsb:Uewersorbesch</value>
@@ -57,7 +57,7 @@
       <value>hy:Armenesch</value>
       <value>id:Indonesesch</value>
       <value>ie:Interlingua</value>
-      <value>is:Isl&#228;nnesch</value>
+      <value>is:Islännesch</value>
       <value>it:Italienesch</value>
       <value>ja:Japanesch</value>
       <value>jv:Javanesesch</value>
@@ -69,8 +69,8 @@
       <value>kv:Komi-Sprooch</value>
       <value>kw:Kornesch</value>
       <value>ky:Kirghisesch</value>
-      <value>la:Lat&#228;in</value>
-      <value>lb:L&#235;tzebuergesch</value>
+      <value>la:Latäin</value>
+      <value>lb:Lëtzebuergesch</value>
       <value>li:Limburgesch</value>
       <value>lt:Litauesch</value>
       <value>lv:Lettesch</value>
@@ -85,14 +85,14 @@
       <value>mt:Maltesesch</value>
       <value>my:Burmesesch</value>
       <value>na:Nauruesch</value>
-      <value>nb:Norwegesch (Bokm&#229;l)</value>
-      <value>nd:Ndebele (n&#246;rdlech)</value>
-      <value>nds:Nidders&#228;chsesch</value>
+      <value>nb:Norwegesch (Bokmål)</value>
+      <value>nd:Ndebele (nördlech)</value>
+      <value>nds:Niddersächsesch</value>
       <value>ne:Nepalesesch</value>
-      <value>nl:Holl&#228;nnesch</value>
+      <value>nl:Hollännesch</value>
       <value>nn:Norwegesch (Nynorsk)</value>
-      <value>nr:Ndebele (s&#252;dlecht)</value>
-      <value>nso:N&#246;rdlecht Sotho</value>
+      <value>nr:Ndebele (südlecht)</value>
+      <value>nso:Nördlecht Sotho</value>
       <value>ny:Nyanja</value>
       <value>oc:Okzitanesch</value>
       <value>or:Orija</value>
@@ -104,13 +104,13 @@
       <value>pt_BR:Brazilianescht Portugisesch</value>
       <value>qu:Quechua-Sprooch</value>
       <value>rn:Rundi-Sprooch</value>
-      <value>ro:Rum&#228;nesch</value>
+      <value>ro:Rumänesch</value>
       <value>rom:Romani</value>
       <value>ru:Russesch</value>
       <value>rw:Ruanda-Sprooch</value>
       <value>sc:Sardinesch</value>
       <value>sd:Sindhi-Sprooch</value>
-      <value>se:N&#246;rdlecht Sami</value>
+      <value>se:Nördlecht Sami</value>
       <value>sg:Sango-Sprooch</value>
       <value>si:Singhalesesch</value>
       <value>sk:Slowakesch</value>
@@ -118,16 +118,16 @@
       <value>sm:Samoanesch</value>
       <value>so:Somalesch</value>
       <value>sq:Albanesch</value>
-      <value>sr:Lat&#228;inescht Serbesch</value>
+      <value>sr:Latäinescht Serbesch</value>
       <value>ss:Swazi</value>
-      <value>st:S&#252;dlecht Sotho</value>
+      <value>st:Südlecht Sotho</value>
       <value>su:Sudanesesch</value>
       <value>sv:Schwedesch</value>
       <value>tg:Tadschikesch</value>
       <value>ti:Tigrinja-Sprooch</value>
       <value>tk:Turkmenesch</value>
       <value>tn:Tswana-Sprooch</value>
-      <value>tr:T&#252;rkesch</value>
+      <value>tr:Türkesch</value>
       <value>ts:Tsonga-Sprooch</value>
       <value>tt:Tataresch</value>
       <value>tw:Akan-Sprooch</value>

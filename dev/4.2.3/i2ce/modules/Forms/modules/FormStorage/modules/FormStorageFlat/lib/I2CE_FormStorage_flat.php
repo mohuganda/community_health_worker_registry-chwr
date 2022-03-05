@@ -98,7 +98,13 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
                 return array();
             }
         }
-        $rows = $this->db->queryAll("SHOW FULL COLUMNS FROM $table WHERE Field='$id_col'");            
+        try {
+            $res = $this->db->query("SHOW FULL COLUMNS FROM $table WHERE Field='$id_col'");            
+            $rows = $res->fetchAll();
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Failed to get id column" );
+            $rows = array();
+        }
         if(!is_array($rows) || count($rows) != 1) { //the id column was not there
             $this->saveCols[$formName] = array();
             return array();
@@ -139,7 +145,13 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
                 }
             }
             //now we need to make sure that the col is "atomic"
-            $rows = $this->db->queryAll("SHOW FULL COLUMNS FROM $table WHERE Field='{$cols[$field]}'");            
+            try {
+                $res = $this->db->query("SHOW FULL COLUMNS FROM $table WHERE Field='{$cols[$field]}'");            
+                $rows = $res->fetchAll();
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to get field column" );
+                $rows = array();
+            }
             if(!is_array($rows) || count($rows) != 1) { //the column was not there
                 unset($cols[$field]);
             }
@@ -198,18 +210,17 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
         }        
         $id = $form->getId();
         if ($id == '0') { 
-            $new_id = $this->db->getBeforeID( $table, $col, true, true ); 
-            if (I2CE::pearError($new_id,"Cannot get next id")) {
-                return '0';
-            }
-            $stmt = "INSERT INTO  SET `$col` = '" . $form->getName() . "|$id'";
+            $stmt = "INSERT INTO $table SET `$col` = '" . $form->getName() . "|$id'";
             if (is_string($parent_col)) {
                 $stmt .= ", `{$parent_col}` = '" . $form->getParent() ."'";
             }
-            if (I2CE::pearError( $this->db->exec($stmt), "Error inserting form " . $form->getName() . ": " )) {
+            try {
+                $this->db->exec($stmt);
+                $new_id = $this->db->lastInsertId();
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Error inserting form " . $form->getName() . ": " );
                 return '0'; 
             }
-            $new_id = $this->db->getAfterID( $new_id, $table, $col);
             $form->setId( $new_id );
             $form->setChangeType( I2CE_FormStorage_Mechanism::CHANGE_INITIAL );
             return $new_id;
@@ -218,10 +229,13 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
             if (is_string($parent_col)) {
                 $stmt .= ", `$parent_col` = '" . $form->getParent() ."'";
             }
-            if (I2CE::pearError( $this->db->exec($stmt), "Error inserting form " . $form->getName() . ": " )) {
+            try {
+                $this->db->exec($stmt);
+                return $id;
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Error inserting form " . $form->getName() . ": " );
                 return '0'; 
             }
-            return $id;
         }
     }
 
@@ -247,8 +261,12 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
             I2CE::raiseError("No fields can be  saved");
             return true;
         }
-        if ( $transact && $this->db->supports( 'transactions' ) ) {
-            $this->db->beginTransaction();
+        if ( $transact ) {
+            try {
+                $this->db->beginTransaction();
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to start transaction!" );
+            }
         }        
         if (array_key_exists('parent',$cols)) {
             $parent_col = $cols['parent'];
@@ -258,7 +276,7 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
         $formId = $this->ensureFormId($form, $cols['id'],$parent_col);
         if ($formId == '0') {
             I2CE::raiseError("Could not create a new row for the form $form");
-            if ( $transact && $this->db->in_transaction ) { 
+            if ( $transact && $this->db->inTransaction() ) { 
                 $this->db->rollback();
             }
             return false;
@@ -272,19 +290,14 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
                 continue;
             }
             if ( !$fieldObj->save( $do_check, $user ) ) {
-                if ($transact && $this->db->in_transaction) { 
+                if ($transact && $this->db->inTransaction()) { 
                     $this->db->rollback();
                 }
                 return false;
             }
         }       
-        if ( $transact && $this->db->in_transaction ) {
-            $res = $this->db->commit();
-            if ( $res == MDB2_OK ) {
-                return true;
-            } else {
-                return false;
-            }
+        if ( $transact && $this->db->inTransaction() ) {
+            return $this->db->commit();
         }
         return true;
 
@@ -309,9 +322,13 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
             I2CE::raiseError("Trying to save invalid field " . $fieldObj->getName());
             return false;
         }
-        return !I2CE::pearError(
-            $stmt->execute(array($fieldObj->getDBValue(), $fieldObj->getContainer()->getId())),
-            "Could not save " . $fieldObj->getName() . " from form " . $fieldObj->getContainer()->getName());
+        try {
+            $stmt->execute(array($fieldObj->getDBValue(), $fieldObj->getContainer()->getId()));
+            return true;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Could not save " . $fieldObj->getName() . " from form " . $fieldObj->getContainer()->getName());
+            return false;
+        }
     }
 
     /**
@@ -322,7 +339,7 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
     /**
      * Get/prepare the prepared statement for the given field obj
      * @param I2CE_FormField $fieldObj
-     * @returns mixed.  false om failure.  a mdb2 preapred statement object on success
+     * @returns mixed.  false om failure.  a PDOStatement object on success
      */
     protected function getFieldSave($fieldObj) {
         $formName = $fieldObj->getContainer()->getName();
@@ -338,8 +355,10 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
                 return false; 
             }            
             $stmt = "UPDATE $table SET `{$cols[$fieldName]}` = ? WHERE `{$cols['id']}` = ?";
-            $prepStmt =  $this->db->prepare( $stmt,  array( $fieldObj->getMDB2Type(), 'text' ), MDB2_PREPARE_MANIP );
-            if ( I2CE::pearError( $prepStmt, "Error preparing save statemnt for " . $fieldObj->getName() . "\n" . $stmt )) {
+            try {
+                $prepStmt =  $this->db->prepare( $stmt );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Error preparing save statemnt for " . $fieldObj->getName() . "\n" . $stmt );
                 $prepStmt = false;
             }
             $this->fieldSaves[$formName][$fieldName] = $prepStmt;
@@ -554,7 +573,7 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
             }
             $select_list[] = $p_qry . " AS $p_ref";
             if (!is_bool($parent) && is_scalar($parent)) {
-                $wheres[] = " ( $p_qry = '" . mysql_real_escape_string($parent) . "' ) ";
+                $wheres[] = " ( $p_qry = " . $this->db->quote($parent) . " ) ";
             }            
         }
         if (in_array('created', $fields)) {
@@ -593,9 +612,9 @@ class I2CE_FormStorage_Flat extends I2CE_FormStorage_DB {
         $qry = 'SELECT ' . implode(',', $select_list) . " FROM $table";
         if (is_scalar($id)) {
             if ($form_prepended) {
-                $wheres[] = " ($id_qry ='" . mysql_real_escape_string($form . '|' . $id) . "') ";
+                $wheres[] = " ($id_qry =" . $this->db->quote($form . '|' . $id) . ") ";
             } else {
-                $wheres[] = " ($id_qry ='" . mysql_real_escape_string($id) . "') ";
+                $wheres[] = " ($id_qry =" . $this->db->quote($id) . ") ";
             }
         }
         if (count($wheres) >  0 ) {

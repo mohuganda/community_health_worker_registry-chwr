@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="nl">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -63,7 +63,7 @@
       <value>mo:Moldavisch</value>
       <value>mt:Maltees</value>
       <value>my:Burmees</value>
-      <value>nb:Noors Bokm&#229;l</value>
+      <value>nb:Noors Bokmål</value>
       <value>nd:Ndebele, Noord</value>
       <value>nds:Nedersaksisch</value>
       <value>ne:Nepalees</value>
@@ -95,10 +95,10 @@
       <value>tk:Turkmeens</value>
       <value>tr:Turks</value>
       <value>ty:Tahitiaans</value>
-      <value>uk:Oekra&#239;ns</value>
+      <value>uk:Oekraïns</value>
       <value>uz:Uzbeeks</value>
       <value>vi:Vietnamees</value>
-      <value>vo:Volap&#250;k</value>
+      <value>vo:Volapúk</value>
       <value>wa:Waals</value>
       <value>zh:Chinees</value>
       <value>zh_CN:Chinees (Vereenvoudigd)</value>

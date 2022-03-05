@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="af">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -13,7 +13,7 @@
       <value>bg:Bulgaars</value>
       <value>bs:Bosnies</value>
       <value>ca:Katelaans</value>
-      <value>cs:Tsjeggi&#235;</value>
+      <value>cs:Tsjeggië</value>
       <value>cy:Wallies</value>
       <value>da:Deens</value>
       <value>de:Duits</value>
@@ -27,17 +27,17 @@
       <value>fi:Feense</value>
       <value>fr:Franse</value>
       <value>ga:Ierse Gaelic</value>
-      <value>he:Hibre&#252;s</value>
+      <value>he:Hibreüs</value>
       <value>hr:Kroatiese</value>
       <value>hsb:Hoog Serbiese</value>
       <value>hu:Hongaars</value>
       <value>hy:Armeens</value>
-      <value>id:Indonesi&#235;</value>
+      <value>id:Indonesië</value>
       <value>is:Yslandies</value>
       <value>it:Italiaans</value>
       <value>ja:Japanees</value>
       <value>jv:Javanees</value>
-      <value>ka:Georgi&#235;n</value>
+      <value>ka:Georgiën</value>
       <value>kn:Kanadees</value>
       <value>ko:Koriaanse</value>
       <value>la:Latyn</value>
@@ -48,7 +48,7 @@
       <value>nd:Ndebele, Noord</value>
       <value>nds:Lae Saxon</value>
       <value>nl:Hollands</value>
-      <value>nn:No&#246;rweese Nynorsk</value>
+      <value>nn:Noörweese Nynorsk</value>
       <value>nr:Ndebele, Suid</value>
       <value>nso:Noord Sotho</value>
       <value>oc:Okkitaan</value>
@@ -65,10 +65,10 @@
       <value>sv:Sweeds</value>
       <value>ta:Tamilies</value>
       <value>tg:Tajikees</value>
-      <value>th:Tha&#239;s</value>
+      <value>th:Thaïs</value>
       <value>tr:Turks</value>
-      <value>uk:Ukra&#239;nies</value>
-      <value>vi:Vi&#235;tnamees</value>
+      <value>uk:Ukraïnies</value>
+      <value>vi:Viëtnamees</value>
       <value>zh:Sjinese</value>
       <value>zh_CN:Sjinese vereenvoudig</value>
       <value>zh_TW:Sjinese tradisioneel</value>

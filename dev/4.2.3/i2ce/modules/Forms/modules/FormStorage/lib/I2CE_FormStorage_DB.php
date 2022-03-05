@@ -37,7 +37,7 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
     protected $container_cache = array();
     
     /**
-     * @var MDB2 The database object
+     * @var PDO The database object
      */
     protected $db;
 
@@ -50,7 +50,7 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
      */
     public function __construct($name,$options) {
         parent::__construct($name,$options);
-        $this->db = MDB2::singleton();
+        $this->db = I2CE::PDO();
     }
 
 
@@ -113,8 +113,10 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
             return false;
         }      
         $populateQry .= ' LIMIT 1';
-        $result = $this->db->getRow($populateQry);
-        if ( I2CE::pearError( $result, "Error populating form " . $form->getName() ) ) {
+        try {
+            $result = I2CE_PDO::getRow($populateQry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error populating form " . $form->getName() );
             return false;
         }    
         $form_name = $form->getName();
@@ -167,23 +169,25 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
         }
         $qry = $this->getRequiredFieldsQuery($form,$lookup_fields,$id, $parent);
         $qry .= ' LIMIT 1';
-        $result = $this->db->getRow($qry);
-        if ( I2CE::pearError( $result, "Error populating form " . $form ) ) {
-            return false;
-        }
-        $ret = array();
-        foreach ($fields as $field) {
-            $field_ref = strtolower($form . '+' . $field);
-            if (isset($result->$field_ref)) {
-                $ret[$field] = $result->$field_ref;
-            } else {
-                $ret[$field] = '';
+        try { 
+            $result = I2CE_PDO::getRow($qry);
+            $ret = array();
+            foreach ($fields as $field) {
+                $field_ref = strtolower($form . '+' . $field);
+                if (isset($result->$field_ref)) {
+                    $ret[$field] = $result->$field_ref;
+                } else {
+                    $ret[$field] = '';
+                }
             }
-        }
-        if ($delim === false) {
-            return $ret;
-        } else {
-            return implode($delim,$ret);
+            if ($delim === false) {
+                return $ret;
+            } else {
+                return implode($delim,$ret);
+            }
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error populating form " . $form );
+            return false;
         }
     }
 
@@ -208,7 +212,7 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
      *    
      */
     public function getSubSelectFieldsQuery($form,$sel_fields,$id = null ,$mod_time = -1,  $parent =false ,$limit = false  ) {
-        $callback = @create_function('$a,$b','return "`" . $b . "`";');
+        $callback = function($a,$b) { return "`" . $b . "`"; };
         if (!$callback) {
             I2CE::raiseError("Could not create callback reference");
             return false;
@@ -251,15 +255,17 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
         }
         $qry = $this->getRequiredFieldsQuery($form,$lookup_fields,$id, $parent);        
         $qry .= ' LIMIT 1';
-        $result = $this->db->getRow($qry);
-        if ( I2CE::pearError( $result, "Error populating form " . $form ) ) {
+        try {
+            $result = I2CE_PDO::getRow($qry);
+            if (!$result ) {
+                I2CE::raiseError("Error populating form $form:\n\t$qry");
+                return;
+            }
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error populating form " . $form );
             return false;
         }
-        if (!$result instanceof MDB2_Row) {
-            I2CE::raiseError("Error populating form $form:\n\t$qry");
-            return;
-        }
-        $ret = array();
+       $ret = array();
         $fo = $this->getContainer($form);
         if ($fo instanceof I2CE_Form ) {
             foreach ($fields as $field) {
@@ -303,14 +309,16 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
             return false;
         }        
         $fieldQry = $this->getRequiredFieldsQuery($form->getName(),array($field),$form->getId());
-        $result = $this->db->getRow($fieldQry);
-        if ( I2CE::pearError( $result, "Error populating field $field of form " . $form->getName() ) ) {
+        try {
+            $result = I2CE_PDO::getRow($fieldQry);
+            $ref = strtolower($form->getName() . '+' . $field );
+            $entry = new I2CE_Entry( I2CE_Date::blank(), 1, 0,  $form_field->getFromDB( $result->$ref ));
+            $form_field->addHistory( $entry );
+            return true;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error populating field $field of form " . $form->getName() );
             return false;
         }
-        $ref = strtolower($form->getName() . '+' . $field );
-        $entry = new I2CE_Entry( I2CE_Date::blank(), 1, 0,  $form_field->getFromDB( $result->$ref ));
-        $form_field->addHistory( $entry );
-        return true;
     }
     
     
@@ -345,16 +353,19 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
             //I2CE::raiseError("Could not get the required fields query for $form");
             return array();
         }
-        $result = $this->db->query($idQry);
-        if ( I2CE::pearError( $result, "Error getting ids for form $form:" ) ) {
+        try {
+            $result = $this->db->query($idQry);
+            $ids = array();
+            $ref =   strtolower($form . '+id');
+            while( $row = $result->fetch() ) {
+                $ids[] = $row->$ref;
+            }
+            unset( $result );
+            return $ids;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error getting ids for form $form:" );
             return array();
         }
-        $ids = array();
-        $ref =   strtolower($form . '+id');
-        while( $row = $result->fetchRow() ) {
-            $ids[] = $row->$ref;
-        }
-        return $ids;        
     }
 
 
@@ -496,16 +507,19 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
         if (!is_string($idQry) || strlen(ltrim($idQry)) == 0 ) {
             return array();
         }
-        $result = $this->db->query($idQry);
-        if ( I2CE::pearError( $result, "Error getting ids for form $form as a child of $parent_form_id:" ) ) {
+        try {
+            $result = $this->db->query($idQry);
+            $this->queryLastListCount( $form );
+            $ids = array();
+            while( $row = $result->fetch() ) {
+                $ids[] = $row->id;
+            }
+            unset( $result );
+            return $ids;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error getting ids for form $form as a child of $parent_form_id:" );
             return array();
         }
-        $this->queryLastListCount( $form );
-        $ids = array();
-        while( $row = $result->fetchRow() ) {
-            $ids[] = $row->id;
-        }        
-        return $ids;
     }
 
 
@@ -544,26 +558,29 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
         }
         if (!$qry) {
             return parent::search($form,$parent,$where_data,$ordering,$limit);
-        }        
-        $results = $this->db->query($qry);      
-        if (I2CE::pearError($results,"Bad query -- $qry")) {
-            return parent::search($form,$parent,$where_data,$ordering,$limit);
         }
-        $this->queryLastListCount( $form );
-        if ($limit_one) {
-            //if (($data = $results->fetchRow()) !== false) {
-            if (($data = $results->fetchRow())) {
-                return $data->id;
+        try {
+            $results = $this->db->query($qry);      
+            $this->queryLastListCount( $form );
+            if ($limit_one) {
+                if (($data = $results->fetch())) {
+                    unset( $results );
+                    return $data->id;
+                } else {
+                    unset( $results );
+                    return false;
+                }
             } else {
-                return false;
+                $res = array();
+                while ( $data = $results->fetch() ) {
+                    $res[] = $data->id;
+                }
+                unset( $results );
+                return $res;
             }
-        } else {
-            $res = array();
-            while ( $data = $results->fetchRow() ) {
-                $res[] = $data->id;
-            }
-            $results->free();
-            return $res;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Bad query -- $qry");
+            return parent::search($form,$parent,$where_data,$ordering,$limit);
         }
     }
 
@@ -608,25 +625,27 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
         if (!$qry) {
             return array();
         }
-        $res = $this->db->query($qry);      
-        if (I2CE::pearError($res,"Bad query -- $qry")) {
+        try {
+            $res = $this->db->query($qry);      
+            $this->queryLastListCount( $form );
+            $results = array();
+            while ( $data = $res->fetch() ) {
+                $data_vals = array();
+                foreach ($fields as $field) {
+                    if (isset($data->$field)) {
+                        $data_vals[$field] = $data->$field;
+                    } else {
+                        $data_vals[$field] = null;
+                    }
+                }
+                $results[$data->id] = $data_vals;
+            }
+            unset( $res );
+            return $results;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Bad query -- $qry");
             return array();
         }
-        $this->queryLastListCount( $form );
-        $results = array();
-        while ( $data = $res->fetchRow() ) {
-            $data_vals = array();
-            foreach ($fields as $field) {
-                if (isset($data->$field)) {
-                    $data_vals[$field] = $data->$field;
-                } else {
-                    $data_vals[$field] = null;
-                }
-            }
-            $results[$data->id] = $data_vals;
-        }
-        $res->free();
-        return $results;
     }
 
 
@@ -670,35 +689,38 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
         if (!$qry) {
             return array();
         }
-        $res = $this->db->query($qry);      
-        if (I2CE::pearError($res,"Bad query -- $qry")) {
-            return array();
-        }
-        $this->queryLastListCount( $form );
-        $results = array();
-        $fo = $this->getContainer($form);
-        if (!$fo instanceof I2CE_Form) {
-            I2CE::raiseError("Could not instantiate form $form");
-            return array();
-        }
-        while ( $data = $res->fetchRow() ) {
-            $data_vals = array();
-            foreach ($fields as $field) {
-                $fieldObj = $fo->getField($field);
-                if (!$fieldObj instanceof I2CE_FormField) {
-                    I2CE::raiseError("Could not get field $field");
-                    continue;
-                }
-                if (isset($data->$field)) {                    
-                    $fieldObj->setFromDB($data->$field);
-                    $data_vals[$field] = $fieldObj->getDisplayValue();
-                } else {
-                    $data_vals[$field] = null;
-                }
+        try {
+            $res = $this->db->query($qry);      
+            $this->queryLastListCount( $form );
+            $results = array();
+            $fo = $this->getContainer($form);
+            if (!$fo instanceof I2CE_Form) {
+                I2CE::raiseError("Could not instantiate form $form");
+                return array();
             }
-            $results[$data->id] = $data_vals;
+            while ( $data = $res->fetch() ) {
+                $data_vals = array();
+                foreach ($fields as $field) {
+                    $fieldObj = $fo->getField($field);
+                    if (!$fieldObj instanceof I2CE_FormField) {
+                        I2CE::raiseError("Could not get field $field");
+                        continue;
+                    }
+                    if (isset($data->$field)) {                    
+                        $fieldObj->setFromDB($data->$field);
+                        $data_vals[$field] = $fieldObj->getDisplayValue();
+                    } else {
+                        $data_vals[$field] = null;
+                    }
+                }
+                $results[$data->id] = $data_vals;
+            }
+            unset( $res );
+            return $results;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Bad query -- $qry");
+            return array();
         }
-        return $results;
     }
 
     /**
@@ -707,9 +729,11 @@ abstract class I2CE_FormStorage_DB extends I2CE_FormStorage_Mechanism {
      */
 
     protected function queryLastListCount( $form ) {
-        $num_rows = $this->db->queryRow( "SELECT FOUND_ROWS() AS num_rows" );
-        if ( !I2CE::pearError( $num_rows, "Couldn't get total number of results." ) ) {
+        try {
+            $num_rows = I2CE_PDO::getRow( "SELECT FOUND_ROWS() AS num_rows" );
             I2CE_FormStorage::setLastListCount( $form, (int)$num_rows->num_rows );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Couldn't get total number of results." );
         }
     }
 

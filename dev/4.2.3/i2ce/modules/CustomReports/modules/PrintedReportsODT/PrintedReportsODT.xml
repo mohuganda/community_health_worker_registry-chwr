@@ -5,23 +5,23 @@
     <displayName>ODT Reports</displayName>
     <category>Report Type</category>
     <description>Configuration options for reports that use ODT</description>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <link>http://launchpad.net/i2ce</link>
     <requirement name="CustomReports">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="textlayout">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="ColorPicker">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="PrintedFormsODT">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <path name="templates">
       <value>./templates</value>

@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="nb">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -38,15 +38,15 @@
       <value>fa:Farsi (Persisk)</value>
       <value>fi:Finsk</value>
       <value>fj:Fijisk</value>
-      <value>fo:F&#230;r&#248;yisk</value>
+      <value>fo:Færøyisk</value>
       <value>fr:Fransk</value>
       <value>fy:Frisisk</value>
       <value>ga:Irsk gaelisk</value>
-      <value>gd:G&#230;lisk</value>
+      <value>gd:Gælisk</value>
       <value>gl:Gaelisk</value>
       <value>he:Hebraisk</value>
       <value>hr:Kroatisk</value>
-      <value>hsb:&#216;vresorbisk</value>
+      <value>hsb:Øvresorbisk</value>
       <value>hu:Ungarsk</value>
       <value>hy:Armensk</value>
       <value>id:Indonesisk</value>
@@ -70,12 +70,12 @@
       <value>ms:Malaiisk</value>
       <value>mt:Maltesisk</value>
       <value>my:Burmesisk</value>
-      <value>nb:Norsk, bokm&#229;l</value>
+      <value>nb:Norsk, bokmål</value>
       <value>nd:Ndebele, Nord</value>
       <value>nds:Lavgermansk</value>
       <value>nl:Nederlandsk</value>
       <value>nn:Nynorsk</value>
-      <value>nr:Ndebele, S&#248;r</value>
+      <value>nr:Ndebele, Sør</value>
       <value>nso:Nord-Sotho</value>
       <value>oc:Oksitansk</value>
       <value>os:Ossetisk</value>
@@ -93,7 +93,7 @@
       <value>sm:Samoansk</value>
       <value>sq:Albansk</value>
       <value>sr:Serbisk (latinsk)</value>
-      <value>st:Sotho, S&#248;rlig</value>
+      <value>st:Sotho, Sørlig</value>
       <value>su:Sundanesisk</value>
       <value>sv:Svensk</value>
       <value>tg:Tadsjikisk</value>

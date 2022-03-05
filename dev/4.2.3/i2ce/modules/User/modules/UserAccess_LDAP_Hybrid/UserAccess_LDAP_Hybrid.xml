@@ -8,7 +8,7 @@
     <description>Provides a hybrid database and LDAP User Access Mechansim</description>
     <longDescription />
     <link>https://launchpad.net/i2ce</link>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <requirement name="php5-ldap" external="1">
       <eval>extension_loaded('ldap')</eval>
     </requirement>

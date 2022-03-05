@@ -38,10 +38,6 @@ abstract class I2CE_FormField_DB_FLOAT extends I2CE_FormField {
      * The database type for the field
      */
     const FIELD_TYPE_DB = 'float DEFAULT NULL';
-    /**
-     * The MDB2 type for the field.
-     */
-    const FIELD_TYPE_MDB2 = 'float';
 
 
 

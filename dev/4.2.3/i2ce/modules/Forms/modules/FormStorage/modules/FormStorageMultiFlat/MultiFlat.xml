@@ -8,14 +8,14 @@
     <creator>Carl Leitner</creator>
     <email>litlfred@ibiblio.org</email>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <requirement name="forms-storage">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="Lists">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

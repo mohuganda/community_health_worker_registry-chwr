@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="zu">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -162,7 +162,7 @@
       <value>ur:Isi-Urdu</value>
       <value>uz:Isi-Uzbek</value>
       <value>vi:Isi-Vietnamese</value>
-      <value>vo:Isi-Volap&#252;k</value>
+      <value>vo:Isi-Volapük</value>
       <value>wa:Isi-Walloon</value>
       <value>wo:Isi-Wolof</value>
       <value>xh:Isi-Xhosa</value>

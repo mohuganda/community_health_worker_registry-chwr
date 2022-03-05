@@ -213,13 +213,17 @@ class I2CE_FormStorage_magicdata extends I2CE_FormStorage_DB{
             }
             $fields[] = $field;
         }
+        $fields[] = 'last_modified';
+        $fields[] = 'created';
         $populateQry = $this->getRequiredFieldsQuery($form->getName(),$fields,$form->getId(),true);
         if (!$populateQry) {
             return false;
         }      
         $populateQry .= ' LIMIT 1';
-        $result = $this->db->getRow($populateQry);
-        if ( I2CE::pearError( $result, "Error populating form " . $form->getName() ) ) {
+        try {
+            $result = I2CE_PDO::getRow($populateQry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error populating form " . $form->getName() );
             return false;
         }    
         $form_name = $form->getName();
@@ -231,7 +235,7 @@ class I2CE_FormStorage_magicdata extends I2CE_FormStorage_DB{
             $ref =   strtolower($form_name . '+' . $field)  ;
             if (isset($result->$ref)) {                
                 $value = $result->$ref;
-                if ($fieldObj->getMDB2Type() =='blob') {
+                if ($fieldObj->getTypeString() =='blob') {
                     $value = base64_decode($value);
                 }
                 $fieldObj->setFromDB($value);
@@ -260,8 +264,10 @@ class I2CE_FormStorage_magicdata extends I2CE_FormStorage_DB{
         } else {
             $fieldQry = $this->getRequiredFieldsQuery($form->getName(),array($field,'last_modified','who'),$form->getId());
         }
-        $result = $this->db->getRow($fieldQry);
-        if ( I2CE::pearError( $result, "Error populating field $field of form " . $form->getName() ) ) {
+        try {
+            $result = I2CE_PDO::getRow($fieldQry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error populating field $field of form " . $form->getName() );
             return false;
         }
         $ref =   $form->getName() . '+' . $field;
@@ -500,7 +506,7 @@ class I2CE_FormStorage_magicdata extends I2CE_FormStorage_DB{
         if (!$field_config instanceof I2CE_MagicDataNode) {
             return false;
         }
-        if ($form_field->getMDB2Type() =='blob') {
+        if ($form_field->getTypeString() =='blob') {
             $field_config->setAttribute('binary',1);
             $field_config->setAttribute('encoding','base64');
             $field_config->setValue(base64_encode($form_field->getDBValue()));
@@ -555,9 +561,11 @@ class I2CE_FormStorage_magicdata extends I2CE_FormStorage_DB{
             ." WHERE (name = '" . $form_field->getName() . "' AND ($where_qry))";
         //I2CE::raiseError("Updating by $qry");
         
-        $res = $this->db->exec($qry);
-        I2CE::getConfig()->clearCache(false);  //since we did a write to the DB, need to clear cache
-        if (I2CE::pearError("Cannot update by:\n$qry",$res)) {
+        try {
+            $res = $this->db->exec($qry);
+            I2CE::getConfig()->clearCache(false);  //since we did a write to the DB, need to clear cache
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e, "Cannot update by:\n$qry");
             return false;
         }            
         return true;

@@ -2,6 +2,7 @@
 # Exported from translatewiki.net
 #
 # Author: Liuxinyu970226
+# Author: Tonylianlong
 # --
 # Copyright (c) 2011-2016 <hris@capacityproject.org> Capacity Project partnership via IntraHealth International, Inc.
 # Copyright (c) 2011-2016 Rosetta Contributors and Canonical Ltd
@@ -13,14 +14,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-14 07:58+0000\n"
-"PO-Revision-Date: 2016-09-22 07:18+0000\n"
+"PO-Revision-Date: 2017-05-21 16:02+0000\n"
 "Last-Translator: Siebrand Mazeland <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-23 06:11+0000\n"
-"X-Generator: Launchpad (build 18204)\n"
+"X-Launchpad-Export-Date: 2017-09-02 05:24+0000\n"
+"X-Generator: Launchpad (build 18446)\n"
 "Language: zh_cn\n"
 "X-POT-Import-Date: 2014-12-27 16:53:16+0000\n"
 
@@ -185,7 +186,7 @@ msgstr "表格字段类"
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 10]
 #, no-c-format
 msgid "The data type for this field."
-msgstr ""
+msgstr "用于此字段的数据类型。"
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html line 26]
 #, no-c-format
@@ -314,7 +315,7 @@ msgstr ""
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L65 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 65]
 #, no-c-format
 msgid "Edit meta data for this field"
-msgstr ""
+msgstr "编辑用于该字段的元数据"
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield_headers.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield_headers.html line 2]
 #, no-c-format
@@ -392,7 +393,7 @@ msgstr "命令"
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 37]
 #, no-c-format
 msgid "Set the ordering by fields"
-msgstr ""
+msgstr "通过字段来排序"
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html#L44 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html line 44]
@@ -537,7 +538,7 @@ msgstr ""
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html line 17]
 #, no-c-format
 msgid "Existing Form Orders"
-msgstr ""
+msgstr "已经存在的表单窗体"
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html#L5 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html line 5]
 #, no-c-format
@@ -749,7 +750,7 @@ msgstr "选择一个"
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html line 17]
 #, no-c-format
 msgid "Existing Child Forms"
-msgstr ""
+msgstr "存在子窗体"
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_enum_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_enum_meta.html line 10]
 #, no-c-format

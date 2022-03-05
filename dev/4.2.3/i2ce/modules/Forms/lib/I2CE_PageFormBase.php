@@ -303,17 +303,24 @@ abstract class I2CE_PageFormBase extends I2CE_Page{
     protected function action() {
         $this->setForm();
         if ($this->isSave(false)) { //the requested action is a save, but no validation checks are performed
-            $db = MDB2::singleton();
-            if ( $db->supports( 'transactions' ) && !$db->in_transaction) {
-                $db->beginTransaction();
-                $transact = true;
-            } else {
-                $transact = false;
+            $db = I2CE::PDO();
+            if ( !$db->inTransaction() ) {
+                try {
+                    $db->beginTransaction();
+                    $transact = true;
+                } catch ( PDOException $e ) {
+                    $transact = false;
+                }
             }
             if ( $this->isSave()  ) { //this is a save and everything is valid
                 if ($this->action_save() !==false) {
                     if ($transact) {
-                        return (  $db->commit() ==  MDB2_OK );
+                        try {
+                            return $db->commit();
+                        } catch ( PDOException $e ) {
+                            I2CE::pdoError( $e, "Failed to commit save transaction." );
+                            return false;
+                        }
                     } else {
                         return true;
                     }
@@ -323,8 +330,12 @@ abstract class I2CE_PageFormBase extends I2CE_Page{
                 }
             } else {
                 //we did not have a valid save state
-                if ( $transact && $db->in_transaction ) {
-                    $db->rollback();
+                if ( $transact && $db->inTransaction() ) {
+                    try {
+                        $db->rollback();
+                    } catch ( PDOException $e ) {
+                        I2CE::pdoError( $e, "Failed to rollback save transaction." );
+                    }
                 }
             }
         }

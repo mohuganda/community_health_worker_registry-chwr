@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="Lists-LinkTo" path="/modules/forms/">
   <metadata>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="Lists-LinkTo" path="/modules/forms/" locale="en_US">
-    <version>4.2.0</version>
+    <version>4.3.0</version>
     <configurationGroup name="formClasses">
       <configurationGroup name="I2CE_ListLink">
         <configurationGroup name="fields">

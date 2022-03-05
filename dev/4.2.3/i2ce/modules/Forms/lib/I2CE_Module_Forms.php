@@ -182,30 +182,28 @@ class I2CE_Module_Forms extends I2CE_Module {
      * Note: this should seem to need be in the last entry mdoule, but this existed before it was created.  probably msotyl dead code at this point as noone should be less than 3.1
      */
     protected function createDateIndexOnLastEntry() {
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         $qry =
-        "SELECT  null FROM information_schema.statistics WHERE
-table_schema = '{$db->database_name}'
-and table_name = 'last_entry'
-and index_name = 'date'";
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
-            return false;
-        }
-        if ($result->numRows() > 0) {
-            //the index has already been created.
-            return true;
-        }
-        //the index has not been created.
-        ini_set('max_execution_time',6000);
-        I2CE::raiseError("Creating index 'date' on last_entry");
-        $qry = "CREATE INDEX date ON last_entry (date)";
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
+            "SELECT  null FROM information_schema.statistics WHERE table_schema = '{$db->database_name}' and table_name = 'last_entry' and index_name = 'date'";
+        try {
+            $result = $db->query($qry);
+            if ($result->rowCount() > 0) {
+                //the index has already been created.
+                unset( $result );
+                return true;
+            }
+            //the index has not been created.
+            ini_set('max_execution_time',6000);
+            I2CE::raiseError("Creating index 'date' on last_entry");
+            $qry = "CREATE INDEX date ON last_entry (date)";
+            $result = $db->query($qry);
+            unset( $result );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot execute  query:\n$qry");
             return false;
         }
         return true;
-        
+
     }
 
 

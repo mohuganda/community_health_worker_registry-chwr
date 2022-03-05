@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="it">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -77,7 +77,7 @@
       <value>mo:Moldavo</value>
       <value>ms:Malese</value>
       <value>my:Birmano</value>
-      <value>nb:Norvegese Bokm&#229;l</value>
+      <value>nb:Norvegese Bokmål</value>
       <value>nd:Ndebele settentrionale</value>
       <value>nds:Basso sassone</value>
       <value>ne:Nepalese</value>

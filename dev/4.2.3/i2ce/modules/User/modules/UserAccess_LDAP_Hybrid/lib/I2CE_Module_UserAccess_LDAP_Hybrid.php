@@ -127,7 +127,7 @@ class I2CE_Module_UserAccess_LDAP_Hybrid extends I2CE_Module {
         }
         $options['userDB'] = trim($options['userDB']);
         if (!$options['userDB']) {
-            $options['userDB'] =  '`' . MDB2::singleton()->database_name  . '`';
+            $options['userDB'] =  '`' . I2CE_PDO::details('dbname') . '`';
         }
         if (!array_key_exists('user_table',$options)) {
             $options['user_table']=  $options['userDB'] . '.user_ldap';
@@ -170,7 +170,7 @@ class I2CE_Module_UserAccess_LDAP_Hybrid extends I2CE_Module {
             }
         }        
         $options =  self::ensureDefaultOptions($options);
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         $qry = 'CREATE TABLE IF NOT EXISTS ' . $options['user_table']. ' '
             .'(`id` int(11) NOT NULL auto_increment,'
             .' `username` varchar(20) NOT NULL,'
@@ -179,11 +179,14 @@ class I2CE_Module_UserAccess_LDAP_Hybrid extends I2CE_Module {
             .' UNIQUE KEY `username` (`username`)'
             .') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin';
         I2CE::raiseError("Initializing LDA-DB User Table. Users' details table se stored in database {$options['userDB']}");
-        if (I2CE::pearError($db->query($qry),"Cannot create user access table: $qry")) {
+        try {
+            $db->exec($qry);
+            return true;
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot create user access table: $qry");
             I2CE::raiseError("Could not initialize LDAP-DB user table") ;
             return false;
         }
-        return true;
     }
 
 }

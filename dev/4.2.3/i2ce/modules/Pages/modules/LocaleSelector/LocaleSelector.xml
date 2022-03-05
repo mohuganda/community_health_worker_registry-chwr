@@ -9,14 +9,14 @@
     <creator>Carl Leitner</creator>
     <email>litlfred@ibiblio.org</email>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <requirement name="pages">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="swissfactory">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <path name="classes">
       <value>./lib</value>
@@ -179,7 +179,7 @@
       <value>mt:Maltese</value>
       <value>my:Burmese</value>
       <value>na:Nauru</value>
-      <value>nb:Norwegian Bokm&#229;l</value>
+      <value>nb:Norwegian Bokmål</value>
       <value>nd:Ndebele, North</value>
       <value>nds:Low Saxon</value>
       <value>ne:Nepali</value>
@@ -244,7 +244,7 @@
       <value>uz:Uzbek (Cyrillic)</value>
       <value>ven:Venda</value>
       <value>vi:Vietnamese</value>
-      <value>vo:Volap&#252;k</value>
+      <value>vo:Volapük</value>
       <value>wa:Walloon</value>
       <value>wo:Wolof</value>
       <value>xh:Xhosa</value>

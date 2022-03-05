@@ -9,7 +9,7 @@
     <creator>Intrahealth Informatics</creator>
     <email>hris@capacityproject.org</email>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
@@ -20,12 +20,12 @@
       <value>./templates</value>
     </path>
     <requirement name="pages">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="admin">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
   </metadata>
   <configurationGroup name="cron" path="/modules/admin/cron">

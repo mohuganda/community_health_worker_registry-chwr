@@ -5,10 +5,10 @@
     <displayName>ODT Printed Forms</displayName>
     <category>Application Component</category>
     <description>Provides Printed/Standardized Forms by ODT document templates</description>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <requirement name="PrintedForms">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <path name="classes">
       <value>./lib</value>

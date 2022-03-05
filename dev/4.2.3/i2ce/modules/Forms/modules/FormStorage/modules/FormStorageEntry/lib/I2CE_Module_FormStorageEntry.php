@@ -39,11 +39,11 @@ class I2CE_Module_FormStorageEntry  extends I2CE_Module{
      */
     public function action_initialize() {
         I2CE::raiseError("Initializing Form Tables");
-        if (! $this->addBlobValue()) {
-            return false;
-        }
         if (!I2CE_Util::runSQLScript('initialize_form.sql')) {
             I2CE::raiseError("Could not initialize I2CE form tables");
+            return false;
+        }
+        if (! $this->addBlobValue()) {
             return false;
         }
         if (! $this->addParentFormColumnToRecordTable()) { 
@@ -58,14 +58,21 @@ class I2CE_Module_FormStorageEntry  extends I2CE_Module{
     }
 
     private function addBlobValue() {
-        $db = MDB2::singleton();
-        $rows = $db->queryAll("SHOW FULL COLUMNS FROM entry WHERE Field='blob_value'");
-        if(count($rows)) {
-            I2CE::raiseError("entry table already has blob_value");
-            return true;
+        $db = I2CE::PDO();
+        try {
+            $result = $db->query("SHOW FULL COLUMNS FROM entry WHERE Field='blob_value'");
+            $rows = $result->fetchAll();
+            unset( $result );
+            if(count($rows)) {
+                I2CE::raiseError("entry table already has blob_value");
+                return true;
+            }
+            I2CE::raiseError("Adding blob_value to entry tables");
+            return I2CE_Util::runSQLScript('add_blob_fields.sql');
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Unable to query blob value column." );
+            return false;
         }
-        I2CE::raiseError("Adding blob_value to entry tables");
-        return I2CE_Util::runSQLScript('add_blob_fields.sql');
     }
 
 
@@ -113,21 +120,29 @@ class I2CE_Module_FormStorageEntry  extends I2CE_Module{
     }
 
     protected function addCreationDate() {
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
         foreach (array('record','deleted_record') as $table) {
-            $rows = $db->queryAll("SHOW FULL COLUMNS FROM $table WHERE Field='created'");
-            if(count($rows)> 0) {
-                I2CE::raiseError("table $table already has created field");
-            } else {
-                $qry_alter = "ALTER TABLE $table ADD COLUMN `created` datetime;";
-                if ( I2CE::pearError( $db->exec($qry_alter), "Error adding created column to $table table:")) {
-                    return false;
+            try {
+                $result = $db->query("SHOW FULL COLUMNS FROM $table WHERE Field='created'");
+                $rows = $result->fetchAll();
+                if(count($rows)> 0) {
+                    I2CE::raiseError("table $table already has created field");
+                } else {
+                    $qry_alter = "ALTER TABLE $table ADD COLUMN `created` datetime;";
+                    $db->exec($qry_alter);
                 }
+                unset( $result );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Unable to add created column to $table." );
+                return false;
             }
         }
-        $createdQry = "UPDATE  record set created = (SELECT MIN( entry.date ) FROM entry  WHERE record.id = entry.record)";
 
-        if ( I2CE::pearError( $db->exec($createdQry), "Error populating created column in record")) {
+        try {
+            $createdQry = "UPDATE  record set created = (SELECT MIN( entry.date ) FROM entry  WHERE record.id = entry.record)";
+            $db->exec($createdQry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error populating created column in record" );
             return false;
         }
         return true;
@@ -139,15 +154,29 @@ class I2CE_Module_FormStorageEntry  extends I2CE_Module{
      *@param string $table
      */
     protected function dropColumnFromTable($column,$table) {
-        $db = MDB2::singleton();
-        $qry_check = "SHOW FULL COLUMNS FROM $table WHERE Field='$column'";
-        $rows = $db->queryAll($qry_check);
-        if(count($rows) == 0) {
-            I2CE::raiseError("$table table does not have $column");
-            return true;
+        $db = I2CE::PDO();
+        try {
+            $qry_check = "SHOW FULL COLUMNS FROM $table WHERE Field='$column'";
+            $result = $db->query($qry_check);
+            $rows = $result->fetchAll();
+            unset( $result );
+            if(count($rows) == 0) {
+                I2CE::raiseError("$table table does not have $column");
+                return true;
+            }
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Failed to get $column from $table" );
+            return false;
         }
-        $qry_drop = "ALTER TABLE `$table` DROP COLUMN `$column`";
-        return (!(I2CE::pearError( $db->exec($qry_drop), "Error dropping $column from table $table:")));
+        try {
+            $qry_drop = "ALTER TABLE `$table` DROP COLUMN `$column`";
+            $db->exec($qry_drop);
+            return true;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error dropping $column from table $table:" );
+            return false;
+        }
+
     }
 
     /**
@@ -165,29 +194,34 @@ class I2CE_Module_FormStorageEntry  extends I2CE_Module{
             I2CE::raiseError("Invalid fields");
             return false;
         }
-        $db = MDB2::singleton();
-        $qry =
-        "SELECT  null FROM information_schema.statistics WHERE
-table_schema = '{$db->database_name}'
+        $db = I2CE::PDO();
+        try {
+            $qry = "SELECT  null FROM information_schema.statistics WHERE
+table_schema = '".I2CE_PDO::details('dbname')."'
 and table_name = 'last_entry'
 and index_name = '{$index_name}'";
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
+            $result = $db->query($qry);
+            if ($result->numRows() > 0) {
+                //the index has already been created.
+                unset( $result );
+                return true;
+            }
+            unset( $result );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e,"Cannot execute  query:\n$qry" );
             return false;
-        }
-        if ($result->numRows() > 0) {
-            //the index has already been created.
-            return true;
         }
         //the index has not been created.
         I2CE::longExecution(); //it may take a shilw
         I2CE::raiseError("Creating index '$index_name' on the field(s) " . implode(",",$fields) . " of  last_entry.  This may take a long time if you have many records.");
-        $qry = "CREATE INDEX $index_name ON last_entry (" . implode(',',$fields) . ")";
-        $result = $db->query($qry);
-        if (I2CE::pearError($result,"Cannot execute  query:\n$qry")) {
+        try {
+            $qry = "CREATE INDEX $index_name ON last_entry (" . implode(',',$fields) . ")";
+            $result = $db->exec($qry);
+            return true;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Cannot execute  query:\n$qry");
             return false;
         }
-        return true;
         
     }
     
@@ -197,22 +231,44 @@ and index_name = '{$index_name}'";
      * @param string $table  the table to fixup the parent columns on.  Defaulst to 'record'
      */
     protected function addParentFormColumnToRecordTable($table = 'record') {
-        $db = MDB2::singleton();
-        $rows = $db->queryAll("SHOW FULL COLUMNS FROM $table WHERE Field='parent_id'");
+        $db = I2CE::PDO();
+        $rows = array();
+        try {
+            $result = $db->query("SHOW FULL COLUMNS FROM $table WHERE Field='parent_id'");
+            $rows = $result->fetchAll();
+            unset( $result );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Failed to show columns for $table parent_id." );
+            return false;
+        }
         if(count($rows)> 0) {
             I2CE::raiseError("$table table already has parent_form");
         } else {
             $qry_alter = "ALTER TABLE $table ADD COLUMN `parent_id` int(10) unsigned default 0, ADD COLUMN `parent_form` varchar(255), ADD INDEX (`parent_form`,`parent`);";
-            if ( I2CE::pearError( $db->exec($qry_alter), "Error adding parent_id, parent_form column to $table table:")) {
+            try {
+                $db->exec($qry_alter);
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Error adding parent_id, parent_form column to $table table:");
                 return false;
             }
         }
         // If it's a brand new installation then parent doesn't exist so 
         // no update needs to happen.
-        $rows = $db->queryAll("SHOW FULL COLUMNS FROM $table WHERE Field='parent'");
+        $rows = array();
+        try {
+            $result = $db->query("SHOW FULL COLUMNS FROM $table WHERE Field='parent'");
+            $rows = $result->fetchAll();
+            unset( $result );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Failed to show columns for $table parent." );
+            return false;
+        }
         if ( count($rows) > 0 ) {
             $qry_insert = "UPDATE $table r JOIN $table pr ON pr.id = r.parent JOIN  form pf ON pf.id = pr.form  SET r.`parent_id` = r.`parent` , r.`parent_form` = pf.name";
-            if ( I2CE::pearError( $db->exec($qry_insert), "Error updating parent_id, parent_form columns:")) {
+            try {
+                $db->exec($qry_insert);
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Error updating parent_id, parent_form columns:");
                 return false;
             }        
         }

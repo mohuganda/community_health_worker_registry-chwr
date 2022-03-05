@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="sq">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -28,12 +28,12 @@
       <value>br:Bretonisht</value>
       <value>bs:Boshnjakisht</value>
       <value>ca:Katalanisht</value>
-      <value>ce:&#199;e&#231;enisht</value>
+      <value>ce:Çeçenisht</value>
       <value>ch:Kamoroisht</value>
       <value>co:Korsikanisht</value>
-      <value>cs:&#199;ekisht</value>
+      <value>cs:Çekisht</value>
       <value>cu:Slavishte Kisthore</value>
-      <value>cv:&#199;uvashisisht</value>
+      <value>cv:Çuvashisisht</value>
       <value>cy:Uelsh</value>
       <value>da:Danisht</value>
       <value>de:Gjermanisht</value>
@@ -98,15 +98,15 @@
       <value>mt:Maltezisht</value>
       <value>my:Burmesisht</value>
       <value>na:Naurisht</value>
-      <value>nd:Nbedelisht t&#235; Veriut</value>
+      <value>nd:Nbedelisht të Veriut</value>
       <value>ne:Nepalisht</value>
       <value>ng:Ndongisht</value>
       <value>nl:Hungarisht</value>
       <value>nn:Norvegjisht (Nynorsk)</value>
-      <value>nr:NBedelisht t&#235; Jugut</value>
-      <value>nso:Sothisht T&#235; Veriut</value>
+      <value>nr:NBedelisht të Jugut</value>
+      <value>nso:Sothisht Të Veriut</value>
       <value>nv:Navahisht</value>
-      <value>ny:&#199;i&#231;evisht</value>
+      <value>ny:Çiçevisht</value>
       <value>oc:Oksitanisht</value>
       <value>om:Oromisht</value>
       <value>or:Orijisht</value>
@@ -117,7 +117,7 @@
       <value>ps:Pushtisht</value>
       <value>pt:Portugalisht</value>
       <value>pt_BR:Portugalishte Braziliane</value>
-      <value>qu:Ke&#231;isht</value>
+      <value>qu:Keçisht</value>
       <value>rn:Rundisht</value>
       <value>ro:Rumanisht</value>
       <value>ru:Rusisht</value>

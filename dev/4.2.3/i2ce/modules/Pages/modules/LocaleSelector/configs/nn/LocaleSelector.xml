@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="nn">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -39,16 +39,16 @@
       <value>fa:Persisk</value>
       <value>fi:Finsk</value>
       <value>fj:Fijisk</value>
-      <value>fo:F&#230;r&#248;ysk</value>
+      <value>fo:Færøysk</value>
       <value>fr:Fransk</value>
       <value>fy:Frisisk</value>
-      <value>ga:G&#230;lisk (Irland)</value>
-      <value>gd:G&#230;lisk</value>
+      <value>ga:Gælisk (Irland)</value>
+      <value>gd:Gælisk</value>
       <value>gl:Galisisk</value>
       <value>he:Hebraisk</value>
       <value>ho:Hiri motu</value>
       <value>hr:Kroatisk</value>
-      <value>hsb:&#216;vresorbisk</value>
+      <value>hsb:Øvresorbisk</value>
       <value>hu:Ungarsk</value>
       <value>hy:Armensk</value>
       <value>id:Indonesisk</value>
@@ -60,7 +60,7 @@
       <value>jv:Javanesisk</value>
       <value>ka:Georgisk</value>
       <value>kk:Kasakhisk</value>
-      <value>kl:Gr&#248;nlandsk</value>
+      <value>kl:Grønlandsk</value>
       <value>ko:Koreansk</value>
       <value>ks:Kasjmiri</value>
       <value>ku:Kurdisk</value>
@@ -78,13 +78,13 @@
       <value>ms:Malayisk</value>
       <value>mt:Maltesisk</value>
       <value>my:Burmesisk</value>
-      <value>nb:Norsk bokm&#229;l</value>
+      <value>nb:Norsk bokmål</value>
       <value>nd:Ndebele, nord</value>
-      <value>nds:L&#229;ggermansk</value>
+      <value>nds:Låggermansk</value>
       <value>ne:Nepalsk</value>
       <value>nl:Nederlandsk</value>
       <value>nn:Norsk nynorsk</value>
-      <value>nr:Ndebele, s&#248;r</value>
+      <value>nr:Ndebele, sør</value>
       <value>nso:Nord-Sotho</value>
       <value>oc:Oksitansk</value>
       <value>os:Ossetisk</value>
@@ -102,7 +102,7 @@
       <value>sm:Samoansk</value>
       <value>sq:Albansk</value>
       <value>sr:Serbisk, latinsk</value>
-      <value>st:Sotho, s&#248;r</value>
+      <value>st:Sotho, sør</value>
       <value>su:Sundanesisk</value>
       <value>sv:Svensk</value>
       <value>ta:Tamilsk</value>

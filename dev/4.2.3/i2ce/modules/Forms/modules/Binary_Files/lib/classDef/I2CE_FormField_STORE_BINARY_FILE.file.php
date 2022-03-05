@@ -115,7 +115,7 @@ abstract class I2CE_FormField_STORE_BINARY_FILE extends I2CE_FormField_DB_STRING
         } else {
             $base_dir = array( '', 'var', 'lib', 'iHRIS', 'file_storage' );
         }
-        $base_dir[] = MDB2::singleton()->database_name;
+        $base_dir[] = I2CE_PDO::details('dbname');
         if ( $container ) {
             $base_dir[] = $container;
         } else {
@@ -247,7 +247,7 @@ abstract class I2CE_FormField_STORE_BINARY_FILE extends I2CE_FormField_DB_STRING
      * @return string
      */
     public static function setupTemporaryDirectory() {
-        $tmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "I2CE_temp_upload" . DIRECTORY_SEPARATOR . MDB2::singleton()->database_name;
+        $tmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "I2CE_temp_upload" . DIRECTORY_SEPARATOR . I2CE_PDO::details('dbname');
         if ( !file_exists( $tmpDir ) || ( !is_dir( $tmpDir ) && unlink( $tmpDir ) ) ) {
             mkdir( $tmpDir, '0755', true );
         }

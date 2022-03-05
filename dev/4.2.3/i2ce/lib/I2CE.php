@@ -37,7 +37,7 @@ require_once 'I2CE_FileSearch_Caching.php';
 require_once 'I2CE_ModuleFactory.php';
 require_once 'I2CE_Fuzzy.php';
 require_once 'I2CE_Locales.php';
-require_once 'MDB2.php';
+require_once 'I2CE_PDO.php';
 
 /**
  * @package I2CE
@@ -68,6 +68,11 @@ class I2CE   {
      * @var static protected array $userAccessInit os string the user access initialization strings
      */
     protected static $userAccessInit =array();
+
+    /**
+     * @var static protected PDO PDO object
+     */
+    protected static $pdo;
 
     /**
      * Gets the registered user access protocol
@@ -187,81 +192,30 @@ class I2CE   {
 
 
 
+
     /**
-     * connect to the database
-     * @param string $dsn;
-     * @returns true on sucess
+     * Return the connected PDO object.
+     * @return PDO
      */
-    protected static function dbConnect($dsn) {
-        // Especially when writing PHP scripts for use on different
-        // servers, it is a very good idea to explicitly set the internal
-        // encoding somewhere on top of every document served, e.g.
+    public static function PDO() {
+        return I2CE_PDO::PDO();
+    }
 
-        // mb_internal_encoding("UTF-8");
-
-        // This, in combination with mysql-statement "SET NAMES
-        // 'utf8'", will save a lot of debugging trouble.
-
-        // Also, use the multi-byte string functions instead of the
-        // ones you may be used to, e.g. mb_strlen() instead of
-        // strlen(), etc.
-
-        // -- From Joachim Kruyswijk 25-May-2006 on mb_internal_encoding
-
-        mb_internal_encoding("UTF-8");
-        $db = MDB2::singleton($dsn);
-        if( PEAR::isError( $db ) ) {
-            self::raiseError( $db->getMessage() );
-            return false;
-        }
-
-        $db->loadModule('Extended');
-        $db->setFetchMode( MDB2_FETCHMODE_OBJECT, 'MDB2_row' );
-        $db->query( "SET NAMES 'utf8'" );
-        return true;
+    /**
+     * Return the database name being used.
+     * @return string
+     */
+    public static function dbName() {
+        return I2CE_PDO::details( 'dbname' );
     }
 
 
     /**
      *try to reconnect to the database
-     * @returns DB_Singleton on success
+     * @return PDO
      */
     public static function dbReconnect() {
-        $db = MDB2::singleton(); //get old connection info
-        if( PEAR::isError( $db ) ) {
-            self::raiseError( $db->getMessage() );
-            return false;
-        }
-        if (! ($db_name = $db->database_name)) {
-            I2CE::raiseError("No database to reconnect to mysql");
-            return false;
-        }
-        if (! ($db_password = $db->dsn['password'])) {
-            I2CE::raiseError("No password to reconnect to mysql");
-            return false;
-        }
-        if ( !($db_user = $db->dsn['username'])) {
-            I2CE::raiseError("No user to connect to mysql");
-            return false;
-        }
-        $db_type =  self::getRuntimeVariable('I2CE_DB_TYPE', 'mysql' );
-        if (empty($db_type)) {
-            $db_type = "mysql";
-        }
-        $protocol = self::getRuntimeVariable('I2CE_DB_PROTOCOL',
-                                             'unix(/var/run/mysqld/mysqld.sock)' );
-        if ( (strlen($protocol) > 0) ) {
-            if ( $protocol[0] !== "@" ) {
-                $protocol = "@$protocol";
-            }
-        }
-        if ( $protocol[strlen($protocol)-1] !== '/') {
-            $protocol .= '/';
-        }
-
-        $dsn = $db_type.'://' . $db_user  . ':' . $db_pass   . $protocol . $db_name;
-        $new_db = MDB2::singleton($dsn);
-        return $new_db;
+        return I2CE_PDO::reconnect();
     }
 
     /**
@@ -345,8 +299,7 @@ class I2CE   {
                 }
             } else {
                 require_once 'I2CE_MagicDataStorageAPC.php';
-                $db  =   MDB2::singleton();
-                $store_mem = new I2CE_MagicDataStorageAPC( $db->database_name . "_config" );
+                $store_mem = new I2CE_MagicDataStorageAPC( self::dbName() . "_config" );
                 if ($store_mem->isAvailable()) {
                     $config->addStorage( $store_mem );               
                 }
@@ -357,7 +310,6 @@ class I2CE   {
             } 
             return $config;
         default:
-            $db = MDB2::singleton(); 
             require_once 'I2CE_MagicDataStorageAPC.php';
             require_once 'I2CE_MagicDataStorageDBAlt.php';
             $store_db = new I2CE_MagicDataStorageDBAlt( "config" );
@@ -368,12 +320,12 @@ class I2CE   {
                 $store_db = new I2CE_MagicDataStorageDB( "config" );
             }
             $config = I2CE_MagicData::instance( "config", $replace );
-            $store_mem = new I2CE_MagicDataStorageAPC( $db->database_name . "_config" );
+            $store_mem = new I2CE_MagicDataStorageAPC( self::dbName() . "_config" );
             if ($store_mem->isAvailable()) {
                 $config->addStorage( $store_mem );               
             }
             require_once 'I2CE_MagicDataStorageMemcached.php';
-            $store_memcached = new I2CE_MagicDataStorageMemcached($db->database_name. '_config');
+            $store_memcached = new I2CE_MagicDataStorageMemcached( self::dbName() . '_config');
             if ($store_memcached->isAvailable()) {
                 $config->addStorage($store_memcached);
             } else {
@@ -404,12 +356,11 @@ class I2CE   {
      * clear out the APC Cache.
      */
     public static function setupFileSearch($paths=array(), $clear_cache = false) {
-        $db  =   MDB2::singleton();
         if (!array_key_exists('HTTP_HOST',$_SERVER)) { //command line
             self::$fileSearch = new I2CE_FileSearch(FALSE, FALSE, TRUE);
         } else {
             self::$fileSearch = new I2CE_FileSearch_Caching(FALSE, FALSE, TRUE);
-            self::$fileSearch->setPrefix($db->database_name);
+            self::$fileSearch->setPrefix(self::dbName());
         }
         self::$fileSearch->
             setPreferredLocales('MODULES',array(I2CE_Locales::DEFAULT_LOCALE));
@@ -476,8 +427,7 @@ class I2CE   {
      * @param string $user_db defaults 
      */
     protected static function setupDatabaseReferences($user_db = null) {
-        $db  =  MDB2::singleton();
-        $db_name =  $db->database_name;
+        $db_name =  self::dbName();
         // Set the user db and quote the name so we don't need to worry about it later
         if ($user_db === null) {
             $user_db = $db_name;
@@ -569,6 +519,7 @@ class I2CE   {
                 return false;
             }
         }
+
         if (empty($db_user)) {
             self::raiseError( "Please set the database user", E_USER_ERROR);
             if (!array_key_exists('HTTP_HOST',$_SERVER)) { //command line
@@ -577,6 +528,7 @@ class I2CE   {
                 return false;
             }
         }
+
         if (empty($db_pass)) {
             self::raiseError("Please set the database user's password",
                              E_USER_ERROR);
@@ -586,27 +538,26 @@ class I2CE   {
                 return false;
             }
         }
+
         $protocol = self::getRuntimeVariable('I2CE_DB_PROTOCOL',
-                                             'unix(/var/run/mysqld/mysqld.sock)' );
-        if ( (strlen($protocol) > 0) ) {
-            if ( $protocol[0] !== "@" ) {
-                $protocol = "@$protocol";
-            }
+                                             '/var/run/mysqld/mysqld.sock' );
+        if ( (strlen($protocol) <= 0) ) {
+            $protocol = 'localhost';
         }
-        if ( $protocol[strlen($protocol)-1] !== '/') {
-            $protocol .= '/';
-        }
+
         $db_type =  self::getRuntimeVariable('I2CE_DB_TYPE', 'mysql' );
         if (empty($db_type)) {
-            $db_type = "mysql";
+            $db_type = 'mysql';
         }
-        $dsn = $db_type.'://' . $db_user  . ':' . $db_pass   . $protocol . $db_name;
-        return self::initializeDSN($dsn,$user_access_init,$site_module_file, $bring_up_system);
+
+
+        $dsn = "$db_type://$db_user:$db_pass@$protocol/$db_name";
+
+        return self::initializeDSN( $dsn, $user_access_init, $site_module_file, $bring_up_system );
     }
 
 
 
-    
     /**
      * Gets the core system going.  
      * @param string $dsn dsn string to connect to the database
@@ -614,7 +565,8 @@ class I2CE   {
      * @param string $site_module_file  the configttion file for the site module
      * @returns boolean.  True on sucess
      */ 
-    public static function initializeDSN($dsn, $user_access_init,  $site_module_file,  $bring_up_system = true) {
+    public static function initializeDSN($dsn, $user_access_init, $site_module_file,  $bring_up_system = true) {
+//      '/^(?P<user>\w+)(:(?P<password>\w+))?@(?P<host>[.\w]+)(:(?P<port>\d+))?\\\\(?P<database>\w+)$/im'
         if (empty($dsn)) {
             self::raiseError( "Please set the dsn string", E_USER_ERROR);
             if (!array_key_exists('HTTP_HOST',$_SERVER)) { //command line
@@ -623,12 +575,30 @@ class I2CE   {
                 return false;
             }
         }
-        $mdb2 = new MDB2();
-        $dsn_info = $mdb2->parseDSN( $dsn );
-        if (I2CE_Dumper::dumpStaticURL($dsn_info['database'], 'file')) {
+        I2CE_PDO::initialize( $dsn );
+
+        return self::initializePDO( $user_access_init, $site_module_file, $bring_up_system );
+
+    }
+
+
+
+
+    /**
+     * Gets the core system going with PDO 
+     * @param string $user_access_init the init string for the user access mechanism
+     * @param string $site_module_file  the configttion file for the site module
+     * @returns boolean.  True on sucess
+     */ 
+    public static function initializePDO( $user_access_init, $site_module_file, $bring_up_system = true ) {
+ 
+        /** What's this for? Does it need to be done?
+        if (I2CE_Dumper::dumpStaticURL(self::$dbDetails['dbname'], 'file')) {
             exit();
         }
-        if (!self::dbConnect($dsn_info)) {
+        **/
+
+        if (!I2CE_PDO::setup()) {
             self::raiseError("Could not connect to the database");
             if (!array_key_exists('HTTP_HOST',$_SERVER)) { //command line
                 exit(13);
@@ -636,6 +606,7 @@ class I2CE   {
                 return false;
             }
         }
+
         self::setupSession();
         $clear = false;
         if (!array_key_exists('HTTP_HOST',$_SERVER)) { //command line
@@ -668,17 +639,12 @@ class I2CE   {
             self::raiseError("Already initialized!",E_USER_WARNING);
             return true;
         }
-        $db = MDB2::singleton();//get the instance we just created.
         if (!$update && $bring_up_system) {
             // just assume it is until we know otherwise.  This error
             // message to don't dumped to the screen.
             self::siteInitialized(true);
         }
-        /*
-        if (I2CE_Dumper::dumpStaticURL($db->database_name, 'file')) {
-            exit();
-        }
-        */
+
         I2CE_Error::resetStoredMessages();
 
 
@@ -890,6 +856,9 @@ class I2CE   {
                 continue;
             }
             $last = strtolower($val[strlen($val)-1]);
+            if (!is_numeric($last)) {
+                $val = substr($val, 0, -1);
+            }
             switch($last) {
             case 'g':
                 $val *= 1024;
@@ -978,12 +947,23 @@ class I2CE   {
      */
     static public function pearError( $obj, $message, $type=E_USER_NOTICE, $redirect="" ) {
         if ( PEAR::isError( $obj ) ) {
-            $db = MDB2::singleton(); 
             I2CE_Error::raiseError( $message . ":\n" . $obj->getMessage() . "\n" . $obj->getUserInfo(), $type, $redirect );
             return true;
         }
         return false;
     }
+
+    /**
+     * Display a PDO Exception error
+     * @param PDOException $err
+     * @param string $message Any extra message to display.
+     * @param integer $type The error type to raise.
+     * @param string $redirect The page to redirect to if this is a critical error.
+     */
+    static public function pdoError( $err, $message, $type=E_USER_NOTICE, $redirect="" ) {
+        I2CE_Error::raiseError( $message . ":\n" . $err->getMessage(), $type, $redirect );
+    }
+    
 
     /**
      * See if there were any warning messages set before the site was initialized

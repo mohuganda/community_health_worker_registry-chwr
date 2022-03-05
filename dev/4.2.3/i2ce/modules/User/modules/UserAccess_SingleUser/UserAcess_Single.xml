@@ -7,7 +7,7 @@
     <description>Provides Singele User Access Mechansim</description>
     <longDescription />
     <link>https://launchpad.net/i2ce</link>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <path name="classes">
       <value>./lib</value>
     </path>

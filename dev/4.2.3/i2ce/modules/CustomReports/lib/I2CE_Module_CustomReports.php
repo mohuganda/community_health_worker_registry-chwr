@@ -168,9 +168,8 @@ class I2CE_Module_CustomReports extends I2CE_Module{
 
 
     public function isNumericField($fieldObj) {
-        $mdb2_type= $fieldObj->getMDB2Type();
-        //data types are from http://cvs.php.net/viewcvs.cgi/pear/MDB2/docs/datatypes.html?revision=1.1
-        switch($mdb2_type) {
+        $type= $fieldObj->getTypeString();
+        switch($type) {
         case 'float':
         case 'decimal':
         case 'integer':

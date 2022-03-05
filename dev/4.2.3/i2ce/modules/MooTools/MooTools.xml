@@ -16,8 +16,8 @@
       <value>./modules</value>
     </path>
     <requirement name="I2CE">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
   </metadata>
 </I2CEConfiguration>

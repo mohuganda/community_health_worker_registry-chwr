@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="ss">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -102,7 +102,7 @@
       <value>mt:Si-Maltese</value>
       <value>my:Si-Burmese</value>
       <value>na:Si-Nauru</value>
-      <value>nb:Si-Norwegian Bokm&#229;l</value>
+      <value>nb:Si-Norwegian Bokmål</value>
       <value>nd:SiNdebele, sasenyakatfo</value>
       <value>ne:SiNepali</value>
       <value>ng:SiNdonga</value>
@@ -160,7 +160,7 @@
       <value>ur:Si-Urdu</value>
       <value>uz:Si-Uzbek</value>
       <value>vi:Si-Vietnamese</value>
-      <value>vo:Si-Volap&#252;k</value>
+      <value>vo:Si-Volapük</value>
       <value>wa:Si-Walloon</value>
       <value>wo:Si-Wolof</value>
       <value>xh:SiXhosa</value>

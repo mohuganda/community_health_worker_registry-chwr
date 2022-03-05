@@ -5,7 +5,7 @@
     <displayName>iHRIS Dashboard</displayName>
     <category>Application</category>
     <description>Makes available dashboard reports functionality onto iHRIS Software</description>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>

@@ -69,6 +69,19 @@ class I2CE_CustomReport_Display_CrossTab extends I2CE_CustomReport_Display_Defau
     }
 
     /**
+     * Return true to display Percentages
+     * @return boolean
+     */
+    public function isPercentage() {
+        if ( array_key_exists( 'CrossTab_percentage', $this->defaultOptions ) 
+                && $this->defaultOptions['CrossTab_percentage'] ) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * Generate the export data for this crosstab and return it.
      * @param DOM_Node $contentNode
      * @param boolean $return_array Set to true to return the array, false returns a string
@@ -179,7 +192,7 @@ class I2CE_CustomReport_Display_CrossTab extends I2CE_CustomReport_Display_Defau
 
     /**
      * Process results
-     * @param array $results_data an array of results.  indices are 'results' and MDB2 Buffered result and 'num_results' the
+     * @param array $results_data an array of results.  indices are 'results' and Buffered result and 'num_results' the
      * number of results.  (these values may be false on failure)
      * @param DOMNode $contentNode.  Default to null a node to append the results onto
      * @return boolean
@@ -235,62 +248,62 @@ class I2CE_CustomReport_Display_CrossTab extends I2CE_CustomReport_Display_Defau
         $total = 'Total';
         I2CE::getConfig()->setIfIsSet( $total, "/modules/CustomReports/text/headers/count" );
         $num_results = 0;
-        while( $row = $results_data['results']->fetchRow() ) {
-            if ( I2CE::pearError( $row, "Error getting cross tab results: " ) ) {
-                $results_data['results']->free();
-                return false;
-            }
-            $mapped_row = $this->mapResults($row);
-            $left_arr = array();
-            foreach( $left as $left_field ) {
-                $left_arr[$left_field] = $mapped_row[$left_field];
-                $this->headers[ $left_field ] = true;
-            }
-            $left_key = json_encode($left_arr);
-            if ( !array_key_exists( $left_key, $this->data ) ) {
-                $this->data[$left_key] = array();
-                $num_results++;
-            }
-            if ( !array_key_exists( 'total', $this->data ) ) {
-                $this->data['total'] = array();
-                $num_results++;
-            }
-            $data_row = &$this->data[$left_key];
-            foreach( $top as $top_field ) {
-                if ( !array_key_exists( $top_field, $data_row ) ) {
-                    $data_row[$top_field] = array();
+        try {
+            while( $row = $results_data['results']->fetch() ) {
+                $mapped_row = $this->mapResults($row);
+                $left_arr = array();
+                foreach( $left as $left_field ) {
+                    $left_arr[$left_field] = $mapped_row[$left_field];
+                    $this->headers[ $left_field ] = true;
                 }
-                if ( !array_key_exists( $top_field, $this->headers ) ) {
-                    $this->headers[$top_field] = array();
+                $left_key = json_encode($left_arr);
+                if ( !array_key_exists( $left_key, $this->data ) ) {
+                    $this->data[$left_key] = array();
+                    $num_results++;
                 }
-                $this->headers[$top_field][$mapped_row[$top_field]] = true;
-                if ( !array_key_exists( $mapped_row[$top_field], $data_row[$top_field] ) ) {
-                    $data_row[$top_field][ $mapped_row[$top_field] ] = $mapped_row['total'];
-                } else {
-                    $data_row[$top_field][ $mapped_row[$top_field] ] += $mapped_row['total'];
+                if ( !array_key_exists( 'total', $this->data ) ) {
+                    $this->data['total'] = array();
+                    $num_results++;
                 }
-                if ( !array_key_exists( $total, $data_row[$top_field] ) ) {
-                    $data_row[$top_field][ $total ] = $mapped_row['total'];
-                } else {
-                    $data_row[$top_field][ $total ] += $mapped_row['total'];
-                }
+                $data_row = &$this->data[$left_key];
+                foreach( $top as $top_field ) {
+                    if ( !array_key_exists( $top_field, $data_row ) ) {
+                        $data_row[$top_field] = array();
+                    }
+                    if ( !array_key_exists( $top_field, $this->headers ) ) {
+                        $this->headers[$top_field] = array();
+                    }
+                    $this->headers[$top_field][$mapped_row[$top_field]] = true;
+                    if ( !array_key_exists( $mapped_row[$top_field], $data_row[$top_field] ) ) {
+                        $data_row[$top_field][ $mapped_row[$top_field] ] = $mapped_row['total'];
+                    } else {
+                        $data_row[$top_field][ $mapped_row[$top_field] ] += $mapped_row['total'];
+                    }
+                    if ( !array_key_exists( $total, $data_row[$top_field] ) ) {
+                        $data_row[$top_field][ $total ] = $mapped_row['total'];
+                    } else {
+                        $data_row[$top_field][ $total ] += $mapped_row['total'];
+                    }
 
-                if ( !array_key_exists( $top_field, $this->data['total'] ) ) {
-                    $this->data['total'][$top_field] = array();
-                }
-                if ( !array_key_exists( $mapped_row[$top_field], $this->data['total'][$top_field] ) ) {
-                    $this->data['total'][$top_field][ $mapped_row[$top_field] ] = $mapped_row['total'];
-                } else {
-                    $this->data['total'][$top_field][ $mapped_row[$top_field] ] += $mapped_row['total'];
-                }
-                if ( !array_key_exists( $total, $this->data['total'][$top_field] ) ) {
-                    $this->data['total'][$top_field][ $total ] = $mapped_row['total'];
-                } else {
-                    $this->data['total'][$top_field][ $total ] += $mapped_row['total'];
+                    if ( !array_key_exists( $top_field, $this->data['total'] ) ) {
+                        $this->data['total'][$top_field] = array();
+                    }
+                    if ( !array_key_exists( $mapped_row[$top_field], $this->data['total'][$top_field] ) ) {
+                        $this->data['total'][$top_field][ $mapped_row[$top_field] ] = $mapped_row['total'];
+                    } else {
+                        $this->data['total'][$top_field][ $mapped_row[$top_field] ] += $mapped_row['total'];
+                    }
+                    if ( !array_key_exists( $total, $this->data['total'][$top_field] ) ) {
+                        $this->data['total'][$top_field][ $total ] = $mapped_row['total'];
+                    } else {
+                        $this->data['total'][$top_field][ $total ] += $mapped_row['total'];
+                    }
                 }
             }
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error getting cross tab results: " );
+            return false;
         }
-        $results_data['results']->free();
         // Now add the total columns to the end of the header.
         foreach( $top as $top_field ) {
             ksort( $this->headers[$top_field] );
@@ -330,6 +343,8 @@ class I2CE_CustomReport_Display_CrossTab extends I2CE_CustomReport_Display_Defau
             I2CE::raiseError( "Could not add row to table." );
             return false;
         }
+        $total_head = 'Total';
+        I2CE::getConfig()->setIfIsSet( $total_head, "/modules/CustomReports/text/headers/count" );
         $this->template->setDisplayDataImmediate( "row_count", $row_num, $rowNode );
         $total_row = false;
         if ( array_key_exists( 'total', $row ) ) {
@@ -361,6 +376,9 @@ class I2CE_CustomReport_Display_CrossTab extends I2CE_CustomReport_Display_Defau
                     $dispVal = 0;
                     if ( array_key_exists( $formfield, $row ) && array_key_exists( $topVal, $row[$formfield] ) ) {
                         $dispVal = $row[$formfield][$topVal];
+                        if ( $this->isPercentage() && $topVal != $total_head && array_key_exists( $total_head, $row[$formfield] ) && $row[$formfield][$total_head] > 0 ) {
+                            $dispVal .= " (" . sprintf("%.0f", $dispVal/$row[$formfield][$total_head]*100 ) . "%)";
+                        }
                     }
                     $this->template->setDisplayDataImmediate( "report_data", $dispVal, $cellNode );
                 }

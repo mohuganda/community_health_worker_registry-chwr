@@ -10,7 +10,7 @@
     <creator>Intrahealth Informatics</creator>
     <email>hris@capacityproject.org</email>
     <link>https://launchpad.net/i2ce</link>
-    <version>4.2.1.0</version>
+    <version>4.3.3.0</version>
     <path name="misc">
       <value>./I2CE_config.inc.php</value>
       <value>./I2CE_structure.sql</value>
@@ -35,9 +35,6 @@
       <atLeast version="5.2.6" />
     </requirement>
     <requirement external="1" name="PECL:APC">
-      <atLeast version="0" />
-    </requirement>
-    <requirement external="1" name="PEAR:MDB2">
       <atLeast version="0" />
     </requirement>
     <requirement external="1" name="PHP-MySQL">

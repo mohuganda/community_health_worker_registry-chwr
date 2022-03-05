@@ -171,7 +171,6 @@ class I2CE_Module_TaskLog_FormStorage extends I2CE_Module{
 		'value'=>$fieldObj->getDBValue(),
 		'change_type'=> $change_type,
                 'type'=>$fieldObj->getTypeString(),
-                'mdb2_type'=>$fieldObj->getMDB2Type() 
 		);
 	    $success &= $this->logFieldChange($log_data);
 	}
@@ -181,7 +180,7 @@ class I2CE_Module_TaskLog_FormStorage extends I2CE_Module{
     protected static $insert_stmt = array();
 
     public function logFieldChange($log_data) {
-        $required = array('mdb2_type','type','form','field','id','who','change_type');
+        $required = array('type','type','form','field','id','who','change_type');
         if (!is_array($log_data) ) {
             I2CE::raiseError("Invalid logging data");
             return false;
@@ -200,16 +199,15 @@ class I2CE_Module_TaskLog_FormStorage extends I2CE_Module{
         $log_data['task']=$this->task;
         $log_data['task_id']=$this->taskid;
 
-        $db = MDB2::singleton();
+        $db = I2CE::PDO();
 
         if ( !array_key_exists($log_data['type'], self::$insert_stmt)
              || !self::$insert_stmt[$log_data['type']]) {
-            self::$insert_stmt[$log_data['type']] = $db->prepare( 
-                "INSERT INTO form_task_log ( form,field,id, who, change_type,task,task_id," . $log_data['type'] ."_value ) VALUES ( ?,  ?, ?, ?,?,?,?,? )",  
-                array( 'text', 'text' ,'text','text','integer','text','text',$log_data['mdb2_type']),
-                MDB2_PREPARE_MANIP );
-            if ( I2CE::pearError( self::$insert_stmt[$log_data['type']],
-                                  "Error preparing entry insert of type " . $log_data['type'])) {
+            try {
+                self::$insert_stmt[$log_data['type']] = $db->prepare( 
+                    "INSERT INTO form_task_log ( form,field,id, who, change_type,task,task_id," . $log_data['type'] ."_value ) VALUES ( ?,  ?, ?, ?,?,?,?,? )" );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Error preparing entry insert of type " . $log_data['type']);
                 return false;
             }
         }
@@ -218,8 +216,10 @@ class I2CE_Module_TaskLog_FormStorage extends I2CE_Module{
             $t_log_data[] = $log_data[$key];
         }
         $t_log_data[] = $log_data['value'];
-        $res = self::$insert_stmt[$log_data['type']]->execute( $t_log_data);
-        if ( !I2CE::pearError( $res, "Error logging\n" . print_r($t_log_data,true) ) ) {
+        try {
+            self::$insert_stmt[$log_data['type']]->execute( $t_log_data);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error logging\n" . print_r($t_log_data,true) );
             return false;
         }
         return true;

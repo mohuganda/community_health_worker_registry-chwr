@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="swissConfig">
   <metadata>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="swissConfig" locale="en_US">
-    <version>4.2.0</version>
+    <version>4.3.0</version>
     <configurationGroup name="page">
       <configurationGroup name="modules">
         <configurationGroup name="args">

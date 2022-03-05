@@ -69,30 +69,42 @@ class I2CE_Page_BinaryField extends I2CE_Page{
                     echo "The migration has already occurred.\n";
                     return;
                 }
-                $db = MDB2::singleton();
-                $get_field_info = $db->prepare( "SELECT ff.id as ff_id,ff.field as field_id,field.name as field,field.type AS type,ff.form as form_id,form.name as form FROM form_field ff JOIN field ON field.id = ff.field JOIN form ON form.id = ff.form WHERE ff.id = ?", array('integer'), array( 'integer', 'integer', 'text', 'text', 'integer', 'text' ) );
-                if ( I2CE::pearError( $get_field_info, "Unable to prepare statement for field info lookup: " ) ) {
+                $db = I2CE::PDO();
+                try {
+                    $get_field_info = $db->prepare( "SELECT ff.id as ff_id,ff.field as field_id,field.name as field,field.type AS type,ff.form as form_id,form.name as form FROM form_field ff JOIN field ON field.id = ff.field JOIN form ON form.id = ff.form WHERE ff.id = ?" );
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError( $e, "Unable to prepare statement for field info lookup: " );
                     die();
                 }
-                $find_string_field = $db->prepare( "SELECT id from field WHERE name = ? AND type = 'string'", array( 'text' ), array( 'integer' ) );
-                if ( I2CE::pearError( $find_string_field, "Unable to prepare statement for new field lookup: " ) ) {
+                try {
+                    $find_string_field = $db->prepare( "SELECT id from field WHERE name = ? AND type = 'string'" );
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError( $e, "Unable to prepare statement for new field lookup: " );
                     die();
                 }
-                $update_ff = $db->prepare( "UPDATE form_field SET field = ? WHERE id = ?", array( 'integer', 'integer' ) );
-                if ( I2CE::pearError( $update_ff, "Unable to prepare statement for updating form field: " ) ) {
+                try {
+                    $update_ff = $db->prepare( "UPDATE form_field SET field = ? WHERE id = ?" );
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError( $e, "Unable to prepare statement for updating form field: " );
                     die();
                 }
                 $updates = array();
-                $updates['last_entry'] = $db->prepare( "UPDATE last_entry SET blob_value = null, string_value = ? WHERE record = ? AND form_field = ?", array( 'text', 'integer', 'integer' ) );
-                if ( I2CE::pearError( $updates['last_entry'], "Unable to prepare statement for updating last_entry" ) ) {
+                try {
+                    $updates['last_entry'] = $db->prepare( "UPDATE last_entry SET blob_value = null, string_value = ? WHERE record = ? AND form_field = ?" );
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError( $e, "Unable to prepare statement for updating last_entry" );
                     die();
                 }
-                $updates['entry'] = $db->prepare( "UPDATE entry SET blob_value = null, string_value = ? WHERE record = ? AND form_field = ? AND UNIX_TIMESTAMP(date) = ?", array( 'text', 'integer', 'integer', 'integer' ) );
-                if ( I2CE::pearError( $updates['entry'], "Unable to prepare statement for updating entry" ) ) {
+                try {
+                    $updates['entry'] = $db->prepare( "UPDATE entry SET blob_value = null, string_value = ? WHERE record = ? AND form_field = ? AND UNIX_TIMESTAMP(date) = ?" );
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError( $e, "Unable to prepare statement for updating entry" );
                     die();
                 }
-                $updates['config_alt'] = $db->prepare( "UPDATE config_alt SET value = ? WHERE parent = ? AND name = ?", array( 'text', 'text', 'text' ) );
-                if ( I2CE::pearError( $updates['config_alt'], "Unable to prepare statement for updating entry" ) ) {
+                try {
+                    $updates['config_alt'] = $db->prepare( "UPDATE config_alt SET value = ? WHERE parent = ? AND name = ?" );
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError( $e, "Unable to prepare statement for updating entry" );
                     die();
                 }
 
@@ -110,8 +122,10 @@ class I2CE_Page_BinaryField extends I2CE_Page{
                 foreach ( $tables as $table => $query ) {
 
                     while ( true ) {
-                        $data = $db->queryRow( $query );
-                        if ( I2CE::pearError( $data, "Unable to find blob values in DB." ) ) {
+                        try {
+                            $data = I2CE_PDO::getRow( $query );
+                        } catch ( PDOException $e ) {
+                            I2CE::pdoError( $e, "Unable to find blob values in DB." );
                             $db->rollback();
                             die();
                         }
@@ -131,44 +145,46 @@ class I2CE_Page_BinaryField extends I2CE_Page{
                                 // Just do nothing with this one. It doesn't appear to be a BINARY FILE
                                 continue;
                             }
-                            $info_res = $get_field_info->execute( $data->form_field );
-                            if ( I2CE::pearError( $info_res, "Unable to get details: " ) ) {
-                                $db->rollback();
-                                die();
-                            }
-                            $field_info = $info_res->fetchRow();
-                            if ( !$field_info ) {
-                                echo "Unable to get and process field info!";
-                                $db->rollback();
-                                die();
+                            try {
+                                $get_field_info->execute( array( $data->form_field ) );
+                                $field_info = $get_field_info->fetch();
+                                $get_field_info->closeCursor();
+                                if ( !$field_info ) {
+                                    echo "Unable to get and process field info!";
+                                    $db->rollback();
+                                    die();
+                                }
+                            } catch ( PDOException $e ) {
+                                I2CE::pdoError( $e, "Unable to get details: " );
+                                    $db->rollback();
+                                    die();
                             }
                             if ( !array_key_exists( $data->form_field, $processed_ffs ) ) {
-                               if ( $field_info->type == 'blob' ) {
-                                    $new_field_res = $find_string_field->execute( $field_info->field );
-                                    if ( I2CE::pearError( $new_field_res, "Unable to lookup existing field: " ) ) {
-                                        $db->rollback();
-                                        die();
-                                    }
-                                    $existing_field = $new_field_res->fetchOne();
-                                    if ( !$existing_field ) {
-                                        $existing_field = $db->getBeforeID( 'field', 'id', true, true );
-                                        if ( !I2CE::pearError( $existing_field, "Error getting field id:" ) ) {
-                                            $field_values = array( 'id' => $existing_field, 'name' => $field_info->field, 'type' => 'string' );
-                                            $add_res = $db->autoExecute( "field", $field_values, MDB2_AUTOQUERY_INSERT, null,
-                                                    array( 'integer', 'text', 'text' ) );
-                                            $existing_field = $db->getAfterID( $existing_field, 'field', 'id' );
-                                            if ( I2CE::pearError( $add_res, "Unable to add new field to entry storage: " ) ) {
+                                if ( $field_info->type == 'blob' ) {
+                                    try {
+                                        $find_string_field->execute( array( $field_info->field ) );
+                                        $existing_field = $find_string_field->fetch();
+                                        $find_string_field->closeCursor();
+                                        if ( !$existing_field ) {
+                                            try {
+                                                $add_res = I2CE_PDO::execParam( "INSERT INTO field ( name, type ) VALUES ( ?, ? )", array( $field_info->field, 'string' ) );
+                                                $existing_field = $db->lastInsertId();
+                                            } catch ( PDOException $e ) {
+                                                I2CE::pdoError( $e, "Unable to add new field to entry storage: " );
                                                 $db->rollback();
                                                 die();
                                             }
-                                        } else {
-                                            $db->rollback();
-                                            die();
                                         }
+                                    } catch ( PDOException $e ) {
+                                        I2CE::pdoError( $e, "Unable to lookup existing field: " );
+                                        $db->rollback();
+                                        die();
                                     }
                                     echo "Got new field $existing_field to use\n";
-                                    $update_res = $update_ff->execute( array( $existing_field, $data->form_field ) );
-                                    if ( I2CE::pearError( $update_res, "Unable to update form field to new string field: " ) ) {
+                                    try {
+                                        $update_res = $update_ff->execute( array( $existing_field, $data->form_field ) );
+                                    } catch ( PDOException $e ) {
+                                        I2CE::pdoError( $e, "Unable to update form field to new string field: " );
                                         $db->rollback();
                                         die();
                                     }
@@ -199,26 +215,34 @@ class I2CE_Page_BinaryField extends I2CE_Page{
                             $meta_string .= "$key<$val>";
                         }
                         if ( $table == 'entry' ) {
+                            try {
                             $update_res = $updates['entry']->execute( array( $meta_string, $data->record, $data->form_field, $data->unixtime ) );
-                            if ( I2CE::pearError( $update_res, "Unable to update blob to string value: " ) ) {
+                            } catch ( PDOException $e ) {
+                                I2CE::pdoError( $e, "Unable to update blob to string value: " );
                                 $db->rollback();
                                 die();
                             }
                         } elseif ( $table == 'last_entry' ) {
-                            $update_res = $updates['last_entry']->execute( array( $meta_string, $data->record, $data->form_field ) );
-                            if ( I2CE::pearError( $update_res, "Unable to update blob to string value: " ) ) {
+                            try {
+                                $update_res = $updates['last_entry']->execute( array( $meta_string, $data->record, $data->form_field ) );
+                            } catch ( PDOException $e ) {
+                                I2CE::pdoError( $e, "Unable to update blob to string value: " );
                                 $db->rollback();
                                 die();
                             }
                             echo "Updating same row in entry table.\n";
-                            $update_res = $updates['entry']->execute( array( $meta_string, $data->record, $data->form_field, $data->unixtime ) );
-                            if ( I2CE::pearError( $update_res, "Unable to update blob to string value: " ) ) {
+                            try {
+                                $update_res = $updates['entry']->execute( array( $meta_string, $data->record, $data->form_field, $data->unixtime ) );
+                            } catch ( PDOException $e ) {
+                                I2CE::pdoError( $e, "Unable to update blob to string value: " );
                                 $db->rollback();
                                 die();
                             }
                         } elseif ( $table == 'config_alt' ) {
-                            $update_res = $updates['config_alt']->execute( array( $meta_string, $data->ppath, $field ) );
-                            if ( I2CE::pearError( $update_res, "Unable to update blob to string value: " ) ) {
+                            try {
+                                $update_res = $updates['config_alt']->execute( array( $meta_string, $data->ppath, $field ) );
+                            } catch ( PDOException $e ) {
+                                I2CE::pdoError( $e, "Unable to update blob to string value: " );
                                 $db->rollback();
                                 die();
                             }

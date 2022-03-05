@@ -5,7 +5,7 @@
     <displayName>Login Page</displayName>
     <className>I2CE_Module_Login</className>
     <category>Base System Page</category>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
@@ -28,8 +28,8 @@
       <atLeast version="0" />
     </requirement>
     <requirement name="pages">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <priority>50</priority>
   </metadata>

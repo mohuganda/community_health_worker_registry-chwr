@@ -1,10 +1,10 @@
-# Translation Template of I2CE module (form-builder Version 4.2.0.17)
-# Copyright (C) 2015 <hris@capacityproject.org> Capacity Project partnership via IntraHealth International, Inc.
+# Translation Template of I2CE module (form-builder Version 4.3.0)
+# Copyright (C) 2018 <hris@capacityproject.org> Capacity Project partnership via IntraHealth International, Inc.
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: I2CE@form-builder 4.2.0.17\n"
-"POT-Creation-Date: 2015-09-14 07:58+0000\n"
+"Project-Id-Version: I2CE@form-builder 4.3.0\n"
+"POT-Creation-Date: 2018-02-13 15:37-0500\n"
 "Last-Translator: Intrahealth <hris@capacityproject.org>\n"
 "Language-Team: Intrahealth <hris@capacityproject.org>\n"
 "MIME-Version: 1.0\n"
@@ -38,19 +38,19 @@ msgstr ""
 msgid "Can build or configure form class"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html line 2]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_each.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_each.html line 2]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html line 2]
 #, no-c-format
 msgid "Edit"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays_each.html line 3]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_forms_menu_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_forms_menu_each.html line 3]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html line 2]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits_each.html line 3]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays_each.html line 3]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields_each.html line 3]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays_each.html line 3]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays_each.html line 3]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_each.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_each.html line 2]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits_each.html line 3]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_each.html line 2]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_forms_menu_each.html#L3 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_forms_menu_each.html line 3]
 #, no-c-format
 msgid "Delete"
 msgstr ""
@@ -60,8 +60,8 @@ msgstr ""
 msgid "Create A New Form Class"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html line 9]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html line 9]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html line 9]
 #, no-c-format
 msgid "Form Class Name"
 msgstr ""
@@ -71,8 +71,8 @@ msgstr ""
 msgid "An internal key used to identify the form class. It may not be the same as the key for any of the existing form class or other PHP class."
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html line 17]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html#L16 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html line 16]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_class_builder_menu.html line 17]
 #, no-c-format
 msgid "Extends"
 msgstr ""
@@ -103,9 +103,9 @@ msgstr ""
 msgid "I2CE_Form"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html line 17]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html#L24 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html line 24]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form.html line 17]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html line 17]
 #, no-c-format
 msgid "Display Name"
 msgstr ""
@@ -125,8 +125,8 @@ msgstr ""
 msgid "Edit fields for this class"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html#L41 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html line 41]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L63 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 63]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html#L41 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class.html line 41]
 #, no-c-format
 msgid "Meta"
 msgstr ""
@@ -156,14 +156,14 @@ msgstr ""
 msgid "An internal key used to identify the name of field. It may not be the same as the key for any of the existing field class."
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html#L18 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html line 18]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 9]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html#L18 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html line 18]
 #, no-c-format
 msgid "Form Field Class"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html#L19 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html line 19]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 10]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html#L19 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_fields.html line 19]
 #, no-c-format
 msgid "The data type for this field."
 msgstr ""
@@ -198,50 +198,50 @@ msgstr ""
 msgid "This field needs to be set before it can be saved"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html line 10]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 12]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 20]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 28]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html#L11 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html line 11]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 20]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L29 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 29]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 37]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html line 22]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 20]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 28]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L36 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 36]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html line 10]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html#L11 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html line 11]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html line 22]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 12]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 20]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 28]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L43 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 43]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 20]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 28]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L36 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 36]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 20]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L29 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 29]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 37]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html line 22]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_form.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_form.html line 12]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html line 10]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html line 22]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html line 10]
 #, no-c-format
 msgid "Yes"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html line 10]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 12]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 20]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 28]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html#L11 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html line 11]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 20]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L29 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 29]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 37]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html line 22]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 20]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 28]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L36 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 36]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html line 10]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html#L11 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html line 11]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html line 22]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 12]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 20]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 28]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L43 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 43]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 20]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L28 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 28]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L36 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 36]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L20 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 20]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L29 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 29]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 37]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html line 22]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_form.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_form.html line 12]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html line 10]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html#L22 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html line 22]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html line 10]
 #, no-c-format
 msgid "No"
 msgstr ""
@@ -256,8 +256,8 @@ msgstr ""
 msgid "This field is saved in the databsae"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html#L7 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html line 7]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html#L34 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_formfield.html line 34]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html#L7 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_class_meta.html line 7]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html#L7 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_class_meta.html line 7]
 #, no-c-format
 msgid "Unique"
@@ -313,74 +313,74 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_enum_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_enum_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_passport_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_passport_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 2]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_int_range_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_int_range_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 4]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 2]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 2]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_passport_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_passport_meta.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_int_range_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_int_range_meta.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_enum_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_enum_meta.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_display.html#L2 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_display.html line 2]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_binary_file_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_binary_file_meta.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form.html#L35 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form.html line 35]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_percent_int_meta.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_binary_file_meta.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_binary_file_meta.html line 4]
 #, no-c-format
 msgid "Meta Data"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L7 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 7]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L7 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 7]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L7 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 7]
 #, no-c-format
 msgid "Field Link"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L8 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 8]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L8 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 8]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L8 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 8]
 #, no-c-format
 msgid "Colon seperate list of forms[+field] to define hierarchy"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_form.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_form.html line 9]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L15 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 15]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L15 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 15]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L15 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 15]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_form.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_form.html line 9]
 #, no-c-format
 msgid "Display Style"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L16 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 16]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L16 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 16]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L16 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 16]
 #, no-c-format
 msgid "The way that this form is displayed when editing."
 msgstr ""
 
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L35 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 35]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L35 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 35]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data.html line 9]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L35 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 35]
 #, no-c-format
 msgid "Orders"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 37]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 37]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L37 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 37]
 #, no-c-format
 msgid "Set the ordering by fields"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html#L44 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html line 44]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html#L30 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_meta.html line 30]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html#L30 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_reference.html line 30]
 #, no-c-format
 msgid "Displays"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays.html line 9]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_displays.html line 9]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_list_displays.html line 9]
 #, no-c-format
 msgid "New Displays"
 msgstr ""
@@ -396,8 +396,8 @@ msgid "Existing Displays"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html#L30 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_meta.html line 30]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data.html#L15 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data.html line 15]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_limits.html line 4]
 #, no-c-format
 msgid "Limits"
 msgstr ""
@@ -547,8 +547,8 @@ msgstr ""
 msgid "Select A Class"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html#L34 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html line 34]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form.html#L25 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form.html line 25]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html#L34 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/form_builder_menu.html line 34]
 #, no-c-format
 msgid "Storage"
 msgstr ""
@@ -579,57 +579,57 @@ msgid "Edit Form Classes"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 9]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 9]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 17]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 9]
 #, no-c-format
 msgid "Show Key"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 10]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 10]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L18 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 18]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L10 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 10]
 #, no-c-format
 msgid "Show the key when displaying the associative list"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 17]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 17]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L25 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 25]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L17 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 17]
 #, no-c-format
 msgid "Allow New"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L18 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 18]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L18 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 18]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 26]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L18 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 18]
 #, no-c-format
 msgid "Allow new keys to be added to the list"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L25 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 25]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L25 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 25]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L33 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 33]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L25 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 25]
 #, no-c-format
 msgid "Allow Delete"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 26]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 26]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L34 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 34]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 26]
 #, no-c-format
 msgid "Allows keys to be deleted from the list"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L33 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 33]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L33 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 33]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L41 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 41]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L33 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 33]
 #, no-c-format
 msgid "Key Sort Order"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html#L34 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_list_meta.html line 34]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L34 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 34]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html#L42 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_map_meta.html line 42]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html#L34 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_assoc_percent_meta.html line 34]
 #, no-c-format
 msgid "Ordering to sort keys"
 msgstr ""
@@ -674,8 +674,8 @@ msgid "Maximum file size in kilobytes for stored files"
 msgstr ""
 
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_meta.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_form_meta.html line 26]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html line 4]
 #, no-c-format
 msgid "Child Form Data"
 msgstr ""
@@ -690,8 +690,8 @@ msgstr ""
 msgid "Configure limits for this form"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html line 9]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html line 9]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html line 9]
 #, no-c-format
 msgid "New Form"
 msgstr ""
@@ -701,12 +701,12 @@ msgstr ""
 msgid "Create limits or orders a new child form"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html line 12]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html line 12]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html line 12]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_forms.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_forms.html line 12]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_args_forms.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_args_forms.html line 12]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html line 12]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_orders.html line 12]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_args_forms.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_args_forms.html line 12]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_forms.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_arg_styles_forms.html line 12]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_child_form_data_display.html line 12]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html#L12 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html line 12]
 #, no-c-format
 msgid "Select One"
 msgstr ""
@@ -1005,27 +1005,27 @@ msgstr ""
 msgid "Existing List Displays"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L23 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 23]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L23 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 23]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L23 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 23]
 #, no-c-format
 msgid "Report Display"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L24 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 24]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L24 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 24]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L24 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 24]
 #, no-c-format
 msgid "The report used when populating data for populating drop-downs, tree views. You should consider using this if the field linking is complicated."
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 26]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_mapped_display.html line 26]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L26 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 26]
 #, no-c-format
 msgid "Select A Report"
 msgstr ""
 
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_form.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_form.html line 9]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L41 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 41]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_display.html#L6 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_display.html line 6]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_form.html#L9 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_form.html line 9]
 #, no-c-format
 msgid "Printf"
 msgstr ""
@@ -1070,9 +1070,9 @@ msgstr ""
 msgid "Specify report view used to select data"
 msgstr ""
 
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html#L66 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_display.html line 66]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_display.html#L23 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_reference_display.html line 23]
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_no_limits_forms.html line 4]
 #, no-c-format
 msgid "Show Limits"
 msgstr ""
@@ -1158,8 +1158,8 @@ msgstr ""
 msgid "Existing Form PrintF Arguments"
 msgstr ""
 
-#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html line 4]
 #: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_form.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_form.html line 4]
+#: [http://bazaar.launchpad.net/~intrahealth+informatics/i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html#L4 i2ce/4.0-dev/annotate/head%3A/modules/Pages/modules/FormBuilder/templates/en_US/swiss_map_printf_forms.html line 4]
 #, no-c-format
 msgid "PrintF String"
 msgstr ""

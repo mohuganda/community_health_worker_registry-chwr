@@ -7,13 +7,13 @@
     <category>Report Type</category>
     <description>Enables Ajax which to select a entry in a report</description>
     <link>http://launchpad.net/i2ce</link>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <path name="configs">
       <value>./configs</value>
     </path>
     <requirement name="CustomReports">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <path name="templates">
       <value>./templates</value>

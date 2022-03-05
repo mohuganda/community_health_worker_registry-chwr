@@ -4,118 +4,118 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="ca">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
       <version>4.0.0</version>
-      <value>ab:&#192;zeri</value>
-      <value>am:Amh&#224;ric</value>
-      <value>ar:&#192;rab</value>
-      <value>as:Assam&#232;s</value>
-      <value>az:&#192;zeri</value>
-      <value>be:Bielor&#250;s</value>
-      <value>bg:B&#250;lgar</value>
-      <value>bh:Bihar&#237;</value>
-      <value>bn:Bengal&#237;</value>
-      <value>bo:Tibet&#224;</value>
-      <value>br:Bret&#243;</value>
-      <value>bs:Bosni&#224;</value>
-      <value>ca:Catal&#224;</value>
-      <value>ce:Txetx&#232;</value>
+      <value>ab:Àzeri</value>
+      <value>am:Amhàric</value>
+      <value>ar:Àrab</value>
+      <value>as:Assamès</value>
+      <value>az:Àzeri</value>
+      <value>be:Bielorús</value>
+      <value>bg:Búlgar</value>
+      <value>bh:Biharí</value>
+      <value>bn:Bengalí</value>
+      <value>bo:Tibetà</value>
+      <value>br:Bretó</value>
+      <value>bs:Bosnià</value>
+      <value>ca:Català</value>
+      <value>ce:Txetxè</value>
       <value>co:Cors</value>
       <value>cs:Txec</value>
       <value>csb:Caixubi</value>
-      <value>cu:Eslau eclesi&#224;stic</value>
-      <value>cy:Gal&#183;l&#232;s</value>
-      <value>da:Dan&#232;s</value>
+      <value>cu:Eslau eclesiàstic</value>
+      <value>cy:Gal·lès</value>
+      <value>da:Danès</value>
       <value>de:Alemany</value>
       <value>el:Grec</value>
-      <value>en:Angl&#232;s</value>
-      <value>en_GB:Angl&#232;s brit&#224;nic</value>
-      <value>en_US:Angl&#232;s americ&#224;</value>
+      <value>en:Anglès</value>
+      <value>en_GB:Anglès britànic</value>
+      <value>en_US:Anglès americà</value>
       <value>es:Espanyol</value>
-      <value>et:Estoni&#224;</value>
+      <value>et:Estonià</value>
       <value>eu:Basc</value>
       <value>fa:Farsi (Persa)</value>
-      <value>fi:Fin&#232;s</value>
-      <value>fj:Fij&#237;</value>
-      <value>fo:Fero&#232;s</value>
-      <value>fr:Franc&#232;s</value>
-      <value>fy:Fris&#243;</value>
-      <value>ga:Irland&#232;s ga&#232;lic</value>
-      <value>gd:Ga&#232;lic</value>
+      <value>fi:Finès</value>
+      <value>fj:Fijí</value>
+      <value>fo:Feroès</value>
+      <value>fr:Francès</value>
+      <value>fy:Frisó</value>
+      <value>ga:Irlandès gaèlic</value>
+      <value>gd:Gaèlic</value>
       <value>gl:Gallec</value>
-      <value>gn:Guaran&#237;</value>
+      <value>gn:Guaraní</value>
       <value>he:Hebreu</value>
       <value>hr:Croat</value>
-      <value>hsb:Alt s&#242;rab</value>
-      <value>hu:Hongar&#232;s</value>
+      <value>hsb:Alt sòrab</value>
+      <value>hu:Hongarès</value>
       <value>hy:Armeni</value>
       <value>id:Indonesi</value>
-      <value>is:Island&#232;s</value>
-      <value>it:Itali&#224;</value>
-      <value>ja:Japon&#232;s</value>
-      <value>jv:Javan&#232;s</value>
-      <value>ka:Georgi&#224;</value>
-      <value>ko:Core&#224;</value>
+      <value>is:Islandès</value>
+      <value>it:Italià</value>
+      <value>ja:Japonès</value>
+      <value>jv:Javanès</value>
+      <value>ka:Georgià</value>
+      <value>ko:Coreà</value>
       <value>ku:Kurd</value>
-      <value>la:Llat&#237;</value>
-      <value>lb:Luxemburgu&#232;s</value>
-      <value>li:Limburg&#224;</value>
-      <value>lo:Laosi&#224;</value>
-      <value>lt:Litu&#224;</value>
-      <value>lv:Let&#243;</value>
+      <value>la:Llatí</value>
+      <value>lb:Luxemburguès</value>
+      <value>li:Limburgà</value>
+      <value>lo:Laosià</value>
+      <value>lt:Lituà</value>
+      <value>lv:Letó</value>
       <value>mg:Malgaix</value>
-      <value>mh:Marshall&#232;s</value>
+      <value>mh:Marshallès</value>
       <value>mk:Macedoni</value>
       <value>mn:Mongol</value>
       <value>mo:Moldau</value>
       <value>ms:Malai</value>
-      <value>mt:Malt&#232;s</value>
-      <value>my:Burm&#232;s</value>
-      <value>nb:Noruec Bokm&#229;l</value>
+      <value>mt:Maltès</value>
+      <value>my:Burmès</value>
+      <value>nb:Noruec Bokmål</value>
       <value>nd:Ndebele, Nord</value>
-      <value>nds:Baix sax&#243;</value>
-      <value>ne:Nepal&#237;</value>
-      <value>nl:Holand&#232;s</value>
+      <value>nds:Baix saxó</value>
+      <value>ne:Nepalí</value>
+      <value>nl:Holandès</value>
       <value>nn:Noruec Nynorsk</value>
       <value>nr:Ndebele, Sud</value>
       <value>nso:Sotho del nord</value>
-      <value>oc:Occit&#224;</value>
+      <value>oc:Occità</value>
       <value>os:Oseti</value>
-      <value>pl:Polon&#232;s</value>
+      <value>pl:Polonès</value>
       <value>ps:Pashto</value>
-      <value>pt:Portugu&#232;s</value>
-      <value>pt_BR:Brasiler Portugu&#232;s</value>
-      <value>ro:Roman&#232;s</value>
-      <value>rom:Cal&#243;</value>
+      <value>pt:Portuguès</value>
+      <value>pt_BR:Brasiler Portuguès</value>
+      <value>ro:Romanès</value>
+      <value>rom:Caló</value>
       <value>ru:Rus</value>
       <value>sc:Sard</value>
       <value>se:Sami del nord</value>
-      <value>si:Sinhal&#232;s</value>
-      <value>sk:Eslov&#232;</value>
-      <value>sl:Eslov&#232;</value>
-      <value>sm:Samoan&#232;s</value>
-      <value>so:Somal&#237;</value>
-      <value>sq:Alban&#232;s</value>
-      <value>sr:Serbi llat&#237;</value>
+      <value>si:Sinhalès</value>
+      <value>sk:Eslovè</value>
+      <value>sl:Eslovè</value>
+      <value>sm:Samoanès</value>
+      <value>so:Somalí</value>
+      <value>sq:Albanès</value>
+      <value>sr:Serbi llatí</value>
       <value>st:Sotho del sud</value>
-      <value>su:Sundan&#232;s</value>
+      <value>su:Sundanès</value>
       <value>sv:Suec</value>
       <value>sw:Suahili</value>
-      <value>ta:T&#224;mil</value>
+      <value>ta:Tàmil</value>
       <value>tk:Turcmeni</value>
       <value>tr:Turc</value>
-      <value>ty:Tahiti&#224;</value>
-      <value>uk:Ucra&#239;n&#232;s</value>
-      <value>ur:Urd&#250;</value>
-      <value>uz:Uzbek (Cir&#237;l&#183;lic)</value>
+      <value>ty:Tahitià</value>
+      <value>uk:Ucraïnès</value>
+      <value>ur:Urdú</value>
+      <value>uz:Uzbek (Ciríl·lic)</value>
       <value>vi:Vietnamita</value>
-      <value>zh:Xin&#232;s</value>
-      <value>zh_CN:Xin&#232;s simplificat</value>
-      <value>zh_HK:Xin&#232;s (Hong Kong)</value>
-      <value>zh_TW:Xin&#232;s tradicional</value>
+      <value>zh:Xinès</value>
+      <value>zh_CN:Xinès simplificat</value>
+      <value>zh_HK:Xinès (Hong Kong)</value>
+      <value>zh_TW:Xinès tradicional</value>
     </configuration>
   </configurationGroup>
 </I2CEConfiguration>

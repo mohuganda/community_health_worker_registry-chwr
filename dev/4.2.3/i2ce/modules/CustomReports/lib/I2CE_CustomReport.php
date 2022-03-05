@@ -47,7 +47,7 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
     protected $tmp_table;
 
     /**
-     * @var protected MDB2 $db The instance of the database to perform queries on.
+     * @var protected PDO $db The instance of the database to perform queries on.
      */
     protected $db;
     
@@ -84,14 +84,15 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
             I2CE::raiseError($msg);
             throw new Exception($msg); 
         }
-        $this->db = MDB2::singleton();
+        $this->db = I2CE::PDO();
         $this->table = self::getCachedTableName($report,true);
         $this->populate_queries = array();
         $qry = "SELECT * FROM `information_schema`.`COLUMNS` WHERE `TABLE_SCHEMA` = '" . I2CE_CachedForm::getCacheDatabase() .
             "' AND `TABLE_NAME` =  ? AND `COLUMN_NAME` = ?";
-        $this->get_field_def = $this->db->prepare($qry,array('text','text'),MDB2_PREPARE_RESULT);
-        $msg = "Unable to prepare field definition query";
-        if (I2CE::pearError($this->get_field_def,$msg)) {
+        try {
+            $this->get_field_def = $this->db->prepare($qry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Unable to prepare field definition query" );
             throw new Exception($msg); 
         }
         //this might throw an exception.  don't catch it here.
@@ -104,7 +105,7 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
     }
 
     /**
-     * @var protected MDB2_PreparedStatement $get_field_def
+     * @var protected PDOStatement $get_field_def
      */
     protected $get_field_def;
     
@@ -118,24 +119,23 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
         if (array_key_exists($report, self::$report_table_cols) && is_array(self::$report_table_cols[$report])) {
             return self::$report_table_cols[$report];
         }
-        $cols_in_report = array();
         $cols_qry = 
             "SELECT column_name FROM information_schema.columns WHERE "
             . " CONCAT('`',TABLE_SCHEMA,'`.`',TABLE_NAME , '`') = '" . self::getCachedTableName($report,true) . "'";
-        $db = MDB2::singleton();
-        $res = $db->query($cols_qry);
-        if (I2CE::pearError($res,"Could not get columns in report " .  self::getCachedTableName($report,true))) {
+        try {
+            $db = I2CE::PDO();
+            $res = $db->query($cols_qry);
+            $cols_in_report = array();
+            while ($row = $res->fetch()) {
+                $cols_in_report[] = $row->column_name;
+            }
+            self::$report_table_cols[$report] = $cols_in_report;
+            return self::$report_table_cols[$report];
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e,"Could not get columns in report " .  self::getCachedTableName($report,true));
             return array();
         } 
-        while ($row = $res->fetchRow()) {
-            if (  PEAR::isError( $row ) ) {
-                break;
-            }
-            $cols_in_report[] = $row->column_name;
-        }
-        self::$report_table_cols[$report] = $cols_in_report;
-        return self::$report_table_cols[$report];
-    }
+   }
 
 
     /**
@@ -168,7 +168,7 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
                     $db_name = '`' . substr($db_name,0,-1) . '`.';
                 }            
             } else {
-                $db_name =         '`'  . MDB2::singleton()->database_name . '`.';
+                $db_name = '`'  . I2CE_PDO::details('dbname') . '`.';
             }
         }        
         if (!$table_prefix) {
@@ -460,7 +460,10 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
         if ($update_status) {
             self::setStatus($this->report,'not_generated');
         }
-        if (I2CE::pearError($this->db->exec("DROP TABLE IF EXISTS {$this->table}"), "Could not drop old table {$this->table}")) {
+        try {
+            $this->db->exec("DROP TABLE IF EXISTS {$this->table}");
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e, "Could not drop old table {$this->table}"); 
             return false;
         }
         return true;
@@ -535,24 +538,31 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
                     continue;
                 }
                 */
-                I2CE::raiseError("Doing $type: $qry");
-                $start_time = time();
-                $res = $this->db->exec($qry);
-                $end_time = time();
-                if (I2CE::pearError($res, "Unable to populate cached report")) {
+
+                try {
+                    I2CE::raiseError("Doing $type: $qry");
+                    $start_time = time();
+                    $res = $this->db->exec($qry);
+                    $end_time = time();
+                    if (substr(ltrim($qry),0,6) == 'INSERT' || substr(ltrim($qry),0,6) == 'UPDATE') {
+                        I2CE::raiseMessage("Inserted $res rows");
+                    }
+                    I2CE::raiseMessage("Query took " . ($end_time-$start_time) . " seconds.");
+
+                } catch ( PDOException $e ) {
+                    I2CE::pdoError($e, "Unable to populate cached report");
                     return false;
-                }      
-                if (substr(ltrim($qry),0,6) == 'INSERT' || substr(ltrim($qry),0,6) == 'UPDATE') {
-                    I2CE::raiseMessage("Inserted $res rows");
                 }
-                I2CE::raiseMessage("Query took " . ($end_time-$start_time) . " seconds.");
             }
         }
         // we move over the tmp_table to table.
         if (!$this->dropTable(false)) {
             return false;
         }
-        if (I2CE::pearError($this->db->exec("RENAME TABLE {$last_tmp_table} TO {$this->table}"),"Could not rename temp table")) {
+        try {
+            $this->db->exec("RENAME TABLE {$last_tmp_table} TO {$this->table}");
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e, "Could not rename temp table");
             return false;
         }
         return true;
@@ -1158,23 +1168,27 @@ class I2CE_CustomReport extends I2CE_Fuzzy{
 
 
     protected function getCreateField($form,$field,$name) {
-        $result = $this->get_field_def->execute(array(I2CE_CachedForm::getCachedTableName($form,false),$field));
-        if (I2CE::pearError($result,"Unable to get field defintion for " . I2CE_CachedForm::getCachedTableName($form,false) . ".$field")) {
+        try {
+            $this->get_field_def->execute(array(I2CE_CachedForm::getCachedTableName($form,false),$field));
+            if ($this->get_field_def->rowCount() != 1) {
+                I2CE::raiseError("Unexpected number of rows " . $this->get_field_def->rowCount() . " when determining field defintion for $form.$field");
+                return false;
+            }
+            $result = $this->get_field_def->fetch();
+            $field = "`$name` " . $result->column_type . ' ' ;
+            if ($result->character_set_name){
+                $field .= ' CHARACTER SET ' . $result->character_set_name . ' ';
+            } 
+            if (isset($result->collation_name)) {
+                $field .= ' COLLATE ' . $result->collation_name;
+            }
+            $val = array('type'=> $result->column_type, 'field'=>$field);
+            $this->get_field_def->closeCursor();
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Unable to get field defintion for " . I2CE_CachedForm::getCachedTableName($form,false) . ".$field");
             return false;
         }
-        if ($result->numRows() != 1) {
-            I2CE::raiseError("Unexpected number of rows " . $result->numRows() . " when determining field defintion for $form.$field");
-            return false;
-        }
-        $result = $result->fetchRow();
-        $field = "`$name` " . $result->column_type . ' ' ;
-        if ($result->character_set_name){
-            $field .= ' CHARACTER SET ' . $result->character_set_name . ' ';
-        } 
-        if (isset($result->collation_name)) {
-            $field .= ' COLLATE ' . $result->collation_name;
-        }
-        return array('type'=> $result->column_type, 'field'=>$field);
+        return $val;
     }
 
   

@@ -25,7 +25,6 @@
  * Deps.
  */
 require_once "I2CE_MagicDataStorage.php";
-require_once "MDB2.php";
 
 if (!class_exists('I2CE_MagicDataStorageDB',false)) {
 
@@ -61,24 +60,32 @@ if (!class_exists('I2CE_MagicDataStorageDB',false)) {
 
         /**
          * Set up a cache of prepared statements.
-         * @return MDB2_Statement_Common
+         * @return PDOStatement
          */
         protected function setUpStatements() {
             $this->db_statements  = array();
-            $db = MDB2::singleton();
-            $this->db_statements['retrieve']
-                =$db->prepare( "SELECT type,value,children FROM " . $this->name . " WHERE hash = ? LIMIT 1", 
-                                 array( 'text' ), array( 'integer', 'text', 'text' ) );
-            $this->db_statements['destroy']
-                =$db->prepare( "DELETE  FROM " . $this->name . " WHERE hash = ? LIMIT 1", array('text'), MDB2_PREPARE_RESULT );
-            $this->db_statements['store'] 
-                = $db->prepare( "REPLACE INTO " . $this->name 
-                                . " ( hash, path, type, value, children ) VALUES ( ?, ?, ?, ?, ? )", 
-                                array( 'text', 'text', 'integer', 'text', 'text' ) );
-            foreach ($this->db_statements as $type=>$db_stmt) {
-                if ( PEAR::isError( $db_stmt ) ) {
-                    unset($this->db_statements[$type]);
-                }
+            $db = I2CE::PDO();
+            try {
+                $this->db_statements['retrieve']
+                    = $db->prepare( "SELECT type,value,children FROM " . $this->name . " WHERE hash = ? LIMIT 1" );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare retrieve statement" );
+                unset( $this->db_statements['retrieve'] );
+            }
+            try {
+                $this->db_statements['destroy']
+                    = $db->prepare( "DELETE FROM " . $this->name . " WHERE hash = ? LIMIT 1", array('text') );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare destroy statement" );
+                unset( $this->db_statements['destroy'] );
+            }
+            try {
+                $this->db_statements['store'] 
+                    = $db->prepare( "REPLACE INTO " . $this->name 
+                            . " ( hash, path, type, value, children ) VALUES ( ?, ?, ?, ?, ? )" );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare store statement" );
+                unset( $this->db_statements['store'] );
             }
         }
 
@@ -97,17 +104,27 @@ if (!class_exists('I2CE_MagicDataStorageDB',false)) {
             } else {
                 $children_str = null;
             }
-            if($this->db_statements['store']->
-               execute( array( $hash, $node->getPath(),
-                               $node->getType(), $value, $children_str ) )) {
-                return TRUE;
-            }
-            else {
+            try {
+                $result = $this->db_statements['store'];
+                if( $result->execute( array( $hash, $node->getPath(),
+                                $node->getType(), $value, $children_str ) )) {
+                    $result->closeCursor();
+                    return true;
+                } else {
+                    $result->closeCursor();
+                    I2CE_MagicDataNode::raiseError( "Error saving to DB " . $node->getPath() .
+                            " Type: " . $node->getType() . 
+                            " Value: " . $value .
+                            " Children: " . implode(',',$children) );
+                    return false;
+                }
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e, "Failed saving to DB");
                 I2CE_MagicDataNode::raiseError( "Error saving to DB " . $node->getPath() .
-                                                " Type: " . $node->getType() . 
-                                                " Value: " . $value .
-                                                " Children: " . implode(',',$children) );
-                return FALSE;
+                        " Type: " . $node->getType() . 
+                        " Value: " . $value .
+                        " Children: " . implode(',',$children) );
+                return false;
             }
         }
         /**
@@ -117,15 +134,21 @@ if (!class_exists('I2CE_MagicDataStorageDB',false)) {
          */
         public function retrieve( $node ) {
             $hash = $this->getHash( $node );
-            $result = $this->db_statements['retrieve']->execute( array( $hash ) );
-            if (I2CE::pearError($result,"Cannot retrieve " . $node->getPath() . " from DB:")) {
-                return false;
-            }
-            if ( $row = $result->fetchRow() ) {
-                if ( $row->type !== null ) {
-                    return array( "type" => $row->type, "value" => $row->value, 
-                                  "children" => (strlen( $row->children ) > 0 ? explode( ",", $row->children ) : null ) );
+            try {
+                $result = $this->db_statements['retrieve'];
+                $result->execute( array( $hash ) );
+                if ( $row = $result->fetch() ) {
+                    if ( $row->type !== null ) {
+                        $result->closeCursor();
+                        return array( "type" => $row->type, "value" => $row->value, 
+                                "children" => (strlen( $row->children ) > 0 ? explode( ",", $row->children ) : null ) );
+                    }
                 }
+                unset( $row );
+                $result->closeCursor();
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e,"Cannot retrieve " . $node->getPath() . " from DB:");
+                return false;
             }
             return false;
         }
@@ -135,11 +158,15 @@ if (!class_exists('I2CE_MagicDataStorageDB',false)) {
          */
         public function isAvailable() {
             $qry = 'SHOW TABLES LIKE "config"';
-            $result = MDB2::singleton()->query($qry);
-            if (I2CE::pearError($result,"Cannot access database")) {
-                return false;
-            }
-            if ($result->numRows() == 0) {
+            $db = I2CE::PDO();
+            try {
+                $result = $db->query($qry);
+                if ($result->rowCount() == 0) {
+                    return false;
+                }
+                unset( $result );
+            } catch( PDOException $e ) {
+                I2CE::pdoError($result,"Cannot access database");
                 return false;
             }
             if (count($this->db_statements) < 3) {
@@ -151,8 +178,14 @@ if (!class_exists('I2CE_MagicDataStorageDB',false)) {
 
         public function destroy($node) {
             $hash = $this->getHash( $node );
-            $result = $this->db_statements['destroy']->execute( array( $hash ) );
-            return !I2CE::pearError($result,"Cannot destroy " . $node->getPath() . " from DB:");
+            try {
+                $this->db_statements['destroy']->execute( array( $hash ) );
+                $this->db_statements['destroy']->closeCursor();
+                return true;
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e,"Cannot destroy " . $node->getPath() . " from DB:");
+                return false;
+            }
         }
 
 
@@ -161,10 +194,15 @@ if (!class_exists('I2CE_MagicDataStorageDB',false)) {
          * @return boolean
          */
         public function clear() {
-            return !I2CE::pearError( MDB2::singleton()->exec("DELETE  FROM " . $this->name),"Unable to clear DB magic data table {$this->name}");
+            $db = I2CE::PDO();
+            try {
+                $db->exec("TRUNCATE TABLE " . $this->name);
+                return true;
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e, "Unable to clear DB magic data table {$this->name}" );
+                return false;
+            }
         }
-
-
 
     }
 

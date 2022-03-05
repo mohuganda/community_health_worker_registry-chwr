@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="forms">
   <metadata>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="forms" locale="en_US">
-    <version>4.2.0.1</version>
+    <version>4.3.0</version>
     <configurationGroup name="forms">
       <configurationGroup name="user">
         <configuration name="display" values="single" locale="en_US" type="string">

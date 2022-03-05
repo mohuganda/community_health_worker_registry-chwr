@@ -240,7 +240,7 @@ class I2CE_Updater {
      * @param boolean $verbose_errors.  defaults to true.  
      */
     protected static function install($site_module_file,$restart, $verbose_errors =true ) {
-        $db = MDB2::singleton(); 
+        $db = I2CE::PDO();
         I2CE::raiseError("Beginning new installation");
         I2CE::longExecution();
         I2CE::getFileSearch()->addPath('MODULES',dirname(dirname(__FILE__)),'EVEN_HIGHER');
@@ -283,7 +283,7 @@ class I2CE_Updater {
             return false;
         }
         //we got through I2CE's installation
-        if ($db->in_transaction) {
+        if ($db->inTransaction()) {
             I2CE::raiseError("Warning: ending installation still in transaction -- committing");
             $db->commit();
         }

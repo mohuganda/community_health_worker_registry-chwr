@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="uz">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -71,7 +71,7 @@
       <value>ks:Kashmircha</value>
       <value>ku:Kurdcha</value>
       <value>kw:Korn</value>
-      <value>ky:Qirg&#699;izcha</value>
+      <value>ky:Qirgʻizcha</value>
       <value>la:Lotincha</value>
       <value>lb:Lyuksemburgcha</value>
       <value>lo:Laoscha</value>
@@ -80,7 +80,7 @@
       <value>mg:Malagasi</value>
       <value>mh:Marshallez</value>
       <value>mk:Makedoniyacha</value>
-      <value>mn:Mug&#699;ulcha</value>
+      <value>mn:Mugʻulcha</value>
       <value>mo:Moldavcha</value>
       <value>mr:Marati</value>
       <value>ms:Malaycha</value>
@@ -131,9 +131,9 @@
       <value>tt:Totarcha</value>
       <value>tw:Tvi</value>
       <value>ty:Taxitian</value>
-      <value>ug:Uyg&#699;urcha</value>
+      <value>ug:Uygʻurcha</value>
       <value>uk:Ukraincha</value>
-      <value>uz:O&#699;zbekcha</value>
+      <value>uz:Oʻzbekcha</value>
       <value>vi:Vetnamcha</value>
       <value>vo:Volapuk</value>
       <value>wa:Valloncha</value>
@@ -142,7 +142,7 @@
       <value>zh:Xitoycha</value>
       <value>zh_CN:Soddalashtirilgan Xitoycha</value>
       <value>zh_HK:Xitoycha (Gongkong)</value>
-      <value>zh_TW:An&#700;anaviy Xitoycha</value>
+      <value>zh_TW:Anʼanaviy Xitoycha</value>
       <value>zu:Zulucha</value>
     </configuration>
   </configurationGroup>

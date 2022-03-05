@@ -9,14 +9,14 @@
     <creator>Carl Leitner</creator>
     <email>litlfred@ibiblio.org</email>
     <link>http://www.capacityproject.org</link>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
     <requirement name="pages">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="messageHandler">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="MooTools">
       <atLeast version="1.4" />

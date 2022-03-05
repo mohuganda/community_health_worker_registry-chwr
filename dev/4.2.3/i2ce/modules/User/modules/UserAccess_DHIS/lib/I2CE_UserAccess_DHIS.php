@@ -73,7 +73,7 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
      * @returns array
      */
     public function getAllowedDetails() {
-        return array_intersect(array_keys($this->getDetailColumns()), array_keys($this->getDetailColumnTypes())) ;
+        return array_keys($this->getDetailColumns());
     }
 
 
@@ -93,20 +93,6 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
                 );
     }
     
-    /**
-     * An array of the details and their associated mdb2 types
-     */
-    protected function getDetailColumnTypes()  {
-        return
-            array(
-                'firstname'=>'text',
-                'lastname'=>'text',
-                'email'=>'text',
-                'phonenumber'=>'text',
-                'email'=>'text'
-                );
-    }
-
 
     /**
      * ensrure default options are set
@@ -123,7 +109,7 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
      */
     public function __construct( ) {
         parent::__construct();
-        $this->db = MDB2::singleton();
+        $this->db = I2CE::PDO();
         $this->passTable = $this->options['passTable'];
         $this->accessTable = $this->options['accessTable'];
         $this->logTable = $this->options['logTable'];
@@ -169,19 +155,19 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
             $qry = "INSERT INTO " . $this->accessTable . " (role,user) SELECT ? as role, u.id as user  FROM " . $this->passTable . 
                 " AS p LEFT JOIN " . $this->accessTable ." AS a ON p.userid = a .user  WHERE  u.username = ?  ON DUPLICATE KEY UPDATE role = ?";
             $params = array($setRole,$username, $setRole);
-            if (I2CE::pearError($this->db->execParam($qry, $params,array('text', 'text','text') ), "Cannot update user role")) {
+            try {
+                I2CE_PDO::execParam( $qry, $params );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError($e, "Cannot update user role");
                 return false;
             }
         }         
         if (count($details) > 0) {
-            $colTypes = $this->getDetailColumnTypes();
             $cols = $this->getDetailColumns();
-            $types = array();
             $params = array();
             $sets = array();
             foreach ($details as  $detail=>$value) {
-                $types[] = $colTypes[$detail];
-                if ($detail == 'creator' && $colTypes['creator'] == 'integer' ) {
+                if ($detail == 'creator' ) {
                     $params[] = $this->getUserId($username);
                 } else {
                     $params[] = $value;
@@ -194,7 +180,10 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
                 $this->passTable . ' AS p ' .
                 "  SET " . implode(',',$sets) .
                 ' WHERE p.username = ? AND a.user = p.userid ';
-            if (I2CE::pearError($this->db->execParam($qry, $params,$types), "Cannot update user details")) {
+            try {
+                I2CE_PDO::execParam( $qry, $params );
+            } catch ( PDOException $e ) {
+                I2CE::pdoError($e, "Cannot update user details");
                 return false;
             }
         }
@@ -232,16 +221,21 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
                 . ' JOIN ' . $this->passTable  .' p ON p.userid = u.userinfoid '
                 . ' WHERE p.username = ?';
         }
-        $row = $this->db->getRow( $qry,  null, array( $username ), array('text') );                
-        if (  I2CE::pearError($row,  "Cannot get user info for $username"  ) ) {
-            return array();
-        }
         $results = array();
-        if ($getRole) {
-            $results['role'] = $row->role;
-        }
-        foreach ($details as $detail) {
-            $results[$detail] = $row->$detail;
+        try {
+
+            $row = I2CE_PDO::getRow( $qry, array( $username ) );
+
+            if ($getRole) {
+                $results['role'] = $row->role;
+            }
+            foreach ($details as $detail) {
+                $results[$detail] = $row->$detail;
+            }
+            unset( $row );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,  "Cannot get user info for $username"  );
+            return array();
         }
         return  $results;
     }
@@ -257,41 +251,38 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
     public function _getUsersByInfo($role = false, $details=array()) {
         $qry = "SELECT p.username AS username "
             . " FROM " . $this->passTable . " AS p ";
-        $colTypes = $this->getDetailColumnTypes();
         $cols = $this->getDetailColumns();
-        $types = array();
         $params = array();
         $limits = array();
         if (count($details) > 0) {
             $qry .= ' JOIN ' . $this->detailTable . ' AS u';
         }
         foreach ($details as  $detail=>$value) {
-            $types[] = $colTypes[$detail];
             $params[] = $value;
             $limits[] = ' u.`' . $cols[$detail] . '` = ? ' ;
         }            
         if ($role) {
             ' LEFT JOIN ' . $this->accessTable  .' a ON a.user = p.userid ';
-            $types[] = 'text';
             $params[] = $role;
             $limits[] = ' a.role  ' ;
         }
         if (count($limits) > 0) {
             $qry .= ' WHERE (' . implode(" AND " , $limits) . ')';
         }
-        $stmt = $this->db->prepare($qry,$types);
-        if (I2CE::pearError($stmt, "Cannot query users")) {
+        try {
+            $stmt = $this->db->prepare($qry);
+            $stmt->execute( $params);
+            $usernames = array();
+            while( $row = $stmt->fetch() ) {
+                $usernames[] = $row->username;
+            }
+            $stmt->closeCursor();
+            unset( $stmt );
+            return $usernames;
+        } catch( PDOException $e ) {
+            I2CE::pdoError($e, "Cannot query users");
             return array();
         }
-        $result = $stmt->execute( $params);
-        if (I2CE::pearError($result, "Cannot query users")) {
-            return array();
-        }
-        $usernames = array();
-        while( $row = $result->fetchRow() ) {
-            $usernames[] = $row->username;
-        }
-        return $usernames;
     }
 
 
@@ -319,14 +310,16 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
                 . ' FROM ' . $this->passTable . ' p'
                 . ' LEFT JOIN ' . $this->accessTable  .' a ON a.user = p.userid '
                 . ' WHERE p.username  = ? AND a.role IS NOT NULL AND LENGTH(a.role) > 0 ';
-            $row = $this->db->getRow( $qry, null, array( $username ), array('text') );
-            if (  I2CE::pearError($row,  "Cannot get user for $username"  ) ) {
+            try {
+                $row = I2CE_PDO::getRow( $qry, array( $username ) );
+                if (!$row || !$row->num) {
+                    return false;
+                }
+                return ($row->num > 0);
+            } catch ( PDOException $e ) {
+                I2CE::pdoError($e,  "Cannot get user for $username"  );
                 return false;
             }            
-            if (!$row instanceof MDB2_ROW || !$row->num) {
-                return false;
-            }
-            return ($row->num > 0);
         } else {
             return $this->getUserId($username) !== false;
         }
@@ -341,14 +334,16 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
         $qry = "SELECT userid AS id"
             . ' FROM ' . $this->passTable . ' p'
             . ' WHERE p.username  = ? ';
-        $row = $this->db->getRow( $qry, null, array( $username ), array('text') );
-        if (  I2CE::pearError($row,  "Cannot get user id for $username"  ) ) {
+        try {
+            $row = I2CE_PDO::getRow( $qry, array( $username ) );
+            if (!$row || !$row->id) {
+                return false;
+            }
+            return $row->id;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($row,  "Cannot get user id for $username"  );
             return false;
         }
-        if (!$row instanceof MDB2_ROW || !$row->id) {
-            return false;
-        }
-        return $row->id;
     }
 
     /**
@@ -357,21 +352,20 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
      */
     public function _getUserIds() {
         $qry = "SELECT userid AS id  FROM " . $this->passTable ;        
-        $sth = $this->db->prepare($qry, array(), MDB2_PREPARE_RESULT );
-        if (I2CE::pearError( $sth, "Error preparing to populate history:" ) ) {
+        try {
+            $sth = $this->db->prepare($qry);
+            $sth->execute();
+            $userIds= array();
+            while ( $data = $sth->fetch() ) {
+                $userIds[] = $data->id;
+            }
+            $sth->closeCursor();
+            unset( $sth );
+            return $userIds;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Error getting userids: " );
             return array();
         }
-        $result = $sth->execute( array());
-        if ( I2CE::pearError( $result, "Error getting userids: " ) ) {
-            return array();
-        }
-        $userIds= array();
-        while ( $data = $result->fetchRow() ) {
-            $userIds[] = $data->id;
-        }
-        $result->free();
-        $sth->free();
-        return $userIds;
     }
 
 
@@ -388,14 +382,16 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
         $qry = "SELECT username "
             . ' FROM ' . $this->passTable . ' p'
             . ' WHERE p.userid  = ? ';
-        $row = $this->db->getRow( $qry, null, array( $userid ), array('integer') );
-        if (  I2CE::pearError($row,  "Cannot get username for id for $userid"  ) ) {
+        try {
+            $row = I2CE_PDO::getRow( $qry, array( $userid ) );
+            if (!$row || !$row->username || $row->username=='0') {
+                return false;
+            }
+            return $row->username;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Cannot get username for id for $userid" );
             return false;
         }
-        if (!$row instanceof MDB2_ROW || !$row->username || $row->username=='0') {
-            return false;
-        }
-        return $row->username;
         
     }
 
@@ -417,8 +413,13 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
                 $this->encryptPassword($new_password),
                 $username
                 );
-            $result = $this->db->execParam($qry, $params,array('text', 'text') );
-            return !I2CE::pearError($result, "Cannot update password") && $result  == 1;
+            try {
+                $result = I2CE_PDO::execParam( $qry, $params );
+                return $result  == 1;
+            } catch ( PDOException $e ) {
+                I2CE::pdoError($e, "Cannot update password");
+                return false;
+            }
         } else {
             $qry = "UPDATE " . $this->passTable . ' SET password = ? WHERE ( ' . 
                 'username = ? AND ' .
@@ -428,8 +429,13 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
                 $username,
                 $this->encryptPassword($old_password)
                 );
-            $result = $this->db->execParam($qry, $params,array('text', 'text', 'text') );
-            return !I2CE::pearError($result, "Cannot update password") && $result == 1;
+            try {
+                $result = I2CE_PDO::execParam( $qry, $params );
+                return $result == 1;
+            } catch ( PDOException $e ) {
+                I2CE::pdoError($e, "Cannot update password");
+                return false;
+            }
         }
     }
 
@@ -444,14 +450,16 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
         $qry = "SELECT COUNT(*) as num FROM  " . $this->passTable . ' WHERE ( ' . 
             'username = ? AND ' .
             'password = ? )' ;
-        $row = $this->db->getRow( $qry,  null, array( $username,$this->encryptPassword($password) ), array('text','text') );                
-        if (  I2CE::pearError($row,  "Cannot check password  for $username"  ) ) {
+        try {
+            $row = I2CE_PDO::getRow( $qry, array( $username,$this->encryptPassword($password) ) );                
+            if (!$row ) {
+                return false;
+            }
+            return ($row->num == 1);        
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($row,  "Cannot check password  for $username"  );
             return false;
         }
-        if (!$row instanceof MDB2_ROW) {
-            return false;
-        }
-        return ($row->num == 1);        
     }
 
 
@@ -491,10 +499,13 @@ class I2CE_UserAccess_DHIS extends I2CE_UserAccess_Mechanism {
     public function _createUser($username, $password, $role = false, $details= array()) {
         $qry = "INSERT INTO " . $this->passTable . " ( username, password) VALUES (?,?)";
         $params = array($username,$this->encryptPassword($password));
-        if (I2CE::pearError($this->db->execParam($qry, $params,array('text', 'text') ), "Cannot create user $username")) {
+        try {
+            I2CE_PDO::execParam($qry, $params );
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Cannot create user $username" );
             return false;
         }
-        return $this->setUserInfo($username,$role,$details);            
+        return $this->setUserInfo($username,$role,$details);
     }
 
 

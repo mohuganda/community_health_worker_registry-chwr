@@ -19,8 +19,8 @@
       <value>./scripts</value>
     </path>
     <requirement name="FileDump">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
   </metadata>
   <configurationGroup name="maani-charts">

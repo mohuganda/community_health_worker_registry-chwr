@@ -25,7 +25,6 @@
  * Deps.
  */
 require_once "I2CE_MagicDataStorage.php";
-require_once "MDB2.php";
 
 if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
 
@@ -42,52 +41,71 @@ if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
         private $db_statements;
 
         /**
-         * @var MDB2 $db DB instnace
+         * @var PDO $db DB instnace
          */
         protected $db;
 
         public function __construct($name) {
             parent::__construct($name);
-            $this->db = MDB2::singleton();
+            $this->db = I2CE::PDO();
             $this->setUpStatements();
-            $this->db->query("SET SESSION group_concat_max_len = @@max_allowed_packet");
-            $res = $this->db->query("SELECT @@group_concat_max_len = @@max_allowed_packet AS use_quick,  @@group_concat_max_len as len");                        
-            if (I2CE::pearError($res,"Bad statement") || ! ($row=$res->fetchRow())) {
-                I2CE::raiseError("Bad group concat check");
+            try {
+                $this->db->exec("SET SESSION group_concat_max_len = @@max_allowed_packet");
+                $res = $this->db->query("SELECT @@group_concat_max_len = @@max_allowed_packet AS use_quick,  @@group_concat_max_len as len");                        
+                $row = $res->fetch();
+                if ($row->use_quick) {
+                    $this->use_quick = true;
+                } else {
+                    I2CE::raiseError("Using slow config_alt retreival.  Please set group_concat_max_len in mysql's config to be the same as max_allowed_packet.  Currently it is set " . $row->len . " to bytes" );
+                }
+                unset( $row );
+                unset( $result );
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e,"Bad group concat check");
                 return false;
-            }
-            if ($row->use_quick) {
-                $this->use_quick = true;
-            } else {
-                I2CE::raiseError("Using slow config_alt retreival.  Please set group_concat_max_len in mysql's config to be the same as max_allowed_packet.  Currently it is set " . $row->len . " to bytes" );
             }
         }
 
         /**
          * Set up a cache of prepared statements.
-         * @return MDB2_Statement_Common
          */
         protected function setUpStatements() {
             $this->db_statements  = array();
-            $this->db_statements['retrieve_type_val']
-                =$this->db->prepare( "SELECT type,value FROM config_alt WHERE path_hash = ? LIMIT 1", 
-                               array( 'text' ), array( 'integer','text' ) );
-            $this->db_statements['retrieve_children']
-                =$this->db->prepare( "SELECT name as children  FROM config_alt WHERE parent = ? ", 
-                               array( 'text'  ), array( 'text' ) );
-            $this->db_statements['retrieve_type_val_children']
-                =$this->db->prepare( "SELECT n.type AS type,n.value AS value, GROUP_CONCAT(c.name SEPARATOR '/') as children FROM config_alt n  LEFT JOIN config_alt c ON "
-                               . "c.parent = IF(n.parent = '/', CONCAT('/',n.name), CONCAT(n.parent,'/',n.name)) WHERE n.path_hash = ? GROUP BY type, value LIMIT 1", 
-                               array( 'text' ), array( 'integer','text','text' ) );
-            $this->db_statements['store'] 
-                = $this->db->prepare( "REPLACE INTO config_alt  (  path_hash, parent , name , type, value) VALUES ( ?,?, ?, ?, ? )", 
-                                array( 'text','text', 'text', 'integer', 'text' ) );
-            $this->db_statements['destroy']
-                =$this->db->prepare( "DELETE  FROM config_alt WHERE path_hash = ? LIMIT 1", array('text'), MDB2_PREPARE_RESULT );
-            foreach ($this->db_statements as $type=>$db_stmt) {
-                if ( PEAR::isError( $db_stmt ) ) {
-                    unset($this->db_statements[$type]);
-                }
+            try {
+                $this->db_statements['retrieve_type_val']
+                    = $this->db->prepare( "SELECT type,value FROM config_alt WHERE path_hash = ? LIMIT 1" );
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare retrieve_type_val" );
+                unset( $this->db_statements['retrieve_type_val'] );
+            }
+            try{
+                $this->db_statements['retrieve_children']
+                    = $this->db->prepare( "SELECT name as children  FROM config_alt WHERE parent = ? " );
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare retrieve_children" );
+                unset( $this->db_statements['retrieve_children'] );
+            }
+            try{
+                $this->db_statements['retrieve_type_val_children']
+                    = $this->db->prepare( "SELECT n.type AS type,n.value AS value, GROUP_CONCAT(c.name SEPARATOR '/') as children FROM config_alt n  LEFT JOIN config_alt c ON "
+                            . "c.parent = IF(n.parent = '/', CONCAT('/',n.name), CONCAT(n.parent,'/',n.name)) WHERE n.path_hash = ? GROUP BY type, value LIMIT 1" );
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare retrieve_type_val_children" );
+                unset( $this->db_statements['retrieve_type_val_children'] );
+            }
+            try{
+                $this->db_statements['store'] 
+                    = $this->db->prepare( "REPLACE INTO config_alt  (  path_hash, parent , name , type, value) VALUES ( ?,?, ?, ?, ? )" );
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare store" );
+                unset( $this->db_statements['store'] );
+            }
+            try{
+                $this->db_statements['destroy']
+                    = $this->db->prepare( "DELETE  FROM config_alt WHERE path_hash = ? LIMIT 1", array('text') );
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to prepare destroy" );
+                unset( $this->db_statements['destroy'] );
             }
 
         }
@@ -122,13 +140,24 @@ if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
             $value = $node->getSaveValue();
             //$path_hash = md5($path);
             $path_hash = $this->getHash( $node );
-            if($this->db_statements['store']->execute( array(  $path_hash, $parent,$name, $node->getType(), $value  ) )) {
-                return true;
-            } else {
+            try {
+                if($this->db_statements['store']->execute( array(  $path_hash, $parent,$name, $node->getType(), $value  ) )) {
+                    $this->db_statements['store']->closeCursor();
+                    return true;
+                } else {
+                    $this->db_statements['store']->closeCursor();
+                    I2CE_MagicDataNode::raiseError( "Error saving to DB " . $node->getPath() .
+                            " Type: " . $node->getType() . 
+                            " Value: " . $value );
+
+                    return false;
+                }
+            } catch ( PDOException $e ) {
+                I2CE::pdoError( $e, "Failed to store in DB" );
                 I2CE_MagicDataNode::raiseError( "Error saving to DB " . $node->getPath() .
-                                                " Type: " . $node->getType() . 
-                                                " Value: " . $value );
-                
+                        " Type: " . $node->getType() . 
+                        " Value: " . $value );
+
                 return false;
             }
         }
@@ -140,64 +169,76 @@ if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
         public function retrieve( $node ) {
             $ret = array();
             if ($this->use_quick) {
-                $result = $this->db_statements['retrieve_type_val_children']->execute( array( $this->getHash( $node ) ));
-                if (I2CE::pearError($result,"Cannot retrieve val and type for " . $node->getPath() . " from DB:")) {
-                    return false;
-                }
-                if (! $row = $result->fetchRow() ) {
-                    return false;
-                }
-                if ( $row->type === null ) {
-                    return false;
-                }
-                $ret['type'] = $row->type;
-                $ret['value'] = $row->value;
-                if (strlen($row->children)  > 0) {
-                    $ret['children'] =  explode( "/", $row->children );
-                } else {
-                    $ret['children'] = null;
-                } 
-            } else {
-                $result = $this->db_statements['retrieve_type_val']->execute( array( $this->getHash( $node ) ));
-                if (I2CE::pearError($result,"Cannot retrieve val and type for " . $node->getPath() . " from DB:")) {
-                    return false;
-                }
-                if (! $row = $result->fetchRow() ) {
-                    return false;
-                }
-                if ( $row->type === null ) {
-                    return false;
-                }
-                $ret['type'] = $row->type;
-                $ret['value'] = $row->value;
-                if ($node instanceof I2CE_MagicData) {
-                    $p_path = '/';
-                } else {
-                    $name = $node->getName();
-                    if (is_string($name) && strlen($name) == 0) {
-                        I2CE::raiseError("Non-existent name on a non-root magic data node");
+                try {
+                    $result = $this->db_statements['retrieve_type_val_children'];
+                    $result->execute( array( $this->getHash( $node ) ));
+                    if (! $row = $result->fetch() ) {
                         return false;
                     }
-                    $parentNode = $node->getParent();
-                    if ($parentNode instanceof I2CE_MagicData) {
-                        $p_path  = '/' . $name;
-                    } else {
-                        $p_path  = $parentNode->getPath(false) . '/' . $name;
+                    if ( $row->type === null ) {
+                        return false;
                     }
-                }
-                $result = $this->db_statements['retrieve_children']->execute( array( $p_path ) );
-                if (I2CE::pearError($result,"Cannot retrieve children for " . $node->getPath() . " from DB:")) {
+                    $ret['type'] = $row->type;
+                    $ret['value'] = $row->value;
+                    if (strlen($row->children)  > 0) {
+                        $ret['children'] =  explode( "/", $row->children );
+                    } else {
+                        $ret['children'] = null;
+                    } 
+                    $row = null; 
+                    $result->closeCursor();
+                } catch( PDOException $e ) {
+                    I2CE::pdoError($e,"Cannot retrieve val and type for " . $node->getPath() . " from DB:");
                     return false;
                 }
-                $children = $result->fetchAll(MDB2_FETCHMODE_ASSOC| MDB2_FETCHMODE_FLIPPED,false,false,true);
-                if (!is_array($children)) {
-                    I2CE::raiseError("Cannot fetch children for " . $node->getPath());
+            } else {
+                try {
+                    $result = $this->db_statements['retrieve_type_val'];
+                    $result->execute( array( $this->getHash( $node ) ));
+                    if (! $row = $result->fetch() ) {
+                        return false;
+                    }
+                    if ( $row->type === null ) {
+                        return false;
+                    }
+                    $ret['type'] = $row->type;
+                    $ret['value'] = $row->value;
+                    $row = null; 
+                    $result->closeCursor();
+                    if ($node instanceof I2CE_MagicData) {
+                        $p_path = '/';
+                    } else {
+                        $name = $node->getName();
+                        if (is_string($name) && strlen($name) == 0) {
+                            I2CE::raiseError("Non-existent name on a non-root magic data node");
+                            return false;
+                        }
+                        $parentNode = $node->getParent();
+                        if ($parentNode instanceof I2CE_MagicData) {
+                            $p_path  = '/' . $name;
+                        } else {
+                            $p_path  = $parentNode->getPath(false) . '/' . $name;
+                        }
+                    }
+                    try {
+                        $result = $this->db_statements['retrieve_children'];
+                        $result->execute( array( $p_path ) );
+                        $children = $result->fetchAll(PDO::FETCH_COLUMN,0);
+                        $result = null;
+                        unset( $result );
+                        if (!is_array($children)) {
+                            I2CE::raiseError("Cannot fetch children for " . $node->getPath());
+                            return false;
+                        }
+                        $ret['children'] = $children;
+                        $result->closeCursor();
+                    } catch( PDOException $e ) {
+                        I2CE::pdoError($result,"Cannot retrieve children for " . $node->getPath() . " from DB:");
+                        return false;
+                    }
+                } catch( PDOException $e ) {
+                    I2CE::pdoError($result,"Cannot retrieve val and type for " . $node->getPath() . " from DB:");
                     return false;
-                }
-                if ( ! array_key_exists('children',$children) || !is_array($children['children'])) {
-                    $ret['children'] = null;
-                } else {
-                    $ret['children'] = $children['children'];
                 }
             }
             return $ret;
@@ -210,12 +251,15 @@ if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
          */
         public function isAvailable() {
             $qry = 'SHOW TABLES LIKE "config_alt"';
-            $result =$this->db->query($qry);
-            if (I2CE::pearError($result,"Cannot access database")) {
-                return false;
-            }
-            if ($result->numRows() == 0) {
-                I2CE::raiseError("No config_alt");
+            try {
+                $result = $this->db->query($qry);
+                if ($result->rowCount() == 0) {
+                    I2CE::raiseError("No config_alt");
+                    return false;
+                }
+                unset( $result );
+            } catch( PDOException $e ) {
+                I2CE::pdoError($e,"Cannot access database");
                 return false;
             }
             if (count($this->db_statements) != 5) {
@@ -230,8 +274,14 @@ if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
             if ($node->is_indeterminate()) { 
                 return true;
             }            
-            $result = $this->db_statements['destroy']->execute( array( $this->getHash($node) ) );
-            return !I2CE::pearError($result,"Cannot destroy " . $node->getPath() . " from DB:");
+            try {
+                $this->db_statements['destroy']->execute( array( $this->getHash($node) ) );
+                $this->db_statements['destroy']->closeCursor();
+                return true;
+            } catch ( PDOException $e ) {
+                I2CE::pdoError($e,"Cannot destroy " . $node->getPath() . " from DB:");
+                return false;
+            }
         }
 
 
@@ -240,7 +290,13 @@ if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
          * @return boolean
          */
         public function clear() {
-            return !I2CE::pearError( $this->db->exec("DELETE  FROM " . $this->name),"Unable to clear DB magic data table {$this->name}");
+            try {
+                $this->db->exec("TRUNCATE TABLE " . $this->name);
+                return true;
+            } catch( PDOException $e ) {
+                I2CE::pdoError( $e,"Unable to clear DB magic data table {$this->name}");
+                return false;
+            }
         }
 
 
@@ -268,26 +324,32 @@ if (!class_exists('I2CE_MagicDataStorageDBAlt',false)) {
                 //so if parent = /some/old/path then substr(parent,10) = /path
                 //we want to result in /some/new/path
             }
-            $newPath = mysql_real_escape_string($this->getChildPath($node,$new,false));
-            $newFullPath = mysql_real_escape_string($this->getChildPath($node,$new,true));
-            $oldPath = mysql_real_escape_string($this->getChildPath($node,$old,false));
-            $qry_node = "UPDATE config_alt SET name = '" . mysql_real_escape_string($new)  . "' , path_hash = '"  . mysql_real_escape_string($this->getHash($node, $new)) ."' "
-                . "WHERE parent = '". mysql_real_escape_string($parentPath). "' AND name = '" . mysql_real_escape_string($old) . "'";
+            $newPath = $this->getChildPath($node,$new,false);
+            $newFullPath = $this->getChildPath($node,$new,true);
+            $oldPath = $this->getChildPath($node,$old,false);
+            $qry_node = "UPDATE config_alt SET name = ?, path_hash = ? WHERE parent = ? AND name = ?";
+            $qry_node_args = array( $new, $this->getHash($node, $new), $parentPath, $old );
+
             //change direct children
-            $qry_child = "UPDATE config_alt SET  "
-                . "  path_hash = MD5(CONCAT('$newFullPath', '/',name)) "
-                . ", parent = '$newPath' "
-                ."WHERE parent = '$oldPath'";
+            $qry_child = "UPDATE config_alt SET path_hash = MD5(CONCAT(?, '/',name)), parent = ? WHERE parent = ?";
+            $qry_child_args = array( $newFullPath, $newPath, $oldPath );
             //change descendents
-            $qry_desc = 
-                "UPDATE config_alt SET  "
-                . "  path_hash = MD5( CONCAT('$newFullPath', SUBSTR(parent,$offset) , '/',name)) "
-                . ", parent = CONCAT('$newPath', SUBSTR(parent,$offset) ) " 
-                ."WHERE parent LIKE '$oldPath/%'";
-            
-            $this->db->exec($qry_node);
-            $this->db->exec($qry_child);
-            $this->db->exec($qry_desc);
+            $qry_desc = "UPDATE config_alt SET path_hash = MD5( CONCAT(?, SUBSTR(parent,?) , '/',name)) "
+                . ", parent = CONCAT(?, SUBSTR(parent,?) ) WHERE parent LIKE ?";
+            $qry_desc_args = array( $newFullPath, $offset, $newPath, $offset, $oldPath .'/%' );
+
+
+            try {
+                $this->db->beginTransaction();
+                I2CE_PDO::execParam( $qry_node, $qry_node_args );
+                I2CE_PDO::execParam( $qry_child, $qry_child_args );
+                I2CE_PDO::execParam( $qry_desc, $qry_desc_args );
+                $this->db->commit();
+            } catch( PDOException $e ) {
+                $this->db->rollback();
+                I2CE::pdoError( $e, "Unable to rename child.");
+                return false;
+            }
 
 
             return true;

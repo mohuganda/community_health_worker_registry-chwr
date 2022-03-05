@@ -114,7 +114,7 @@ class I2CE_Module_UserAccess_LDAP extends I2CE_Module {
             $options['ldap_user'] = 'admin';
         }
         if (!array_key_exists('ldap_pass',$options)) {
-            $options['ldap_pass'] =  MDB2::singleton()->dsn['password'];
+            $options['ldap_pass'] =  I2CE_PDO::details('pass');
         }
         if (!array_key_exists('can_change_pass',$options)) {
             $options['can_change_pass'] = true;

@@ -318,7 +318,7 @@ abstract class I2CE_CustomReport_Display extends I2CE_Fuzzy{
 
     /**
      * @param boolean $check_restart defaults to true in which case if the results are paginated and the offeset is more than the number of results, we restart it setting the page to 1
-     * @returns mixed false on failure on succes an array. at index 'results' and  MDB2 buffered result object  at index 'num_results' the
+     * @returns mixed false on failure on succes an array. at index 'results' and  buffered result object  at index 'num_results' the
      * number of results that would be found without the limit
      */
     protected function getResults($check_restart = true) {
@@ -557,7 +557,7 @@ abstract class I2CE_CustomReport_Display extends I2CE_Fuzzy{
                 }
             }
         }
-        $group_bys = array_map( create_function( '$n','return ( ($i = stripos( $n, " as" ) ) === false ? $n : substr( $n, 0, $i ) );' ),$group_bys);
+        $group_bys = array_map( function($n) { return ( ($i = stripos( $n, " as" ) ) === false ? $n : substr( $n, 0, $i ) ); }, $group_bys);
         if (count($group_bys) > 0) {
             $lgroup_bys = array();
             foreach ($group_bys as $g) {
@@ -589,18 +589,21 @@ abstract class I2CE_CustomReport_Display extends I2CE_Fuzzy{
             I2CE_CustomReport::getCachedTableName($this->config->report) . ' AS primary_table '.
             implode( " " ,  $merge_reports) .
             ' ' . $where . ' ' . $group_by . ' ' . $order_by . ' ' . $limit;
-        I2CE::raiseError("Doing $qry");
-        $db = MDB2::singleton();
-        $res = $db->query($qry);
-        I2CE::raiseMessage($qry);
-        if (I2CE::pearError($res,"Could not get results")) {
+        try {
+            I2CE::raiseError("Doing $qry");
+            $db = I2CE::PDO();
+            $res = $db->query($qry);
+            I2CE::raiseMessage($qry);
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Could not get results");
             return false;
-        } 
-        $num_rows = $db->queryRow( "SELECT FOUND_ROWS() AS num_rows" );
-        if (I2CE::pearError($num_rows,"Could not get total number of results")) {
-            $num_rows  = false;
-        } else {
+        }
+        try {
+            $num_rows = I2CE_PDO::getRow( "SELECT FOUND_ROWS() AS num_rows" );
             $num_rows = (int) $num_rows->num_rows;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError($e,"Could not get total number of results");
+            $num_rows = false;
         }
         if ($check_restart && $num_rows > 0 && $num_rows < $limit_offset) {
             //set the limit offset to be 0 and restart the query..
@@ -1274,7 +1277,7 @@ abstract class I2CE_CustomReport_Display extends I2CE_Fuzzy{
             return '';
         }
         $wheres = array();
-        $callback = create_function('$form,$field', "return '`$form+$field`';"); //weird, but i do want $form and $field substituted now and now later.
+        $callback = function($f1,$f2) use($form,$field) { return "`$form+$field`"; }; //weird, but i do want $form and $field substituted now and now later.
         foreach ($limitStyles  as $limitStyle=>$values) {
             if (!isset($config->$limitStyle)) {
                 continue;
@@ -2186,7 +2189,7 @@ abstract class I2CE_CustomReport_Display extends I2CE_Fuzzy{
 
     /**
      * Process results
-     * @param array $results_data an array of results.  indices are 'restults' and MDB2 Buffered result and 'num_results' the
+     * @param array $results_data an array of results.  indices are 'restults' and Buffered result and 'num_results' the
      * number of results.  (these values may be false on failure)
      * @param DOMNode $contentNode.  Default to null a node to append the results onto
      */
@@ -2201,17 +2204,21 @@ abstract class I2CE_CustomReport_Display extends I2CE_Fuzzy{
         } else {
             $row_num = $this->row_start;
         }        
-        while ($row = $results_data['results']->fetchRow()) {
-            if (  PEAR::isError( $row ) ) {
-                break;
+        try {
+            while ($row = $results_data['results']->fetch()) {
+                if (!$this->processResultRow($row,$row_num,$contentNode)) {
+                    unset( $results_data['results'] );
+                    return false;
+                }
+                $row_num++;
             }
-            if (!$this->processResultRow($row,$row_num,$contentNode)) {
-                $results_data['results']->free();
-                return false;
-            }
-            $row_num++;
+        } catch ( PDOException $e ) {
+            I2CE::pdoError( $e, "Failed to process row results.");
+            unset( $results_data['results'] );
+            return false;
+
         }
-        $results_data['results']->free();
+        unset( $results_data['results'] );
         return true;
     }
 

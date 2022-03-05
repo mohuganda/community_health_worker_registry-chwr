@@ -48,7 +48,7 @@ abstract class I2CE_FormField_BINARY_FILE extends I2CE_FormField_STORE_BINARY_FI
 
     /**
      * Appends an XML representation of the field data onto the current node
-     * @param DOMNode $field_node the node we are appending the representation onto
+     
      */
     protected function appendXMLRepresentation($field_node) {
         $doc = $field_node->ownerDocument;
@@ -67,7 +67,7 @@ abstract class I2CE_FormField_BINARY_FILE extends I2CE_FormField_STORE_BINARY_FI
 
 
     /**
-     * The number of null \0 at the end of the string (it seems MDB2 does truncates \0 when getting results)
+     * The number of null \0 at the end of the string (it seems MDB2 does truncates \0 when getting results, check to see if PDO needs this)
      * @var protected int $null_term
      */
     protected $null_term = 0;    
@@ -257,7 +257,7 @@ abstract class I2CE_FormField_BINARY_FILE extends I2CE_FormField_STORE_BINARY_FI
 
     public function setFromData($data,$file_name,$mime_type=false, $fmod_time = false) {
         $content_length = strlen($data);
-        $this->value = rtrim($data,"\0"); //MDB2 strips off terminating \0 when returning results
+        $this->value = rtrim($data,"\0"); //MDB2 strips off terminating \0 when returning results, check if PDO needs this.
         $this->null_term = $content_length - strlen($this->value);
         $this->file_name = $file_name;
         if ($fmod_time == false) {

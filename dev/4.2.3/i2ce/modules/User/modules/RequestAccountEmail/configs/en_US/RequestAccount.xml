@@ -2,10 +2,10 @@
 <!DOCTYPE I2CEConfiguration SYSTEM "I2CE_Configuration.dtd">
 <I2CEConfiguration name="RequestAccount-VerifyEmail">
   <metadata>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="RequestAccount-VerifyEmail" locale="en_US">
-    <version>4.2.0</version>
+    <version>4.3.0</version>
     <configurationGroup name="user_request_class_data" path="/modules/forms/formClasses/I2CE_User_Request">
       <configurationGroup name="fields">
         <configurationGroup name="request_number">

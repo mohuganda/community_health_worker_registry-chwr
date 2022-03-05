@@ -4,7 +4,7 @@
   <metadata>
     <displayName>Locale Selector</displayName>
     <className>I2CE_Module_LocaleSelector</className>
-    <version>4.2.1.0</version>
+    <version>4.3.0</version>
   </metadata>
   <configurationGroup name="localeSelector" locale="fy">
     <configuration name="languages" path="/locales/languages" values="many" type="delimited">
@@ -30,7 +30,7 @@
       <value>cu:Tsjerk-slavysk</value>
       <value>cy:Welsk</value>
       <value>da:Deensk</value>
-      <value>de:D&#250;tsk</value>
+      <value>de:Dútsk</value>
       <value>el:Gryks</value>
       <value>en:Ingelsk</value>
       <value>en_GB:Britsk Ingelsk</value>
@@ -42,7 +42,7 @@
       <value>fi:Finsk</value>
       <value>fj:Fijdzjysk</value>
       <value>fo:Faeroersk</value>
-      <value>fr:Fr&#226;nsk</value>
+      <value>fr:Frânsk</value>
       <value>fy:Frysk</value>
       <value>ga:Iersk Gaelic</value>
       <value>gl:Galiciaansk</value>
@@ -54,7 +54,7 @@
       <value>hy:Armeensk</value>
       <value>id:Yndonesysk</value>
       <value>ie:Interlingua</value>
-      <value>is:Iisl&#226;nsk</value>
+      <value>is:Iislânsk</value>
       <value>it:Italiaansk</value>
       <value>ja:Japansk</value>
       <value>jv:Javaansk</value>
@@ -76,21 +76,21 @@
       <value>ms:Maleisk</value>
       <value>mt:Malteesk</value>
       <value>my:Burmeesk</value>
-      <value>na:Naur&#251;aansk</value>
-      <value>nb:Noarsk, Bokm&#229;l</value>
+      <value>na:Naurûaansk</value>
+      <value>nb:Noarsk, Bokmål</value>
       <value>nd:Ndebele, Noard</value>
       <value>nds:Neder Saksysk</value>
       <value>ne:Nepaleesk</value>
-      <value>nl:Nederl&#226;nsk</value>
+      <value>nl:Nederlânsk</value>
       <value>nn:Noarsk, Nynorsk</value>
-      <value>nr:Ndebele, S&#250;d</value>
+      <value>nr:Ndebele, Súd</value>
       <value>nso:Noard Sotho</value>
       <value>oc:Oksitaansk</value>
       <value>os:Ossetysk</value>
       <value>pl:Poalsk</value>
       <value>pt:Portugeesk</value>
       <value>pt_BR:Braziliaansk Portugeesk</value>
-      <value>rn:R&#251;andeesk</value>
+      <value>rn:Rûandeesk</value>
       <value>ro:Roemeensk</value>
       <value>ru:Russysk</value>
       <value>sa:Sanskryt</value>
@@ -103,10 +103,10 @@
       <value>so:Somalysk</value>
       <value>sq:Albaansk</value>
       <value>sr:Servysk Latijnsk</value>
-      <value>st:Sotho, S&#250;d</value>
+      <value>st:Sotho, Súd</value>
       <value>su:Soendaneesk</value>
       <value>sv:Sweedsk</value>
-      <value>te:Tel&#251;g&#251;</value>
+      <value>te:Telûgû</value>
       <value>tg:Tadzjyksk</value>
       <value>th:Taaisk</value>
       <value>ti:Tigrysk</value>
@@ -117,8 +117,8 @@
       <value>ts:Tsongaansk</value>
       <value>tt:Tataarsk</value>
       <value>ty:Tahitiaansk</value>
-      <value>uk:Oekra&#239;nsk</value>
-      <value>ur:Urd&#251;</value>
+      <value>uk:Oekraïnsk</value>
+      <value>ur:Urdû</value>
       <value>uz:Oezbeeksk</value>
       <value>vi:Vietnameesk</value>
       <value>wa:Waalsk</value>
