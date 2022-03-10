@@ -264,7 +264,7 @@ class iHRIS_Page_API_Resource extends I2CE_Page{
 
         $db = I2CE::PDO();
         //$db = MDB2::singleton();
-		$results = $db->execute($qry)->fetchAll();
+		$results = $db->query($qry)->fetchAll();
         $count = 0;
         if ( $this->useJSON ) {
             $top['entry'] = array();
