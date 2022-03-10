@@ -14,8 +14,8 @@
       <value>./configs</value>
     </path>
     <!--<requirement name="ManageDashboard">
-      <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <atLeast version="4.3" />
+      <lessThan version="4.4" />
     </requirement>-->
 	<requirement name="ihris-manage">
       <atLeast version="4.2" />
@@ -55,7 +55,6 @@
     <enable name="RecordStatus" />
     <enable name="training-exam" />
     <enable name="SDMX-HD-CodeLists" />
-    <enable name="sample-hire-letter" />
     <enable name="ihris-manage-FacilityTree" />
     <enable name="ihris-manage-PositionTree" />
     <enable name="SampleOpenLayers" />
@@ -82,7 +81,8 @@
     <enable name="web-services-lists" />
     <enable name="CustomReports_CrossTab" />
     <enable name="ihris-manage-mcsd-update-supplier-chwr" />
-    <enable name="ihris-manage-csd-PersonPosition" />
+    <conflict name='sample-hire-letter'>
+    </conflict>
     <path name="classes">
       <value>./lib</value>
     </path>
@@ -327,7 +327,6 @@
      </configurationGroup>
     </configurationGroup>
     <configurationGroup name="iHRIS_Parish" path="/modules/forms/formClasses/iHRIS_Parish">
-          <version>4.2.1.29</version>
       <displayName>Configuration for the class 'iHRIS_Parish'</displayName>
       <configuration name="extends">
         <displayName>The class this form extends</displayName>
@@ -375,15 +374,6 @@
             <value>county</value>
           </configuration>
         </configurationGroup>
-	<configurationGroup name="csd_uuid">
-          <version>4.2.1.29</version>
-            <configuration name="formfield">
-             <value>STRING_LINE</value>
-            </configuration>
-            <configuration name="headers" type="delimited" locale="en_US">
-             <value>default:CSD Entity ID</value>
-            </configuration>
-        </configurationGroup>
         <configurationGroup name="county">
           <displayName>The field 'county'</displayName>
           <configurationGroup name="meta">
@@ -413,8 +403,7 @@
     </configurationGroup>
     <!-- iHRIS_Parish -->
     <configurationGroup name="iHRIS_Village" path="/modules/forms/formClasses/iHRIS_Village">
-          <version>4.2.1.29</version>
-      <displayName>Configuration for the class 'iHRIS_Village'</displayName>
+      <displayName>Configuration for the class 'iHRIS_Parish'</displayName>
       <configuration name="extends">
         <displayName>The class this form extends</displayName>
         <value>I2CE_List</value>
@@ -460,15 +449,6 @@
             <value>parish</value>
           </configuration>
         </configurationGroup>
-	<configurationGroup name="csd_uuid">
-	  <version>4.2.1.29</version>
-	    <configuration name="formfield">
-             <value>STRING_LINE</value>
-            </configuration>
-      	    <configuration name="headers" type="delimited" locale="en_US">
-             <value>default:CSD Entity ID</value>
-      	    </configuration>
-	</configurationGroup>
         <configurationGroup name="parish">
           <displayName>The field 'parish'</displayName>
           <configurationGroup name="meta">
