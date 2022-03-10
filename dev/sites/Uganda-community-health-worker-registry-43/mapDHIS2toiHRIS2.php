@@ -38,8 +38,8 @@ unset($i2ce_site_module_config);
 global $user;
 
 $user = new I2CE_User(1, false, false, false);
-//$db = I2CE::PDO();
-$db = MDB2::singleton();
+$db = I2CE::PDO();
+//$db = MDB2::singleton();
 if (PEAR::isError($db)) {
 	die($db->getMessage());
 }

@@ -262,16 +262,44 @@ class iHRIS_Page_API_Resource extends I2CE_Page{
 
         $qry = "SELECT * FROM zebra_staff_list $where_str ORDER BY last_modified ASC";
 
-       // $db = I2CE::PDO();
-        $db = MDB2::singleton();
-		$results = $db->query( $qry );
+        $db = I2CE::PDO();
+        //$db = MDB2::singleton();
+		$results = $db->execute($qry)->fetchAll();
         $count = 0;
         if ( $this->useJSON ) {
             $top['entry'] = array();
         }
-        if ( !I2CE::pearError( $results, "Failed to get cached data for mCSD Update Supplier." ) ) {
 
-            while ( $row = $results->fetchRow(MDB2_FETCHMODE_ASSOC) ) {
+
+        // $db = I2CE::PDO();
+        // try {
+        //     $stmt = $db->prepare( $qry);
+        //     $stmt->execute();
+        //     $this->template->addFile( "audit_district_report_list.html" );
+        //     $district_field = 'district+id';
+        //     $found = array();
+        //     while ( $data  = $stmt->fetch() ) {
+        //         $found[ $data->$district_field ] = true;
+        //     }
+        //     $stmt->closeCursor();
+        //     foreach( $districts as $district ) {
+        //         if ( $found[ $district['value'] ] ) {
+        //             $node = $this->template->appendFileById( "audit_district_report_list_line.html",
+        //                     "li", "district_list" );
+        //             $this->template->setDisplayDataImmediate( "district_name",
+        //                     $district['display'], $node );
+        //             $this->template->setDisplayDataImmediate( "district_link", array("district" => $district['value'] ), $node );
+        //         }
+        //     }
+        // } catch ( PDOException $e ) {
+        //     I2CE::pdoError( $e,  "Unable to get district list.");
+        //     $this->template->addFile( 'audit_report_list_error.html' );
+        // }
+
+        
+        //if ( !I2CE::pearError( $results, "Failed to get cached data for mCSD Update Supplier." ) ) {
+           if(count($fetch>0)){
+            foreach ( $results as $row) {
                 $data = array();
                 $count++;
                 if ( $this->useJSON ) {
@@ -398,7 +426,9 @@ class iHRIS_Page_API_Resource extends I2CE_Page{
                 $total->setAttribute('value', $count);
             }
             return true;
-        } else {
+        } 
+        
+        else {
             http_response_code(500);
             return false;
         }
