@@ -4,18 +4,18 @@
   <metadata>
     <displayName>Sample Staff Hire Letter</displayName>
     <description>Sample staff hire letter generated from the staff form relationship.</description>
-    <version>4.2.2.0</version>
+    <version>4.3.5.1</version>
     <requirement name="ihris-manage-CustomReports-staff-reports">
       <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
     <requirement name="PrintedForms">
       <atLeast version="4.2" />
-      <lessThan version="4.3" />
+      <lessThan version="4.4" />
     </requirement>
   </metadata>
   <configurationGroup name="sample-hire-letter" path="/modules/PrintedForms/forms/sample_hire_letter">
-    <version>4.0.5.2</version>
+    <version>4.3.5.1</version>
     <configuration name="relationship">
       <value>staff</value>
     </configuration>

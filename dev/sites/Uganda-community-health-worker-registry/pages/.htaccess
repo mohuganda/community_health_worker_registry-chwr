@@ -3,7 +3,7 @@ RewriteEngine On
 
 Options -Indexes
 
-RewriteBase /
+RewriteBase /community_registry
 
 #Remove extra trailing slashes
 RewriteCond %{REQUEST_URI} ^(.*)/{2,}(.*)$
