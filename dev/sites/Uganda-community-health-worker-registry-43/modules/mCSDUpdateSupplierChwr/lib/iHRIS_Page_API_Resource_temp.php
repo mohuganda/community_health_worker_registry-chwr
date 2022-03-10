@@ -251,15 +251,15 @@ class iHRIS_Page_API_Resource extends I2CE_Page{
         $qry = "SELECT * FROM zebra_staff_list $where_str ORDER BY last_modified ASC";
 
 //        echo $qry;
-        $db = MDB2::singleton();
-		$results = $db->query( $qry );
+        $db = I2CE::PDO();
+        //$db = MDB2::singleton();
+        $results = $db->query($qry)->fetchAll(PDO::FETCH_ASSOC);
         $count = 0;
         if ( $this->useJSON ) {
             $top['entry'] = array();
         }
-        if ( !I2CE::pearError( $results, "Failed to get cached data for mCSD Update Supplier." ) ) {
-
-            while ( $row = $results->fetchRow(MDB2_FETCHMODE_ASSOC) ) {
+        if(count($results>0)){
+            foreach ($results as $row) {
                 $data = array();
                 $count++;
                 if ( $this->useJSON ) {

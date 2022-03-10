@@ -1673,14 +1673,15 @@ if ( $row['home_mobile'] && $row['home_phone']) {
             LEFT JOIN hippo_facility AS facility ON facility.id = position.facility $where ORDER BY lastupdated ASC";
 
 
-        $db = MDB2::singleton();
-        $results = $db->query($qry);
+        $db = I2CE::PDO();
+        //$db = MDB2::singleton();
+        $results = $db->query($qry)->fetchAll(PDO::FETCH_ASSOC);
         $count = 0;
         if ( $this->useJSON ) {
             $top['entry'] = array();
         }
-        if ( !I2CE::pearError( $results, "Failed to get cached data for mCSD Update Supplier." ) ) {
-            while ( $row = $results->fetchRow(MDB2_FETCHMODE_ASSOC) ) {
+        if(count($results>0)){
+            foreach ($results as $row) {
                 $data = array();
                 $count++;
                 $newid = explode("|",$row['id']);
