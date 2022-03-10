@@ -47,7 +47,7 @@
  * the path to the I2CE installation. 
  * You might need to set this depending on your installation
  *    Default value is  ../../../../I2CE
- */
+ **/
 $i2ce_site_i2ce_path = "/var/lib/iHRIS/community_health_worker_registry-chwr/dev/4.2.3/i2ce";
 
 
