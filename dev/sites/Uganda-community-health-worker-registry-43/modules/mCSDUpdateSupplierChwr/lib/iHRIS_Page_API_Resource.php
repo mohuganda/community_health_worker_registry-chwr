@@ -270,8 +270,8 @@ class iHRIS_Page_API_Resource extends I2CE_Page{
             $top['entry'] = array();
         }
 
-        if(count($fetch>0)){
-            foreach ( $results as $row) {
+      if(count($fetch>0)){
+            while ($row=$results) {
                 $data = array();
                 $count++;
                 if ( $this->useJSON ) {
