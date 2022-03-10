@@ -264,41 +264,13 @@ class iHRIS_Page_API_Resource extends I2CE_Page{
 
         $db = I2CE::PDO();
         //$db = MDB2::singleton();
-		$results = $db->query($qry)->fetchAll(PDO::FETCH_ASSOC);
+		$results = $db->query($qry)->fetch(PDO::FETCH_ASSOC);
         $count = 0;
         if ( $this->useJSON ) {
             $top['entry'] = array();
         }
 
-
-        // $db = I2CE::PDO();
-        // try {
-        //     $stmt = $db->prepare( $qry);
-        //     $stmt->execute();
-        //     $this->template->addFile( "audit_district_report_list.html" );
-        //     $district_field = 'district+id';
-        //     $found = array();
-        //     while ( $data  = $stmt->fetch() ) {
-        //         $found[ $data->$district_field ] = true;
-        //     }
-        //     $stmt->closeCursor();
-        //     foreach( $districts as $district ) {
-        //         if ( $found[ $district['value'] ] ) {
-        //             $node = $this->template->appendFileById( "audit_district_report_list_line.html",
-        //                     "li", "district_list" );
-        //             $this->template->setDisplayDataImmediate( "district_name",
-        //                     $district['display'], $node );
-        //             $this->template->setDisplayDataImmediate( "district_link", array("district" => $district['value'] ), $node );
-        //         }
-        //     }
-        // } catch ( PDOException $e ) {
-        //     I2CE::pdoError( $e,  "Unable to get district list.");
-        //     $this->template->addFile( 'audit_report_list_error.html' );
-        // }
-
-        
-        //if ( !I2CE::pearError( $results, "Failed to get cached data for mCSD Update Supplier." ) ) {
-           if(count($fetch>0)){
+        if(count($fetch>0)){
             foreach ( $results as $row) {
                 $data = array();
                 $count++;
