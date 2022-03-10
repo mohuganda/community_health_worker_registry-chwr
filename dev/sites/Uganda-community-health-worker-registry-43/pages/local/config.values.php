@@ -68,7 +68,7 @@ $i2ce_site_user_access_init = null;
 /**
  * the configuration xml file for the site module.  You need to set this.
  */
-$i2ce_site_module_config = "/var/lib/iHRIS/community_health_worker_registry-chwr/dev/sites/Uganda-community-health-worker-registry/Uganda-community-health-worker-registry.xml";
+$i2ce_site_module_config = "/var/lib/iHRIS/community_health_worker_registry-chwr/dev/sites/Uganda-community-health-worker-registry-43/Uganda-community-health-worker-registry.xml";
 
 
 /*****************************************************************
